@@ -2,7 +2,7 @@
 
 This is a one-page preview of a new **woodwardsports.com**, built as "ON AIR ON WOODWARD". The page plays like WSN's live channel. It has a station bug, an ET clock, a headline ticker, lower-thirds, a Day Rail lineup that knows what is on air right now, channel surfing between shows and a YouTube **Live Room**. Every broadcast graphic is cut from the Woodward street-sign stock used in the logo.
 
-- Preview URL: https://kristijan-eth.github.io/website-Joey-woodwardsports/
+- Preview URL: https://the-ethos-team.github.io/website-woodward-sports/
 - Client's live site, which this does not replace yet: https://woodwardsports.com/
 - Static HTML, CSS and vanilla JS. There is no framework, no build step to deploy and no third-party scripts. YouTube is loaded only after a visitor presses play, and the page holds at most one iframe.
 
@@ -12,8 +12,8 @@ This is a one-page preview of a new **woodwardsports.com**, built as "ON AIR ON 
 index.html            all content is server-rendered (reads fine without JS); schedule JSON is inline
 css/main.css          design tokens, components, motion (transform/opacity only)
 js/main.js            live logic, ident, reveals, split-flap, channel surf, Live Room, Find, Show sheet, team filter
-fonts/*.woff2         self-hosted, latin only: Big Shoulders Stencil (variable 100–900),
-                      Barlow Condensed 600/800/700i, Barlow 400/500/600, JetBrains Mono (variable)
+fonts/*.woff2         self-hosted, latin only (84 KB): Anton 400 (display), Schibsted Grotesk
+                      (variable 400–900, text/UI), Newsreader Italic 500 (show taglines only)
 img/                  logo.svg (dark) + logo-on-light.svg, favicons, og-image.jpg (1200×630),
                       show-*.webp, news/<post-id>.webp, videos/<youtube-id>-480|960.webp,
                       shop/, party/, atmo-*.webp, badges/app-store.svg (Apple's official badge), noise.webp

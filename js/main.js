@@ -13,6 +13,11 @@ mqRM.addEventListener?.('change', e => { RM = e.matches; H.classList.toggle('rm'
 const mqDesk = matchMedia('(min-width: 1100px)');
 const mqWide = matchMedia('(min-width: 900px)');
 const mqSm = matchMedia('(min-width: 600px)');
+const mqTab = matchMedia('(min-width: 768px)');
+/* input modality: overlays opened by touch or mouse get focus without a visible ring */
+let kbdNav = false;
+addEventListener('keydown', e => { if (!e.metaKey && !e.ctrlKey && !e.altKey) kbdNav = true; }, true);
+addEventListener('pointerdown', () => { kbdNav = false; }, true);
 const EO = 'cubic-bezier(.16,1,.3,1)', EC = 'cubic-bezier(.7,0,.2,1)';
 const SPRING = (CSS.supports && CSS.supports('transition-timing-function', 'linear(0, 1)'))
   ? 'linear(0,.033,.12 4.4%,.253,.414 9.6%,.746 15.5%,.879,.982 22.1%,1.024 25%,1.048 28.1%,1.056 31.3%,1.054 34.8%,1.029 42.7%,1.009 50.4%,.998 60%,1)'
@@ -24,6 +29,9 @@ const SHOWS = DATA.shows;
 const NEWTAB = '<span class="sr-only"> (opens in new tab)</span>';
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const ico = n => `<svg class="ico" aria-hidden="true" focusable="false"><use href="#i-${n}"/></svg>`;
+const DOT = '<i class="dot" aria-hidden="true"></i>'; // ● is not in the web fonts
+/* digits: tabular, zero tracking; colons stay proportional (Schibsted's tnum colon is .635em wide) */
+const num = t => esc(t).replace(/\d+(?::\d+)*/g, m => `<span class="n">${m.replace(/:/g, '<span class="cn">:</span>')}</span>`);
 const hostsOf = s => s.hosts.length < 3 ? s.hosts.join(' & ') : s.hosts.slice(0, -1).join(', ') + ' & ' + s.hosts.at(-1);
 const vibrate = ms => { try { navigator.vibrate?.(ms); } catch (e) { /* no haptics */ } };
 const play = (el, kf, o) => { try { return el.animate(kf, o); } catch (e) { return null; } };
@@ -45,7 +53,29 @@ const ro = 'ResizeObserver' in window ? new ResizeObserver(es => {
   const todo = es.map(e => [e.target, Math.round(e.borderBoxSize?.[0]?.blockSize ?? e.target.offsetHeight)]);
   requestAnimationFrame(() => todo.forEach(([el, h]) => { if (h && Math.abs((el._h || 0) - h) >= 1) { el._h = h; el.style.setProperty('--h', h + 'px'); } }));
 }) : null;
-$$('.sh__blade, .st__body').forEach(el => ro?.observe(el));
+$$('.sh__blade, .l3__plate, .lr__l3').forEach(el => ro?.observe(el));
+
+/* Anton names: shrink to fit the plate (floor 24px), then balance onto two lines */
+function fitName(el, avail) {
+  if (!el || !(avail > 0)) return;
+  el.style.fontSize = '';
+  const max = parseFloat(getComputedStyle(el).fontSize), ws = el.style.whiteSpace;
+  el.style.whiteSpace = 'nowrap';
+  const w = el.scrollWidth;
+  el.style.whiteSpace = ws;
+  if (w > avail + 1) el.style.fontSize = Math.max(24, Math.floor(max * avail / w * 10) / 10) + 'px';
+}
+const padX = el => { const c = getComputedStyle(el); return parseFloat(c.paddingLeft) + parseFloat(c.paddingRight); };
+function fitL3() {
+  const name = $('[data-l3-name]'); if (!name) return;
+  const plate = name.parentElement, box = plate.parentElement, side = $('[data-l3-side]', box);
+  const inRow = side && !side.hidden && getComputedStyle(box).flexDirection === 'row';
+  fitName(name, box.clientWidth - (inRow ? side.offsetWidth + 8 : 0) - padX(plate));
+}
+function fitLR() {
+  const b = $('[data-lr-name]'), plate = b?.parentElement; if (!plate || !plate.getClientRects().length) return;
+  fitName(b, plate.parentElement.clientWidth - padX(plate));
+}
 
 /* ------------------------------------------------------------------ live logic (America/Detroit) */
 const fmt = new Intl.DateTimeFormat('en-US', { timeZone: DATA.tz, hourCycle: 'h23', weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -93,7 +123,9 @@ const etFmt = new Intl.DateTimeFormat('en-US', { timeZone: DATA.tz, hour: 'numer
 const etShort = new Intl.DateTimeFormat('en-US', { timeZone: DATA.tz, hour: 'numeric', minute: '2-digit', hour12: true });
 const clean = s => s.replace(/[  ]/g, ' ');
 const clockText = t => clean(etFmt.format(new Date(t))) + ' ET';
-const firstHour = s => { const [h, m] = hm(s.start); return `${h % 12 || 12}:${pad(m)} ${h < 12 ? 'AM' : 'PM'} ET`; };
+/* "8 AM ET", "8:30 AM ET" — same style as the slot ranges ("8–10 AM ET") */
+const firstHour = (s, et = true) => { const [h, m] = hm(s.start); return `${h % 12 || 12}${m ? ':' + pad(m) : ''} ${h < 12 ? 'AM' : 'PM'}${et ? ' ET' : ''}`; };
+const backAt = (n, et) => `BACK ${WD[n.wd].toUpperCase()} ${firstHour(SHOWS[n.i], et)}`;
 const endsIn = ms => { const m = Math.max(1, Math.ceil(ms / 60000)); return m >= 60 ? `${Math.floor(m / 60)}H ${pad(m % 60)}M` : `${m}M`; };
 function stateLine(n) {
   const s = SHOWS[n.i];
@@ -180,10 +212,12 @@ const subs = [];
 function renderPill(n) {
   const s = SHOWS[n.i];
   let txt;
-  if (n.state === 'live') txt = `LIVE · ${s.short.toUpperCase()}`;
-  else if (n.state === 'next') txt = n.left <= 15 * 60000 ? 'STARTING SOON' : `UP NEXT ${cd(n.left)}`;
-  else txt = `OFF AIR · ${WD[n.wd].toUpperCase()} ${s.start.startsWith('0') ? s.start.slice(1, 2) : s.start.slice(0, 2)}AM`;
-  pillTxt.textContent = txt;
+  /* the "LIVE · " / "OFF AIR · " prefix drops where the header is crowded (CSS), the red/ink plate still says it */
+  const pre = t => `<span class="pill__pre">${t} · </span>`;
+  if (n.state === 'live') txt = pre('LIVE') + esc(s.short.toUpperCase());
+  else if (n.state === 'next') txt = n.left <= 15 * 60000 ? 'STARTING SOON' : `UP NEXT ${num(cd(n.left))}`;
+  else txt = pre('OFF AIR') + num(backAt(n, false));
+  pillTxt.innerHTML = txt;
   pill.dataset.state = n.state;
   pill.setAttribute('aria-label', stateLine(n) + (n.state === 'live' ? ' Open the Live Room.' : ' See the lineup.'));
 }
@@ -193,48 +227,49 @@ subs.push((n, now, changed, prev) => {
   H.classList.toggle('is-next', n.state === 'next');
   H.classList.toggle('is-off', n.state === 'off');
   const ct = clockText(now);
-  clocks.forEach(c => { if (!c._typing) c.textContent = ct; });
+  clocks.forEach(c => { if (!c._typing) c.innerHTML = num(ct); });
 });
 
-function setFacadeVideo(id, title) {
+function setFacadeVideo(id, title, href) {
   const img = $('.facade__img');
   const base = vidThumb(id);
   if (!img.src.includes(id)) { img.srcset = `${base}-480.webp 480w, ${base}-960.webp 960w`; img.src = `${base}-960.webp`; }
   const hit = $('.facade__hit');
-  hit.dataset.video = id; hit.href = 'https://www.youtube.com/watch?v=' + id;
+  hit.dataset.video = id; hit.href = href || 'https://www.youtube.com/watch?v=' + id;
   $('[data-facade-label]').textContent = title;
 }
 function renderL3(n, animate) {
   const s = SHOWS[n.i], live = n.state === 'live';
-  const name = mqSm.matches ? s.name : s.short;
+  const name = s.name;
   facade.classList.toggle('is-live', live);
   l3.classList.toggle('is-live', live);
   $('[data-airbug-txt]', facade).textContent = live ? 'LIVE' : 'REPLAY';
-  $('[data-l3-name]').textContent = name;
+  const nm = $('[data-l3-name]'); if (nm.textContent !== name) { nm.textContent = name; nm.style.fontSize = ''; }
   $('[data-l3-hosts]').textContent = hostsOf(s);
   const side = $('[data-l3-side]'), lbl = $('[data-l3-lbl]'), kick = $('[data-l3-kick]');
   side.hidden = false; side.classList.toggle('is-off', n.state === 'off');
   if (live) {
-    kick.textContent = `● LIVE NOW · ${s.slotShort}`;
+    kick.innerHTML = `${DOT}LIVE NOW · ${esc(s.slotShort)}`;
     lbl.textContent = 'ENDS IN';
     heroFlaps.el.hidden = true;
-    let e = $('.l3__ends', side); if (!e) { e = d.createElement('span'); e.className = 'l3__ends mono'; side.append(e); }
-    e.hidden = false; e.textContent = endsIn(n.left);
+    let e = $('.l3__ends', side); if (!e) { e = d.createElement('span'); e.className = 'l3__ends'; side.append(e); }
+    e.hidden = false; e.innerHTML = num(endsIn(n.left));
     $('[data-l3-progress]').style.setProperty('--p', Math.min(1, Math.max(0, n.prog)).toFixed(4));
-    setFacadeVideo(s.replay, `Watch ${s.name} live now`);
+    setFacadeVideo(s.replay, `Watch ${s.name} live now (opens in new tab)`, DATA.liveUrl);
   } else {
     const soon = n.state === 'next' && n.left <= 15 * 60000;
-    kick.textContent = n.state === 'next' ? `${soon ? 'STARTING SOON' : 'UP NEXT'} · ${s.slotShort}` : `OFF AIR · BACK ${WD[n.wd].toUpperCase()} ${firstHour(s)}`;
-    lbl.textContent = n.state === 'next' ? (soon ? 'STARTING SOON' : 'STARTS IN') : 'BACK IN';
+    kick.textContent = n.state === 'next' ? `${soon ? 'STARTING SOON' : 'UP NEXT'} · ${s.slotShort}` : `OFF AIR · ${backAt(n, true)}`;
+    lbl.textContent = n.state === 'next' ? 'STARTS IN' : 'BACK IN';
     $('.l3__ends', side)?.setAttribute('hidden', '');
     heroFlaps.el.hidden = false;
     heroFlaps.set(cd(n.left), animate && facade._vis !== false);
     setFacadeVideo(DATA.latest, 'Play the latest replay in the Live Room');
   }
+  fitL3();
 }
 subs.push((n, now, changed, prev) => {
   if (changed && prev) {
-    surf(facade, () => renderL3(n, false), `CH ${pad(n.i + 1)} ▸ ${SHOWS[n.i].name.toUpperCase()}`);
+    surf(facade, () => renderL3(n, false), `CH ${pad(n.i + 1)} › ${SHOWS[n.i].name.toUpperCase()}`);
   } else renderL3(n, true);
 });
 
@@ -244,7 +279,7 @@ function renderRail(n, now, force) {
     r.classList.toggle('is-live', c === 'live'); r.classList.toggle('is-next', c === 'next'); r.classList.toggle('is-done', c === 'done');
     const chip = $('[data-chip]', r);
     chip.className = 'chip chip--' + c;
-    chip.innerHTML = c === 'live' ? '● LIVE' : c.toUpperCase();
+    chip.innerHTML = c === 'live' ? `${DOT}Live` : c[0].toUpperCase() + c.slice(1);
     blks[i]?.classList.toggle('is-live', c === 'live'); blks[i]?.classList.toggle('is-done', c === 'done');
   });
   if (!force && now - lastHead < 30000) return;
@@ -255,7 +290,7 @@ function renderRail(n, now, force) {
   else if (n.state === 'next') {
     if (n.prevEnd) { row = gapRows[n.i - 1]; f = (now - n.prevEnd) / (n.start - n.prevEnd); } else { row = rows[0]; f = 0; }
   }
-  if (row && !mqDesk.matches) {
+  if (row && !mqWide.matches) {
     playhead.hidden = false;
     playhead.style.setProperty('--y', (row.offsetTop + Math.min(1, Math.max(0, f)) * row.offsetHeight) + 'px');
   } else playhead.hidden = true;
@@ -264,7 +299,7 @@ function renderRail(n, now, force) {
   if (DATA.days.includes(p.wd) && hrs >= 8 && hrs <= 19 && lane) {
     nowLine.hidden = false;
     nowLine.style.setProperty('--nx', ((hrs - 8) / 11 * lane.clientWidth).toFixed(1) + 'px');
-    nowFlag.textContent = 'NOW ' + clean(etShort.format(new Date(now))).replace(/ (AM|PM)/, '');
+    nowFlag.innerHTML = num('NOW ' + clean(etShort.format(new Date(now))).replace(/ (AM|PM)/, ''));
   } else nowLine.hidden = true;
 }
 subs.push((n, now, changed) => renderRail(n, now, changed));
@@ -274,12 +309,13 @@ subs.push((n, now) => {
   $('[data-dock-lbl]').textContent = live ? 'Live' : 'Watch';
   // phone mock
   const art = $('[data-phone-art]');
-  if (art && !art.src.endsWith(s.art)) art.src = s.art;
+  const thumb = `img/videos/${s.replay}-480.webp`;
+  if (art && !art.src.endsWith(thumb)) art.src = thumb;
   $('.phone__video')?.classList.toggle('is-live', live);
-  const pt = $('[data-phone-time]'); if (pt) pt.textContent = clean(etShort.format(new Date(now))).replace(/ (AM|PM)/, '');
+  const pt = $('[data-phone-time]'); if (pt) pt.innerHTML = num(clean(etShort.format(new Date(now))).replace(/ (AM|PM)/, ''));
   const pk = $('[data-phone-kick]'), pn = $('[data-phone-name]'), pl = $('[data-phone-lbl]');
   if (pk) {
-    pk.textContent = live ? '● LIVE NOW' : n.state === 'next' ? 'UP NEXT' : `OFF AIR · BACK ${WD[n.wd].toUpperCase()}`;
+    pk.innerHTML = live ? `${DOT}LIVE NOW` : n.state === 'next' ? (n.left <= 15 * 60000 ? 'STARTING SOON' : 'UP NEXT') : `OFF AIR · ${backAt(n, false)}`;
     pn.textContent = s.name;
     pl.textContent = live ? 'ENDS IN' : n.state === 'next' ? 'STARTS IN' : 'BACK IN';
     $('.phone__count').classList.toggle('is-live', live);
@@ -327,7 +363,7 @@ hdr.classList.toggle('is-solid', scrollY > 24);
 const dockNav = $('[data-dock-nav]'), dockBar = $('[data-dock-bar]');
 const navMark = $('[data-navmark]');
 const DOCK_MAP = { lineup: 'lineup', teams: 'teams', stories: 'teams', listen: 'listen', shop: 'shop' };
-const NAV_MAP = { lineup: 'lineup', teams: 'teams', stories: 'stories', watch: 'watch', listen: 'listen', 'watch-party': 'listen', shop: 'shop', advertise: 'advertise' };
+const NAV_MAP = { lineup: 'lineup', teams: 'teams', stories: 'stories', watch: 'watch', listen: 'listen', shop: 'shop', advertise: 'advertise' };
 let curSec = '';
 function markNav() {
   const dk = DOCK_MAP[curSec], a = dk && $(`[data-dock="${dk}"]`);
@@ -414,7 +450,7 @@ function typeIn(el) {
   if (!el) return;
   el._typing = true;
   const full = clockText(Date.now()); el.textContent = '';
-  [...full].forEach((_, i) => setTimeout(() => { el.textContent = full.slice(0, i + 1); if (i === full.length - 1) el._typing = false; }, i * 30));
+  [...full].forEach((_, i) => setTimeout(() => { el.innerHTML = num(full.slice(0, i + 1)); if (i === full.length - 1) el._typing = false; }, i * 30));
 }
 function startHero() {
   if (heroStarted) return; heroStarted = true;
@@ -519,11 +555,11 @@ function renderSheet(i) {
   shBody.innerHTML = `<div class="ss">
     <div class="ss__top">
       <img class="ss__art" src="${esc(s.artL)}" width="900" height="900" alt="${esc(s.name)} show art">
-      <div><span class="ss__ch mono">CH ${pad(shIdx + 1)} · ${esc(s.slotShort)}</span>
+      <div><p class="ss__ch">CH ${pad(shIdx + 1)} · <span class="nw">${esc(s.slotShort)}</span></p>
         <h2 class="ss__name" id="ss-name">${esc(s.name)}</h2>
         <p class="ss__tag">${esc(s.tagline)}</p>
         ${h ? `<p class="ss__hosts">${esc(h)}</p>` : ''}
-        <span class="chip chip--${chip}">${live ? '● LIVE NOW' : chip.toUpperCase()}</span></div>
+        <span class="chip chip--${chip}">${live ? DOT + 'Live now' : chip}</span></div>
     </div>
     <p class="ss__desc">${esc(s.desc)}</p>
     <div class="ss__ctas">
@@ -532,7 +568,7 @@ function renderSheet(i) {
       ${s.spotify ? `<a class="btn btn--ghost btn--sm" href="${esc(s.spotify)}" target="_blank" rel="noopener">${ico('spotify')}<span>Spotify</span>${NEWTAB}</a>` : ''}
       <a class="pod__rss" href="${esc(s.rss)}" target="_blank" rel="noopener">${ico('rss')}<span>RSS</span>${NEWTAB}</a>
     </div>
-    <a class="slot slot--sm" href="#advertise" data-close-link><span><span class="slot__k mono">${esc(s.short.toUpperCase())} PRESENTED BY</span></span><span class="slot__v">AVAILABLE</span></a>
+    <a class="slot slot--sm" href="#advertise" data-close-link><span class="slot__k">${esc(s.short)} presented by</span><span class="slot__v">Available</span></a>
   </div>`;
   $('[data-ss-ch]').textContent = `CH ${pad(shIdx + 1)} / ${pad(SHOWS.length)}`;
   $('[data-ss-watch]', shBody).addEventListener('click', () => {
@@ -540,11 +576,19 @@ function renderSheet(i) {
     openLive({ opener: op, video: live ? null : s.replay, from: 'sheet' });
   });
 }
-function openSheet(i, opener) { renderSheet(i); openDialog(SH, opener, $('.sheet__x', SH)); }
+function openSheet(i, opener) {
+  renderSheet(i); openDialog(SH, opener, $('.sheet__x', SH));
+  /* one steady height while paging: size the panel to the tallest show so the grip, X and nav never jump */
+  shPanel.style.minHeight = '';
+  let tall = 0;
+  SHOWS.forEach((_, k) => { renderSheet(k); tall = Math.max(tall, shPanel.offsetHeight); });
+  renderSheet(i);
+  if (tall) shPanel.style.minHeight = tall + 'px';
+}
 function surfSheet(dir) {
   vibrate(8);
   const ni = (shIdx + dir + SHOWS.length) % SHOWS.length;
-  surf(shPanel, () => renderSheet(ni), `CH ${pad(ni + 1)} ▸ ${SHOWS[ni].name.toUpperCase()}`);
+  surf(shPanel, () => renderSheet(ni), `CH ${pad(ni + 1)} › ${SHOWS[ni].name.toUpperCase()}`);
 }
 $('[data-ss-prev]').addEventListener('click', () => surfSheet(-1));
 $('[data-ss-next]').addEventListener('click', () => surfSheet(1));
@@ -570,15 +614,14 @@ const items = $$('.st', list);
 const cats = JSON.parse($('#stories').dataset.cats || '{}');
 const chipsEl = $('.fchips'), ind = $('.fchips__ind');
 let filter = 'all', expanded = false;
-const LIMIT = () => mqDesk.matches ? 8 : 6;
+const LIMIT = () => mqWide.matches ? 8 : mqTab.matches ? 7 : 6;
 const kindOf = it => it.classList.contains('st--feature') ? 'f' : it.classList.contains('st--row') ? 'r' : 'c';
 function layout(vis) {
   vis.forEach((it, k) => {
     const kind = k === 0 ? 'feature' : k < 5 ? 'row' : 'card';
     it.classList.remove('st--feature', 'st--row', 'st--card'); it.classList.add('st--' + kind);
-    $('.st__body', it).classList.toggle('blade', kind === 'feature');
     const img = $('.st__img', it);
-    img.sizes = kind === 'feature' ? '(min-width: 1100px) 720px, 100vw' : '(min-width: 1100px) 400px, 96px';
+    img.sizes = kind === 'feature' ? '(min-width: 900px) 58vw, 100vw' : kind === 'card' ? '(min-width: 900px) 31vw, 128px' : '(min-width: 1100px) 136px, 128px';
   });
 }
 function moveInd(btn, animate) {
@@ -590,6 +633,26 @@ function moveInd(btn, animate) {
   const target = x - (chipsEl.clientWidth - w) / 2;
   if (animate) chipsEl.scrollTo({ left: Math.max(0, target), behavior: RM ? 'auto' : 'smooth' });
 }
+/* chip strip: edge fades only where there is more to scroll */
+function chipFade() {
+  if (!chipsEl) return;
+  const max = chipsEl.scrollWidth - chipsEl.clientWidth;
+  chipsEl.classList.toggle('is-scrolled', chipsEl.scrollLeft > 2);
+  chipsEl.classList.toggle('at-end', chipsEl.scrollLeft >= max - 2);
+}
+/* scroll cue: when a chip happens to end right at the edge (440 px), the next one hides wholly under the fade and
+   the row looks finished. Widen the gaps just enough that the last visible chip runs into the fade instead. */
+function chipPeek() {
+  if (!chipsEl) return;
+  chipsEl.style.removeProperty('--cg');
+  const cs = [...chipsEl.querySelectorAll('.fchip')], edge = chipsEl.clientWidth - 4;
+  if (chipsEl.scrollWidth <= chipsEl.clientWidth + 1) return;
+  const k = cs.findIndex(c => c.offsetLeft + c.offsetWidth > edge);
+  if (k < 2 || cs[k].offsetLeft < edge - 36) return;
+  const prev = cs[k - 1], shift = edge + 28 - (prev.offsetLeft + prev.offsetWidth);
+  chipsEl.style.setProperty('--cg', (2 + shift / (k - 1)).toFixed(1) + 'px');
+}
+chipsEl?.addEventListener('scroll', () => requestAnimationFrame(chipFade), { passive: true });
 function applyStories(animate) {
   const match = it => filter === 'all' || it.dataset.teams.split(' ').includes(filter);
   const all = items.filter(match), next = all.slice(0, expanded ? Infinity : LIMIT()), nextSet = new Set(next);
@@ -642,7 +705,12 @@ function railBtns() {
   $('[data-rail-prev]').disabled = vrail.scrollLeft <= 2;
   $('[data-rail-next]').disabled = vrail.scrollLeft >= max;
 }
-const railStep = dir => { const it = $('.vrail__item', vrail); const step = it ? (it.offsetWidth + 20) * (mqDesk.matches ? 4 : 1) : vrail.clientWidth; vrail.scrollBy({ left: dir * step, behavior: RM ? 'auto' : 'smooth' }); };
+const railStep = dir => {
+  const it = $('.vrail__item', vrail), gap = parseFloat(getComputedStyle(vrail).columnGap) || 0;
+  const per = it ? Math.max(1, Math.round((vrail.clientWidth - parseFloat(getComputedStyle(vrail).paddingLeft) * 2 + gap) / (it.offsetWidth + gap))) : 1;
+  const step = it ? (it.offsetWidth + gap) * per : vrail.clientWidth;
+  vrail.scrollBy({ left: dir * step, behavior: RM ? 'auto' : 'smooth' });
+};
 $('[data-rail-prev]').addEventListener('click', () => railStep(-1));
 $('[data-rail-next]').addEventListener('click', () => railStep(1));
 vrail.addEventListener('scroll', () => requestAnimationFrame(railBtns), { passive: true });
@@ -662,7 +730,6 @@ function mountIframe() {
     f = d.createElement('iframe');
     f.title = 'Woodward Sports Network player';
     f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-    f.setAttribute('allowfullscreen', '');
     f.referrerPolicy = 'strict-origin-when-cross-origin';
     f.src = src; lrFrame.append(f);
   } else if (f.src !== src) f.src = src;
@@ -673,7 +740,7 @@ function renderLR() {
   LR.classList.toggle('is-live', live);
   const kick = $('[data-lr-kick]'), name = $('[data-lr-name]'), hosts = $('[data-lr-hosts]');
   if (lr.mode === 'live') {
-    kick.textContent = live ? `● LIVE NOW · ${s.slotShort}` : 'WSN LIVE STREAM';
+    kick.innerHTML = live ? `${DOT}LIVE NOW · ${esc(s.slotShort)}` : 'WSN LIVE STREAM';
     name.textContent = live ? s.name : 'Woodward Sports Network'; hosts.textContent = live ? hostsOf(s) : 'Live shows every weekday · 8AM–7PM ET';
   } else {
     const v = VIDS.find(x => x.id === lr.vid) || VIDS[0];
@@ -681,12 +748,13 @@ function renderLR() {
     kick.textContent = 'REPLAY · ' + v.meta.split('·').pop().trim().toUpperCase();
     name.textContent = vs ? vs.name : 'Woodward Sports'; hosts.textContent = v.title;
   }
+  fitLR();
   const msg = $('[data-lr-msg]');
   const nxt = n.state === 'next' ? `Up next: <b>${esc(s.name)}</b> at ${firstHour(s)}. Starts in` : `We’re off air. Back <b>${esc(WD[n.wd] || '')} ${firstHour(s)}</b> with <b>${esc(s.name)}</b>.`;
   const html = live ? `<b>${esc(s.name)}</b> is live right now with ${esc(hostsOf(s))}.` : nxt;
   if (msg._html !== html + n.state) {
     msg._html = html + n.state;
-    msg.innerHTML = html + (live ? '' : '<span class="flaps mono" aria-hidden="true"></span>');
+    msg.innerHTML = html + (live ? '' : '<span class="flaps" aria-hidden="true"></span>');
     lrFlaps.el = $('.flaps', msg); lrFlaps.v = ''; lrFlaps.cells = [];
   }
   if (!live) lrFlaps.set(cd(n.left), lr.open && !lr.mini);
@@ -722,17 +790,17 @@ function openLive({ from = 'btn', video = null, opener = null } = {}) {
     const L = lrPlayer.getBoundingClientRect(), F = facade.getBoundingClientRect();
     a = play(lrPlayer, [{ transform: `translate(${F.left - L.left}px,${F.top - L.top}px) scale(${F.width / L.width})` }, { transform: 'none' }], { duration: 480, easing: EO });
     fade.forEach(el => play(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 320, delay: 160, easing: 'ease-out', fill: 'backwards' }));
-  } else if (mqWide.matches) a = play(lrSheet, [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: EO });
+  } else if (mqTab.matches) a = play(lrSheet, [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: EO });
   else a = play(lrSheet, [{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 420, easing: EO });
   (a ? a.finished : Promise.resolve()).catch(() => {}).then(mountIframe);
-  setTimeout(() => $('[data-lr-min]', LR).focus({ preventScroll: true }), 60);
+  setTimeout(() => $('[data-lr-min]', LR).focus({ preventScroll: true, focusVisible: kbdNav }), 60);
 }
 function resetLR() {
   lr.open = false; lr.mini = false;
   $('iframe', lrFrame)?.remove();
   LR.classList.remove('is-open', 'is-mini'); LR.setAttribute('aria-modal', 'true');
   lrPlayer.style.transform = ''; lrSheet.style.transform = ''; $('.lr__backdrop', LR).style.opacity = '';
-  lrExpand.hidden = true; lrMclose.hidden = true; LR.hidden = true;
+  lrExpand.hidden = true; lrMclose.hidden = true; LR.hidden = true; miniClear(null);
 }
 function closeLive(returnFocus = true) {
   if (!lr.open) return;
@@ -743,7 +811,7 @@ function closeLive(returnFocus = true) {
   let a;
   if (wasMini) a = play(lrPlayer, [{ opacity: 1 }, { opacity: 0 }], { duration: 180, fill: 'forwards' });
   else if (RM) a = play(lrSheet, [{ opacity: 1 }, { opacity: 0 }], { duration: 150, fill: 'forwards' });
-  else if (mqWide.matches) a = play(lrSheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(16px) scale(.98)' }], { duration: 240, easing: EC, fill: 'forwards' });
+  else if (mqTab.matches) a = play(lrSheet, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(16px) scale(.98)' }], { duration: 240, easing: EC, fill: 'forwards' });
   else a = play(lrSheet, [{ transform: lrSheet.style.transform || 'none' }, { transform: 'translateY(100%)' }], { duration: 320, easing: EC, fill: 'forwards' });
   LR.classList.remove('is-open');
   (a ? a.finished : Promise.resolve()).catch(() => {}).then(() => { a?.cancel(); lrPlayer.getAnimations?.().forEach(x => x.cancel()); resetLR(); });
@@ -751,10 +819,12 @@ function closeLive(returnFocus = true) {
 }
 function miniRect(L) {
   const W = mqWide.matches ? 400 : Math.round(L.width * .42), s = W / L.width, h = L.height * s;
-  const dock = $('.dock'), dh = mqDesk.matches ? 0 : (dock?.getBoundingClientRect().height || 0);
+  const dock = $('.dock'), dh = dock && getComputedStyle(dock).display !== 'none' ? dock.getBoundingClientRect().height : 0;
   const right = innerWidth - (mqWide.matches ? 24 : 12), bottom = innerHeight - dh - (mqWide.matches ? 24 : 30);
   return { s, x: right - W, y: bottom - h, W, h };
 }
+/* page-end clearance so the mini player never sits on the footer links */
+function miniClear(m) { if (m) H.style.setProperty('--mini-clear', Math.ceil(innerHeight - m.y) + 'px'); H.classList.toggle('lr-mini', !!m); }
 function placeMclose(m) { lrMclose.style.transform = `translate(${Math.round(Math.min(m.x + m.W - 30, innerWidth - 50))}px,${Math.round(m.y - 20)}px)`; }
 function minimize(fromRect) {
   if (!lr.open || lr.mini) return;
@@ -770,7 +840,7 @@ function minimize(fromRect) {
   $('.lr__backdrop', LR).style.opacity = '';
   const i = stack.indexOf(LR); if (i > -1) stack.splice(i, 1);
   if (!stack.length) lock(false);
-  lrExpand.hidden = false; lrMclose.hidden = false; placeMclose(m);
+  lrExpand.hidden = false; lrMclose.hidden = false; placeMclose(m); miniClear(m);
   lrExpand.focus({ preventScroll: true });
 }
 function expand() {
@@ -779,15 +849,15 @@ function expand() {
   const from = lrPlayer.style.transform;
   lrPlayer.style.transform = '';
   play(lrPlayer, [{ transform: from }, { transform: 'none' }], { duration: RM ? 1 : 420, easing: EO });
-  LR.classList.remove('is-mini'); LR.setAttribute('aria-modal', 'true');
+  LR.classList.remove('is-mini'); LR.setAttribute('aria-modal', 'true'); miniClear(null);
   if (!stack.includes(LR)) stack.push(LR); lock(true);
   lrExpand.hidden = true; lrMclose.hidden = true;
-  setTimeout(() => $('[data-lr-min]', LR).focus({ preventScroll: true }), 60);
+  setTimeout(() => $('[data-lr-min]', LR).focus({ preventScroll: true, focusVisible: kbdNav }), 60);
 }
 lrExpand.addEventListener('click', expand);
 $('[data-lr-min]', LR).addEventListener('click', () => minimize());
 $$('[data-lr-close]', LR).forEach(b => b.addEventListener('click', () => closeLive()));
-addEventListener('resize', () => { if (lr.mini) { lrPlayer.style.transform = 'none'; const L = lrPlayer.getBoundingClientRect(), m = miniRect(L); lrPlayer.style.transform = `translate(${m.x - L.left}px,${m.y - L.top}px) scale(${m.s})`; placeMclose(m); } });
+addEventListener('resize', () => { if (lr.mini) { lrPlayer.style.transform = 'none'; const L = lrPlayer.getBoundingClientRect(), m = miniRect(L); lrPlayer.style.transform = `translate(${m.x - L.left}px,${m.y - L.top}px) scale(${m.s})`; placeMclose(m); miniClear(m); } });
 $$('[data-lr-tab]', LR).forEach(b => b.addEventListener('click', () => { setTab(b.dataset.lrTab); if (b.dataset.lrTab === 'live') loadLive(); }));
 $('.tabs', LR).addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const t = lr.tab === 'live' ? 'replays' : 'live'; setTab(t, true); if (t === 'live') loadLive(); } });
 $('[data-lr-latest]', LR).addEventListener('click', () => { const v = st && st.state === 'live' ? SHOWS[st.i].replay : DATA.latest; setTab('replays'); loadVideo(v); });
@@ -863,11 +933,11 @@ function search(q) {
       .map(x => ({ x, sc: (x.t.startsWith(toks[0]) ? 3 : 0) + (toks.every(t => x.t.includes(t)) ? 2 : 0) }))
       .sort((a, b) => b.sc - a.sc).slice(0, 5);
     if (!hits.length) continue;
-    html += `<div class="fgroup" role="group" aria-label="${label.toLowerCase()}"><p class="fgroup__h mono" aria-hidden="true">${label}</p>`;
+    html += `<div class="fgroup" role="group" aria-label="${label.toLowerCase()}"><p class="fgroup__h" aria-hidden="true">${label}</p>`;
     hits.forEach(({ x }) => {
       const k = fOpts.push(x) - 1;
-      const verb = { show: 'OPEN', team: 'FILTER', story: 'READ ↗', video: 'PLAY' }[type];
-      html += `<div class="fres" role="option" id="fo-${k}" data-k="${k}" aria-selected="false"><span class="fres__t">${hl(x.title, toks)}</span><span class="fres__k mono">${verb}</span></div>`;
+      const verb = { show: 'Open', team: 'Filter', story: 'Read', video: 'Play' }[type];
+      html += `<div class="fres" role="option" id="fo-${k}" data-k="${k}" aria-selected="false"><span class="fres__t">${hl(x.title, toks)}</span><span class="fres__k">${verb}</span></div>`;
     });
     html += '</div>';
   }
@@ -917,17 +987,19 @@ addEventListener('keydown', e => {
 /* ------------------------------------------------------------------ misc */
 (() => { // App Store first on iOS, YouTube Live first elsewhere
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  $('[data-appbtns]')?.classList.toggle('is-alt', !ios);
+  const b = $('[data-appbtns]'), yt = b && $('.app__yt', b);
+  if (yt && !ios) b.prepend(yt); // reorder the DOM, not CSS order, so focus follows the visual order
 })();
 function relayout() {
   tickerSpeed();
-  moveInd($('.fchip.is-on'), false);
+  chipPeek(); moveInd($('.fchip.is-on'), false); chipFade();
+  fitL3(); if (lr.open) fitLR();
   markNav(); railBtns();
   if (st) renderRail(st, Date.now(), true);
 }
 let rzT = 0;
 addEventListener('resize', () => { clearTimeout(rzT); rzT = setTimeout(relayout, 120); }, { passive: true });
-mqDesk.addEventListener?.('change', () => { if (!expanded) applyStories(false); });
+[mqTab, mqWide].forEach(m => m.addEventListener?.('change', () => { if (!expanded) applyStories(false); }));
 
 /* ------------------------------------------------------------------ boot */
 clock.start();

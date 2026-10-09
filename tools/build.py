@@ -16,8 +16,10 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = json.loads((ROOT / 'data/content.json').read_text())
 MEDIA = json.loads((ROOT / 'data/media.json').read_text())
 SHOP = json.loads((ROOT / 'data/shop.json').read_text())
+for _p in SHOP:  # typographic apostrophes, like every other string on the page
+    _p['title'] = re.sub(r"(\w)'", '\\1’', _p['title'])
 DET = ZoneInfo('America/Detroit')
-SITE = 'https://kristijan-eth.github.io/website-Joey-woodwardsports/'
+SITE = 'https://the-ethos-team.github.io/website-woodward-sports/'
 STAMP = sys.argv[sys.argv.index('--stamp') + 1] if '--stamp' in sys.argv else datetime.datetime.now().strftime('%Y%m%d%H%M')
 
 e = lambda s: html.escape(str(s), quote=True)
@@ -44,6 +46,25 @@ def icon(name, cls='ico'):
 
 
 SLASHES = '<span class="slashes" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>'
+DOT = '<i class="dot" aria-hidden="true"></i>'          # ● is not in the web fonts: CSS dot instead
+ARROW = '<svg class="ico ico--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg>'  # → as inline SVG
+
+# No-break ranges (typography spec 4d): seasons, scores, time ranges, MON–FRI, dates, "5 min read"
+NW_RE = re.compile(
+    r'(\b\d{4}-\d{2}\b'                                          # 2026-27
+    r'|\b\d{2,3}-\d{2,3}\b'                                       # 109-107
+    r'|\b\d{1,2}(?::\d{2})?(?:\s?[AP]M)?–\d{1,2}(?::\d{2})?\s?[AP]M(?: ET)?'  # 8–10 AM ET, 8AM–7PM ET
+    r'|\bMON–FRI\b'
+    r'|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2}(?:, \d{4})?'
+    r'|\b\d+ min read\b'
+    r'|\bRed Wings\b|\bMichigan State\b'                          # team names never split
+    r'|\blower-thirds?\b)')
+
+
+def nw(text):
+    """Escape text and wrap ranges that must never split in <span class="nw">."""
+    return NW_RE.sub(lambda m: f'<span class="nw">{m.group(0)}</span>', e(text))
+
 
 TEAM = {  # spec accents: stripe, dot and glow only
     'lions': ('LIONS', 'Lions', '#0076B6'),
@@ -66,6 +87,10 @@ SOC = DATA['social']
 def hosts(s):
     h = s['hosts']
     return ' & '.join(h) if len(h) < 3 else ', '.join(h[:-1]) + ' & ' + h[-1]
+
+
+def slot_range(s):  # "8–10 AM" (track blocks, phone mock: the ET is said nearby)
+    return slot_short(s).removesuffix(' ET')
 
 
 def slot_short(s):  # "8–10 AM ET"
@@ -125,15 +150,21 @@ def vid_img(vid, cls, sizes, lazy=True, hero=False):
 
 # ---------------------------------------------------------------- sections
 
+# Fit-to-width factor per blade title (Anton advance + .01em tracking + plate padding, in em),
+# typography spec 4i: font-size = min(--fs-h2, (viewport - gutters) / --bw), so every blade stays one line.
+BLADE_W = {'THE LINEUP': 5.3, 'PICK YOUR TEAM': 7.3, 'THE LATEST': 5.3, 'REPLAYS': 4.4, 'TURN IT UP.': 5.4,
+           'WATCH PARTIES': 7.0, 'MERCH DROP': 6.0, 'TAKE US WITH YOU': 7.9, 'YOUR BRAND. ON AIR.': 9.0}
+
+
 def section_head(ch, name, title, sub, hid, paper=False):
     words = title.split(' ')
     last = words[-1]
     head = ' '.join(words[:-1])
     t = (e(head) + ' ' if head else '') + f'<span class="nw">{e(last)}</span>'
     return f'''<header class="sh" data-reveal-head>
-      <p class="sh__kicker mono"><span>CH {ch} — {e(name)}</span></p>
-      <h2 class="blade sh__blade" id="{hid}"><span class="mask"><span class="mask__in">{t}</span></span></h2>
-      {f'<p class="sh__sub">{sub}</p>' if sub else ''}
+      <p class="sh__kicker"><span><b class="sh__ch">CH {ch}</b> — {e(name)}</span></p>
+      <h2 class="blade sh__blade" id="{hid}" style="--bw:{BLADE_W.get(title, 5)}"><span class="mask"><span class="mask__in">{t}</span></span></h2>
+      {f'<p class="sh__sub">{nw(sub)}</p>' if sub else ''}
     </header>'''
 
 
@@ -145,7 +176,7 @@ def ticker():
         tag, _ = team_tag(a)
         inner = '<em>' + e(tag.upper()) + '</em> ' + e(a['title_display'])
         return f'<li>{ext(a["url"], inner)}</li>'
-    seq = [f'<li><span class="tk-live">● LIVE SHOWS EVERY WEEKDAY 8AM–7PM ET</span></li>']
+    seq = [f'<li><span class="tk-live">{DOT}LIVE SHOWS EVERY WEEKDAY <span class="nw">8AM–7PM ET</span></span></li>']
     for i, a in enumerate(pick):
         seq.append(head(a))
         if i == 2:
@@ -169,26 +200,26 @@ def hero():
     return f'''<section id="live" class="hero" aria-labelledby="hero-h">
     <div class="wall" aria-hidden="true">{rows}</div>
     <div class="wrap hero__grid">
-      <p class="hero__kicker kicker">{SLASHES}<span class="hero__kick"><span class="live-dot" aria-hidden="true"></span><span class="hk"><span>LIVE SHOWS EVERY WEEKDAY</span><span class="hk__t"><span class="hk__sep"> · </span>8AM–7PM ET</span></span></span></p>
-      <h1 class="hero__h1" id="hero-h"><span class="ln"><span class="ln__in" style="--i:0">UNFILTERED</span></span> <span class="ln"><span class="ln__in" style="--i:1">DETROIT</span></span> <span class="ln"><span class="ln__in outline" style="--i:2">SPORTS.</span></span></h1>
+      <p class="hero__kicker kicker">{SLASHES}<span class="hero__kick"><span class="live-dot" aria-hidden="true"></span><span class="hk"><span>LIVE SHOWS EVERY WEEKDAY</span><span class="hk__t"><span class="hk__sep"> · </span><span class="nw">8AM–7PM ET</span></span></span></span></p>
+      <h1 class="hero__h1" id="hero-h"><span class="ln"><span class="ln__in" style="--i:0">UNFILTERED</span></span> <span class="ln"><span class="ln__in" style="--i:1">DETROIT</span></span> <span class="ln"><span class="ln__in" style="--i:2">SPORTS<span class="h1__dot">.</span></span></span></h1>
       <div class="hero__player">
         <div class="facade" id="facade" data-surf>
           <div class="facade__media" data-surf-content>{vid_img(latest["id"], "facade__img", "(min-width: 1100px) 600px, (min-width: 600px) calc(100vw - 48px), calc(100vw - 32px)", hero=True)}</div>
           <span class="facade__shade" aria-hidden="true"></span>
           <a class="facade__hit" href="{e(latest["url"])}" target="_blank" rel="noopener" data-live-open="facade" data-video="{latest["id"]}"><span class="sr-only" data-facade-label>Play the latest episode: {e(latest["title"])} (opens in new tab)</span></a>
           <span class="bug bug--air" data-airbug aria-hidden="true"><i class="bug__dot"></i><span data-airbug-txt>REPLAY</span></span>
-          <span class="bug bug--clock mono" aria-hidden="true"><span data-clock>ET</span></span>
+          <span class="bug bug--clock" aria-hidden="true"><span data-clock>ET</span></span>
           <span class="disc" aria-hidden="true">{icon("play")}</span>
           <div class="l3" data-l3 aria-hidden="true">
             <div class="l3__plate blade" data-surf-content>
-              <span class="l3__kick mono" data-l3-kick>LATEST EPISODE</span>
-              <span class="l3__name" data-l3-name>{e(bes["name"])}</span>
+              <span class="l3__kick" data-l3-kick>LATEST EPISODE</span>
+              <span class="l3__name" data-l3-name data-fit>{e(bes["name"])}</span>
               <span class="l3__hosts" data-l3-hosts>{e(hosts(bes))}</span>
               <span class="l3__bar"><i data-l3-progress></i></span>
             </div>
-            <div class="l3__side" data-l3-side hidden><span class="l3__lbl mono" data-l3-lbl>STARTS IN</span><span class="flaps mono" data-flaps></span></div>
+            <div class="l3__side" data-l3-side hidden><span class="l3__lbl" data-l3-lbl>STARTS IN</span><span class="flaps" data-flaps></span></div>
           </div>
-          <span class="osd mono" aria-hidden="true" data-osd></span>
+          <span class="osd" aria-hidden="true" data-osd></span>
           <span class="surf" aria-hidden="true"><i class="surf__scan"></i><i class="surf__noise"></i></span>
         </div>
       </div>
@@ -211,17 +242,17 @@ def lineup():
         keys = ' '.join([s['short_name'], hosts(s), s['tagline'], s['slot_display'], s.get('podcast_name', '')])
         h = hosts(s)
         rows.append(f'''<li class="rail__row" data-row="{i}" style="--i:{i}">
-          <button class="srow" type="button" data-sheet="{s["id"]}" data-find-type="show" data-find-title="{e(s["name"])}" data-find-keys="{e(keys)}">
-            <img class="srow__art" src="{sm}" srcset="{sm} 480w, {lg} 900w" sizes="(min-width: 1100px) 300px, 72px" width="480" height="480" alt="" loading="lazy" decoding="async">
-            <span class="srow__body">
-              <span class="srow__slot mono">{e(slot_short(s))}<span class="srow__local" data-local="{s["start"]}"></span></span>
-              <span class="srow__name">{e(s["name"])}</span>
-              <span class="srow__tag">{e(s["tagline"])}</span>
-              {f'<span class="srow__hosts">{e(h)}</span>' if h else ''}
-            </span>
-            <span class="chip chip--later" data-chip>LATER</span>
+          <div class="srow">
+            <img class="srow__art" src="{sm}" srcset="{sm} 480w, {lg} 900w" sizes="(min-width: 1100px) 300px, (min-width: 768px) 112px, 80px" width="480" height="480" alt="" loading="lazy" decoding="async">
+            <div class="srow__body">
+              <p class="srow__slot">{nw(slot_short(s))}<span class="srow__local" data-local="{s["start"]}"></span></p>
+              <h3 class="srow__name"><button class="srow__btn" type="button" data-sheet="{s["id"]}" data-find-type="show" data-find-title="{e(s["name"])}" data-find-keys="{e(keys)}">{e(s["name"])}</button></h3>
+              <p class="srow__tag">{e(s["tagline"])}</p>
+              {f'<p class="srow__hosts">{e(h)}</p>' if h else ''}
+            </div>
+            <span class="chip chip--later" data-chip>Later</span>
             <span class="srow__more" aria-hidden="true">{icon("chev-r")}</span>
-          </button>
+          </div>
         </li>''')
         if i < len(gaps):
             a, b = gaps[i].split('–')
@@ -229,49 +260,55 @@ def lineup():
                 hh = int(t.split(':')[0])
                 return f'{hh % 12 or 12}'
             ampm = 'AM' if int(b.split(':')[0]) < 12 else 'PM'
-            rows.append(f'<li class="rail__row rail__row--gap" data-gap="{i}"><span class="mono">Replays · {lab(a)}–{lab(b)} {ampm}</span></li>')
+            # content.json: the hours between shows are not described, so the label claims no programming
+            rows.append(f'<li class="rail__row rail__row--gap" data-gap="{i}"><span>Between shows · <span class="nw">{lab(a)}–{lab(b)} {ampm}</span></span></li>')
         st = int(s['start'][:2]) + int(s['start'][3:]) / 60
         en = int(s['end'][:2]) + int(s['end'][3:]) / 60
-        track_blocks.append(f'<div class="trk__blk" data-blk="{i}" style="--a:{(st - 8) / 11:.4f};--b:{(en - 8) / 11:.4f}"><span class="trk__nm">{e(s["short_name"])}</span><span class="trk__tm mono">{e(s["slot_display"])}</span></div>')
+        track_blocks.append(f'<div class="trk__blk" data-blk="{i}" style="--a:{(st - 8) / 11:.4f};--b:{(en - 8) / 11:.4f}"><span class="trk__nm">{e(s["short_name"])}</span><span class="trk__tm">{nw(slot_range(s))}</span></div>')
     hours = ''.join(f'<span style="--x:{k / 11:.4f}">{(8 + k) % 12 or 12}{"A" if 8 + k < 12 else "P"}</span>' for k in range(12))
-    gapblk = ''.join(f'<span class="trk__gap" style="--a:{(int(g[:2]) - 8) / 11:.4f};--b:{(int(g[6:8]) - 8) / 11:.4f}">Replays</span>' for g in gaps)
+    gapblk = ''.join(f'<span class="trk__gap" style="--a:{(int(g[:2]) - 8) / 11:.4f};--b:{(int(g[6:8]) - 8) / 11:.4f}" aria-hidden="true">/////</span>' for g in gaps)
     return f'''<section id="lineup" class="sec sec--ink" aria-labelledby="lineup-h">
     <div class="wrap">
       {section_head("02", "LINEUP", "THE LINEUP", "Every take. Every host. All the noise.", "lineup-h")}
       <div class="trk" aria-hidden="true" data-reveal>
-        <div class="trk__hours mono">{hours}</div>
-        <div class="trk__lane">{gapblk}{''.join(track_blocks)}<span class="trk__now" data-now hidden><span class="trk__flag mono" data-now-flag>NOW</span></span></div>
+        <div class="trk__hours">{hours}</div>
+        <div class="trk__lane">{gapblk}{''.join(track_blocks)}<span class="trk__now" data-now hidden><span class="trk__flag" data-now-flag>NOW</span></span></div>
       </div>
       <div class="rail-wrap">
         <ol class="rail" data-rail data-reveal>{''.join(rows)}</ol>
         <span class="rail__head" data-playhead aria-hidden="true" hidden></span>
       </div>
-      <p class="smallprint mono">Weekdays · schedule may change.<span data-tznote></span></p>
+      <p class="smallprint">Weekdays · schedule may change.<span data-tznote></span></p>
     </div>
   </section>'''
 
 
 def teams():
     tiles = []
+    used = set()
     for i, t in enumerate(DATA['teams']):
         big, short, col = TEAM[t['id']]
-        a = ALL_ARTICLES[t['latest_article_ids'][0]]
+        ids = t['latest_article_ids']
+        aid = next((x for x in ids if x not in used and x in ALL_ARTICLES), ids[0])  # Michigan + MSU share stories
+        used.add(aid)
+        a = ALL_ARTICLES[aid]
         league = 'NCAA' if t['league'].startswith('NCAA') else t['league']
         keys = ' '.join([t['name'], t['short'], league])
         tiles.append(f'''<li style="--i:{i}"><button class="tile" type="button" data-team="{t["id"]}" style="--team:{col}" data-find-type="team" data-find-title="{e(t["name"])}" data-find-keys="{e(keys)}">
-          <span class="tile__league mono">{league}</span>
+          <span class="tile__league">{league}</span>
           <span class="tile__name">{big}</span>
-          <span class="tile__head">{e(a["title_display"])}</span>
+          <span class="tile__head">{nw(a["title_display"])}</span>
           <span class="tile__go" aria-hidden="true">{icon("chev-r")}</span>
         </button></li>''')
     cats = {c['slug']: c['url'] for c in DATA['categories']}
     leagues = [('NFL', 'nfl'), ('NBA', 'nba'), ('MLB', 'mlb'), ('NHL', 'nhl'), ('NCAA', 'ncaa'), ('Pop Culture', 'pop-culture')]
-    chips = ''.join(f'<li>{ext(cats[s], e(l), "lchip")}</li>' for l, s in leagues)
+    chips = ''.join(f'<li>{ext(cats[s], e(l) + icon("ext"), "lchip")}</li>' for l, s in leagues)
     return f'''<section id="teams" class="sec sec--ink2" aria-labelledby="teams-h">
     <div class="wrap">
-      {section_head("03", "TEAMS", "PICK YOUR TEAM", "Lions, Pistons, Tigers, Red Wings, Michigan and MSU. Tap a team to filter the latest stories.", "teams-h")}
+      {section_head("03", "TEAMS", "PICK YOUR TEAM", "Lions, Pistons, Tigers, Red Wings, Michigan and MSU. Tap a team to filter the latest stories.", "teams-h")}
       <ul class="tiles" data-reveal>{''.join(tiles)}</ul>
-      <ul class="lchips" aria-label="Browse by league on woodwardsports.com">{chips}</ul>
+      <p class="lchips__lbl lbl" id="lchips-lbl">More on woodwardsports.com</p>
+      <ul class="lchips" aria-labelledby="lchips-lbl">{chips}</ul>
     </div>
   </section>'''
 
@@ -301,12 +338,12 @@ def stories():
         ring = ' st__dot--ring' if col == '#18453B' else ''
         items.append(f'''<li class="st st--{kind}" data-teams="{teams_attr}" data-idx="{i}"{hidden}>
           <a class="st__a" href="{e(a["url"])}" target="_blank" rel="noopener" data-find-type="story" data-find-title="{e(a["title_display"])}" data-find-keys="{e(keys)}">
-            <span class="st__media">{media}</span>
-            <span class="st__body{' blade' if i == 0 else ''}">
-              <span class="st__tag"><i class="st__dot{ring}" style="--team:{col}"></i>{e(tag)}</span>
-              <span class="st__title">{e(a["title_display"])}</span>
-              <span class="st__by">{e(a["author"])} · <time datetime="{e(a["date"])}">{fdate(a["date"])}</time></span>
-            </span>{NEWTAB}
+            <div class="st__media">{media}</div>
+            <div class="st__body">
+              <p class="st__tag"><i class="st__dot{ring}" style="--team:{col}"></i><span>{e(tag)}</span><span class="st__min">· <span class="nw">{a["reading_minutes"]} min read</span></span></p>
+              <h3 class="st__title">{nw(a["title_display"])}</h3>
+              <p class="st__by">{e(a["author"])} · <time class="nw" datetime="{e(a["date"])}">{fdate(a["date"])}</time></p>
+            </div>{NEWTAB}
           </a>
         </li>''')
     chips = ['<button class="fchip is-on" type="button" aria-pressed="true" data-filter="all">All</button>']
@@ -319,16 +356,16 @@ def stories():
     </div>
     <div class="fbar" data-fbar>
       <div class="wrap fbar__in">
+        <span class="fbar__count" data-count aria-live="polite">{len(ARTICLES)} stories</span>
         <div class="fchips" role="group" aria-label="Filter stories by team">{''.join(chips)}<span class="fchips__ind" aria-hidden="true"></span></div>
-        <span class="fbar__count mono" data-count aria-live="polite">{len(ARTICLES)} stories</span>
       </div>
     </div>
     <div class="wrap">
       <ol class="stories" id="stories-list" data-reveal>{''.join(items)}</ol>
-      <p class="stories__empty" data-empty hidden>No fresh <span data-empty-team></span> stories here. <a data-empty-link href="https://woodwardsports.com/news/" target="_blank" rel="noopener">See all coverage on woodwardsports.com →<span class="sr-only"> (opens in new tab)</span></a></p>
+      <p class="stories__empty" data-empty hidden>No fresh <span data-empty-team></span> stories here. <a data-empty-link href="https://woodwardsports.com/news/" target="_blank" rel="noopener">See all coverage on woodwardsports.com{ARROW}<span class="sr-only"> (opens in new tab)</span></a></p>
       <div class="stories__foot">
         <button class="btn btn--ink" type="button" data-more aria-controls="stories-list" aria-expanded="false" hidden>More stories</button>
-        {ext("https://woodwardsports.com/news/", "All stories on woodwardsports.com →", "textlink")}
+        {ext("https://woodwardsports.com/news/", "<span>All stories on woodwardsports.com</span>" + ARROW, "textlink")}
       </div>
     </div>
   </section>'''
@@ -344,14 +381,14 @@ def watch():
         keys = ' '.join([show['name'] if show else '', 'short' if v['is_short'] else 'replay'])
         cards.append(f'''<li class="vrail__item" style="--i:{min(i, 5)}">
           <a class="vcard" href="{e(v["url"])}" target="_blank" rel="noopener" data-video="{v["id"]}" data-show="{v["show"] or ''}" data-find-type="video" data-find-title="{e(v["title"])}" data-find-keys="{e(keys)}">
-            <span class="vcard__media">{vid_img(v["id"], "vcard__img", "(min-width: 1100px) 300px, (min-width: 600px) 45vw, 82vw")}<span class="vcard__tag mono">{e(tag)}</span><span class="vcard__play" aria-hidden="true">{icon("play")}</span></span>
-            <span class="vcard__title">{e(v["title"])}</span>
-            <span class="vcard__meta mono">{e(meta)}</span>{NEWTAB}
+            <div class="vcard__media">{vid_img(v["id"], "vcard__img", "(min-width: 1100px) 300px, (min-width: 900px) 31vw, (min-width: 600px) 46vw, 82vw")}<span class="vcard__tag">{e(tag)}</span><span class="vcard__play" aria-hidden="true">{icon("play")}</span></div>
+            <h3 class="vcard__title">{nw(v["title"])}</h3>
+            <p class="vcard__meta">{nw(meta)}</p>{NEWTAB}
           </a>
         </li>''')
     return f'''<section id="watch" class="sec sec--ink" aria-labelledby="watch-h">
     <div class="wrap sh-row">
-      {section_head("05", "REPLAYS", "REPLAYS", "Full shows and clips, fresh off the stream. Tap one to watch it right here.", "watch-h")}
+      {section_head("05", "WATCH", "REPLAYS", "Full shows and clips, fresh off the stream. Tap one to watch it right here.", "watch-h")}
       <div class="railnav" data-railnav>
         <button class="rbtn" type="button" data-rail-prev aria-label="Previous videos">{icon("chev-l")}</button>
         <button class="rbtn" type="button" data-rail-next aria-label="Next videos">{icon("chev-r")}</button>
@@ -360,7 +397,7 @@ def watch():
     <ul class="vrail" data-vrail data-reveal aria-label="Latest videos">{''.join(cards)}</ul>
     <div class="wrap watch__foot">
       {ext(YT["url"] + "?sub_confirmation=1", icon("yt") + "<span>Subscribe on YouTube</span>", "btn btn--yt")}
-      {ext(YT["videos_url"], "All videos on YouTube →", "textlink textlink--light")}
+      {ext(YT["videos_url"], "<span>All videos on YouTube</span>" + ARROW, "textlink textlink--light")}
     </div>
   </section>'''
 
@@ -375,12 +412,12 @@ def listen():
           <div class="pod__top">
             <img class="pod__art" src="{sm}" width="480" height="480" alt="" loading="lazy" decoding="async">
             <div class="pod__id">
-              <p class="pod__name">{e(s["podcast_name"])}</p>
-              <p class="pod__meta mono">{e(slot_short(s))} · MON–FRI</p>
+              <h3 class="pod__name">{e(s["podcast_name"])}</h3>
+              <p class="pod__meta">{nw(slot_short(s) + " · MON–FRI")}</p>
             </div>
             <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           </div>
-          {f'<p class="pod__ep"><span class="mono">LATEST</span> {ext(ep["url"], e(ep["title"]))}</p>' if ep else ''}
+          {f'<p class="pod__ep"><span class="pod__lbl">Latest</span> {ext(ep["url"], nw(ep["title"]))}</p>' if ep else ''}
           <div class="pod__ctas">
             {ext(s["apple_podcasts"], icon("pod") + "<span>Apple Podcasts</span>", "btn btn--blade btn--sm")}
             {spot}
@@ -398,29 +435,29 @@ def listen():
 def watch_party():
     wp = DATA['watch_party']
     board = [('HOPCAT', 'WATCH PARTY + POSTGAME', 'win'), ('BAR LOUIE', 'PREGAME SHOW', 'pre'),
-             ('ROCK & BREWS', 'STREET TEAM', ''), ("O’TOOLE’S", 'STREET TEAM', ''), ('FIFTH AVE', 'STREET TEAM', ''), ('BLIND OWL', 'STREET TEAM', '')]
+             ('ROCK & BREWS', 'STREET TEAM', ''), ("O’TOOLES", 'STREET TEAM', ''), ('FIFTH AVE', 'STREET TEAM', ''), ('BLIND OWL', 'STREET TEAM', '')]
     rows = ''.join(f'<li class="board__row" style="--i:{i}"><span class="board__venue">{e(v)}</span><span class="board__st board__st--{c or "st"}">{e(s)}</span></li>' for i, (v, s, c) in enumerate(board))
     g7 = wp['past_events'][0]
     return f'''<section id="watch-party" class="sec sec--party" aria-labelledby="party-h">
     <picture class="party__bg" aria-hidden="true"><img src="img/atmo-detroit-dusk-1000.webp" srcset="img/atmo-detroit-dusk-1000.webp 1000w, img/atmo-detroit-dusk.webp 2000w" sizes="100vw" width="2000" height="1125" alt="" loading="lazy" decoding="async"></picture>
     <div class="wrap">
-      {section_head("07", "WATCH PARTIES", "WATCH PARTIES", "", "party-h")}
+      {section_head("07", "ON LOCATION", "WATCH PARTIES", "", "party-h")}
       <div class="party">
         <div class="party__copy">
-          <p class="party__recap"><strong>Detroit vs. Buffalo</strong> · Thursday Night Football · 9/17/26 · Downtown Royal Oak. Fans voted between 6 bars, and WSN covered all six.</p>
+          <p class="party__recap"><strong>Detroit vs. Buffalo</strong> · Thursday Night Football · <span class="nw">9/17/26</span> · Downtown Royal Oak. Fans voted between 6 bars, and WSN covered <span class="nw">all six.</span></p>
           <div class="board" data-reveal>
-            <div class="board__head mono"><span>VENUE</span><span>ROYAL OAK · THU 9/17/26</span></div>
+            <div class="board__head"><span>Venue</span><span>Royal Oak · Thu 9/17/26</span></div>
             <ol class="board__rows">{rows}</ol>
           </div>
           <p class="party__g7">Before that: the Woodward Heavyweights hosted a {ext(g7["url"], "Pistons–Magic Game 7 watch party")} at Lume’s grand opening in New Buffalo.</p>
           <div class="party__ctas">
             {ext(wp["post_url"], "<span>Read the recap</span>", "btn btn--blade")}
-            {ext(SOC["instagram"], "<span>Catch the next vote on Instagram</span>", "btn btn--ghost")}
+            {ext(SOC["instagram"], "<span>Catch the next vote on Instagram</span>" + ARROW, "textlink textlink--light")}
           </div>
         </div>
         <div class="party__side">
-          <figure class="party__fig"><img src="img/party/collage.webp" width="1000" height="563" alt="The six Royal Oak watch-party venues: HopCat, Rock &amp; Brews, O’Toole’s, Blind Owl, Fifth Avenue and Bar Louie" loading="lazy" decoding="async"></figure>
-          <a class="slot" href="#advertise"><span class="slot__k mono">PRESENTING PARTNER</span><span class="slot__v">AVAILABLE</span><span class="slot__cta">Put your name on the next one →</span></a>
+          <figure class="party__fig"><img src="img/party/collage.webp" width="1000" height="563" alt="The six Royal Oak watch-party venues: HopCat, Rock &amp; Brews, O’Tooles, Blind Owl, Fifth Avenue and Bar Louie" loading="lazy" decoding="async"></figure>
+          <a class="slot" href="#advertise"><span class="slot__k">Presenting partner</span><span class="slot__v">Available</span><span class="slot__cta">Put your name on the next one{ARROW}</span></a>
         </div>
       </div>
     </div>
@@ -430,14 +467,15 @@ def watch_party():
 def shop():
     cards = []
     for i, p in enumerate(SHOP):
-        inner = (f'<span class="prod__img"><img src="{p["image"]}" width="{p["image_w"]}" height="{p["image_h"]}" alt="{e(p["image_alt"])}" loading="lazy" decoding="async"></span>'
-                 f'<span class="prod__price mono">${e(p["price"])}</span><span class="prod__title">{e(p["title"])}</span>')
+        price = e(p['price']).replace('.', '<span class="pd">.</span>', 1)  # tnum digits, proportional point
+        inner = (f'<div class="prod__img"><img src="{p["image"]}" width="{p["image_w"]}" height="{p["image_h"]}" alt="{e(p["image_alt"])}" loading="lazy" decoding="async"></div>'
+                 f'<span class="prod__price">${price}</span><h3 class="prod__title">{e(p["title"])}</h3>')
         cards.append(f'<li style="--i:{min(i, 5)}">{ext(p["url"], inner, "prod")}</li>')
     return f'''<section id="shop" class="sec sec--paper" aria-labelledby="shop-h">
     <div class="wrap">
       {section_head("08", "SHOP", "MERCH DROP", "The official home of Woodward Sports gear. Rep the street sign.", "shop-h")}
       <ul class="prods" data-reveal>{''.join(cards)}</ul>
-      <div class="shop__foot">{ext(DATA["shop"]["url"], "<span>Shop all</span> →", "btn btn--ink")}<span class="shop__note mono">Prices from the store · may change</span></div>
+      <div class="shop__foot">{ext(DATA["shop"]["url"], "<span>Shop all</span>" + ARROW, "btn btn--ink")}<span class="shop__note">Prices from the store · may change</span></div>
     </div>
   </section>'''
 
@@ -453,17 +491,17 @@ def app():
           <a class="app__store" href="{e(a["ios_url"])}" target="_blank" rel="noopener"><img src="img/badges/app-store.svg" width="180" height="60" alt="Download {e(a["name"])} on the App Store">{NEWTAB}</a>
           {ext(YT["live_url"], icon("yt") + "<span>YouTube Live</span>", "btn btn--ghost app__yt")}
         </div>
-        <p class="app__fine mono">iPhone app. Android? Watch on YouTube Live.</p>
+        <p class="app__fine">iPhone app. Android? Watch on YouTube Live.</p>
       </div>
       <div class="app__stage" data-reveal>
         <div class="phone" aria-hidden="true">
           <div class="phone__screen">
-            <div class="phone__status mono"><span data-phone-time>WSN</span><span class="phone__isl"></span><span>LTE</span></div>
+            <div class="phone__status"><span data-phone-time>WSN</span><span class="phone__isl"></span><span>LTE</span></div>
             <div class="phone__bar"><img src="img/logo.svg" width="34" height="34" alt=""><span class="phone__title">WSN LIVE!</span></div>
-            <div class="phone__video"><img data-phone-art src="{art(SHOWS[0])[0]}" width="480" height="480" alt="" loading="lazy" decoding="async"><span class="bug bug--air" data-airbug><i class="bug__dot"></i><span data-airbug-txt>REPLAY</span></span></div>
-            <div class="phone__l3 blade"><span class="mono" data-phone-kick>UP NEXT</span><span class="phone__name" data-phone-name>{e(SHOWS[0]["name"])}</span></div>
-            <div class="phone__count"><span class="mono" data-phone-lbl>STARTS IN</span><span class="flaps mono" data-flaps-phone></span></div>
-            <div class="phone__list">{''.join(f'<span><img src="{art(s)[0]}" width="480" height="480" alt="" loading="lazy" decoding="async"><b>{e(s["short_name"])}</b><i class="mono">{e(s["slot_display"])}</i></span>' for s in SHOWS)}</div>
+            <div class="phone__video"><img data-phone-art src="img/videos/{replay_for(SHOWS[0])["id"]}-480.webp" width="480" height="270" alt="" loading="lazy" decoding="async"><span class="bug bug--air" data-airbug><i class="bug__dot"></i><span data-airbug-txt>REPLAY</span></span></div>
+            <div class="phone__l3 blade"><span class="phone__kick" data-phone-kick>UP NEXT</span><span class="phone__name" data-phone-name>{e(SHOWS[0]["name"])}</span></div>
+            <div class="phone__count"><span class="phone__lbl" data-phone-lbl>STARTS IN</span><span class="flaps" data-flaps-phone></span></div>
+            <div class="phone__list">{''.join(f'<span><img src="{art(s)[0]}" width="480" height="480" alt="" loading="lazy" decoding="async"><b>{e(s["short_name"])}</b><i>{nw(slot_range(s))}</i></span>' for s in SHOWS)}</div>
             <div class="phone__tabs"><span>{icon("shows")}</span><span>{icon("teams")}</span><span class="is-on">{icon("play")}</span><span>{icon("listen")}</span><span>{icon("shop")}</span></div>
           </div>
         </div>
@@ -481,7 +519,7 @@ def advertise():
            ('Watch-party activations', 'Put your bar or brand at the centre of the next fan watch party.'),
            ('Merch collabs', 'Co-branded drops in the Woodward Sports store.'),
            ('YouTube & social integrations', 'Branded segments, clips and posts across the WSN channels.')]
-    cards = ''.join(f'<li class="inv" style="--i:{min(i, 5)}"><span class="inv__n mono">{i + 1:02d}</span><h3 class="inv__t">{e(t)}</h3><p class="inv__d">{e(dsc)}</p></li>' for i, (t, dsc) in enumerate(inv))
+    cards = ''.join(f'<li class="inv" style="--i:{min(i, 5)}"><span class="inv__n" aria-hidden="true">{i + 1:02d}</span><h3 class="inv__t">{nw(t)}</h3><p class="inv__d">{nw(dsc)}</p></li>' for i, (t, dsc) in enumerate(inv))
     return f'''<section id="advertise" class="sec sec--ink" aria-labelledby="adv-h">
     <div class="wrap">
       {section_head("10", "ADVERTISE", "YOUR BRAND. ON AIR.", "Put your brand inside Detroit’s loudest sports conversation: live every weekday, on demand all week.", "adv-h")}
@@ -490,23 +528,24 @@ def advertise():
           <img class="demo__img" src="img/atmo-arena-bowl-1000.webp" srcset="img/atmo-arena-bowl-1000.webp 1000w, img/atmo-arena-bowl.webp 2000w" sizes="(min-width: 1100px) 640px, 100vw" width="2000" height="1125" alt="" loading="lazy" decoding="async">
           <span class="bug bug--air bug--demo"><i class="bug__dot"></i>LIVE</span>
           <span class="demo__logo"><img src="img/logo.svg" width="56" height="56" alt=""></span>
-          <div class="demo__l3 blade"><span class="mono">PRESENTED BY</span><b>YOUR BRAND</b></div>
-          <div class="demo__tk mono"><span class="demo__tkk">SPONSOR</span><span>THIS SPOT IS AVAILABLE · YOUR BRAND HERE ///// </span></div>
-          <span class="demo__tag mono">DEMO</span>
+          <div class="demo__l3 blade"><span class="demo__kick">PRESENTED BY</span><b>YOUR BRAND</b></div>
+          <div class="demo__tk"><span class="demo__tkk">SPONSOR</span><span>THIS SPOT IS AVAILABLE<span class="demo__tkx"> · YOUR BRAND HERE</span> /////</span></div>
+          <span class="demo__tag">DEMO</span>
         </div>
         <div class="adv__side">
           <dl class="stats">
-            <div><dt class="mono">SUBSCRIBERS</dt><dd>111K</dd></div>
-            <div><dt class="mono">VIEWS</dt><dd>163M+</dd></div>
-            <div><dt class="mono">VIDEOS</dt><dd>22K+</dd></div>
+            <div><dt>Subscribers</dt><dd>111K</dd></div>
+            <div><dt>Views</dt><dd>163M+</dd></div>
+            <div><dt>Videos</dt><dd>22K+</dd></div>
           </dl>
-          <p class="stats__src mono">YouTube, Oct 2026 · @WoodwardSports</p>
+          <p class="stats__src">YouTube, <span class="nw">Oct 2026</span> · @WoodwardSports</p>
           <div class="adv__cta">
             <a class="btn btn--blade btn--xl" data-contact href="https://ig.me/m/woodwardsports" target="_blank" rel="noopener">{icon("chat")}<span>Advertise with WSN</span><span class="sr-only"> (opens Instagram in a new tab)</span></a>
-            <a class="textlink textlink--light" data-contact-alt href="https://m.me/WoodwardSports" target="_blank" rel="noopener">Prefer Messenger? Message us on Facebook →<span class="sr-only"> (opens in new tab)</span></a>
+            <a class="textlink textlink--light" data-contact-alt href="https://m.me/WoodwardSports" target="_blank" rel="noopener">Prefer Messenger? Message us on Facebook{ARROW}<span class="sr-only"> (opens in new tab)</span></a>
           </div>
         </div>
       </div>
+      <p class="invs__lbl">Ideas to ask us about</p>
       <ol class="invs" data-reveal>{cards}</ol>
     </div>
   </section>'''
@@ -519,8 +558,8 @@ def footer():
     navh = ''.join(f'<li><a href="{h}">{e(n)}</a></li>' for n, h in nav)
     return f'''<footer class="ftr" aria-labelledby="ftr-h">
     <div class="wrap">
-      <h2 class="ftr__big" id="ftr-h">SOUND <span class="nw">OFF.</span></h2>
-      <p class="ftr__handle mono">{e(SOC["handle"])} everywhere</p>
+      <h2 class="ftr__big" id="ftr-h">SOUND <span class="nw">OFF<span class="ftr__dot">.</span></span></h2>
+      <p class="ftr__handle"><b>{e(SOC["handle"])}</b> everywhere</p>
       <ul class="ftr__soc">{soc}</ul>
       <div class="ftr__grid">
         <div class="ftr__about">
@@ -537,7 +576,7 @@ def footer():
           <li>{ext(DATA["privacy_policy_url"], "Privacy policy")}</li>
         </ul>
       </div>
-      <p class="ftr__copy mono">© 2026 Woodward Sports Network · Detroit, the 313</p>
+      <p class="ftr__copy">© 2026 Woodward Sports Network · <span class="nw">Detroit, the 313</span></p>
     </div>
   </footer>'''
 
@@ -558,6 +597,8 @@ SPRITE = '''<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="
 <symbol id="i-pod" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></g></symbol>
 <symbol id="i-spotify" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.3"/><path d="M7 9.6c3.5-1 7.4-.7 10.3 1M7.6 12.9c2.9-.8 6-.5 8.3.9M8.2 15.9c2.3-.6 4.6-.4 6.4.7"/></g></symbol>
 <symbol id="i-yt" viewBox="0 0 24 24"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8zM10 15V9l5.2 3L10 15z"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" d="M4 5h16v11H9.5L4 20V5z"/></symbol>
 </svg>'''
 
@@ -598,7 +639,7 @@ def dialogs():
       <div class="lr__bg" aria-hidden="true"></div>
       <div class="lr__handle" data-lr-drag>
         <span class="lr__grip" aria-hidden="true"></span>
-        <span class="lr__title mono" id="lr-title">WSN LIVE ROOM</span>
+        <h2 class="lr__title" id="lr-title">WSN Live Room</h2>
         <button class="ibtn" type="button" data-lr-min aria-label="Minimize player">{icon("chev-d")}</button>
         <button class="ibtn" type="button" data-lr-close aria-label="Close Live Room">{icon("close")}</button>
       </div>
@@ -608,7 +649,7 @@ def dialogs():
       </div>
       <div class="lr__info">
         <div class="lr__now" data-lr-drag>
-          <div class="lr__l3 blade"><span class="mono" data-lr-kick>NOW PLAYING</span><b data-lr-name>WSN</b><span data-lr-hosts></span></div>
+          <div class="lr__l3 blade"><span class="lr__kick" data-lr-kick>NOW PLAYING</span><b data-lr-name data-fit>WSN</b><span class="lr__hosts" data-lr-hosts></span></div>
         </div>
         <div class="tabs" role="tablist" aria-label="Live Room">
           <button class="tab" type="button" role="tab" id="lr-tab-live" aria-controls="lr-p-live" aria-selected="true" data-lr-tab="live"><i class="tab__dot"></i>Live</button>
@@ -617,14 +658,14 @@ def dialogs():
         <div class="lr__panel" role="tabpanel" id="lr-p-live" aria-labelledby="lr-tab-live">
           <p class="lr__msg" data-lr-msg></p>
           <div class="lr__acts">
-            <button class="btn btn--ghost btn--sm" type="button" data-lr-latest>Stream not up yet? Watch latest replay</button>
+            <button class="btn btn--ghost btn--sm" type="button" data-lr-latest>{icon("play")}<span>Latest replay</span></button>
             <a class="btn btn--ghost btn--sm" data-lr-listen href="{e(SHOWS[0]["apple_podcasts"])}" target="_blank" rel="noopener">{icon("listen")}<span>Listen instead</span><span class="sr-only"> (Apple Podcasts, opens in new tab)</span></a>
           </div>
         </div>
         <div class="lr__panel" role="tabpanel" id="lr-p-rep" aria-labelledby="lr-tab-rep" hidden>
           <ul class="lr__list" data-lr-list></ul>
         </div>
-        <a class="slot slot--sm" href="#advertise" data-close-link><span class="slot__k mono">LIVE ROOM PRESENTED BY</span><span class="slot__v">AVAILABLE</span></a>
+        <a class="slot slot--sm" href="#advertise" data-close-link><span class="slot__k">Live Room presented by</span><span class="slot__v">Available</span></a>
       </div>
     </div>
     <button class="lr__mclose" type="button" data-lr-close hidden aria-label="Close player">{icon("close")}</button>
@@ -638,10 +679,10 @@ def dialogs():
       <div class="sheet__body" data-surf-content data-ss-body></div>
       <div class="sheet__nav">
         <button class="rbtn" type="button" data-ss-prev aria-label="Previous show">{icon("chev-l")}</button>
-        <span class="mono sheet__ch" data-ss-ch>CH 01 / 04</span>
+        <span class="sheet__ch" data-ss-ch>CH 01 / 04</span>
         <button class="rbtn" type="button" data-ss-next aria-label="Next show">{icon("chev-r")}</button>
       </div>
-      <span class="osd mono" aria-hidden="true" data-osd></span>
+      <span class="osd" aria-hidden="true" data-osd></span>
       <span class="surf" aria-hidden="true"><i class="surf__scan"></i><i class="surf__noise"></i></span>
     </div>
   </div>
@@ -649,15 +690,16 @@ def dialogs():
   <div class="find" id="find" role="dialog" aria-modal="true" aria-label="Find on WSN" hidden>
     <div class="find__backdrop" data-close></div>
     <div class="find__panel">
+      <h2 class="sr-only">Find on WSN</h2>
       <div class="find__bar">
         {icon("search")}
-        <input id="find-input" type="search" role="combobox" aria-expanded="false" aria-controls="find-results" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Shows, teams, stories, videos">
-        <button class="find__esc" type="button" data-close><span class="mono">ESC</span><span class="sr-only">Close search</span></button>
+        <input id="find-input" type="search" role="combobox" aria-expanded="false" aria-controls="find-results" aria-autocomplete="list" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="Shows, teams, stories…">
+        <button class="find__esc" type="button" data-close><span class="find__esc-k" aria-hidden="true">Esc</span><span class="find__esc-t" aria-hidden="true">Close</span><span class="sr-only">Close search</span></button>
       </div>
       <div class="find__body">
         <div class="find__empty" data-find-empty>
-          <p class="find__lbl mono">TEAMS</p><div class="find__chips" data-find-teams></div>
-          <p class="find__lbl mono">SHOWS</p><div class="find__chips" data-find-shows></div>
+          <p class="find__lbl">Teams</p><div class="find__chips" data-find-teams></div>
+          <p class="find__lbl">Shows</p><div class="find__chips" data-find-shows></div>
         </div>
         <div id="find-results" role="listbox" aria-label="Results" data-find-results></div>
         <p class="find__none" data-find-none hidden>No matches. Try a team, a show or a host.</p>
@@ -707,8 +749,8 @@ def page():
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preload" href="fonts/big-shoulders-stencil.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/anton-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/main.css?v={STAMP}">
 <script>!function(){{var d=document.documentElement;d.className=d.className.replace('no-js','js v');try{{var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;d.classList.add(rm?'rm':'a');if(!rm&&!location.hash&&!sessionStorage.getItem('wsn-ident'))d.classList.add('intro')}}catch(x){{}}setTimeout(function(){{if(!window.__wsn){{d.classList.add('fs');d.classList.remove('intro','a','v')}}}},5000)}}();</script>
 <script type="module" src="js/main.js?v={STAMP}"></script>
@@ -722,9 +764,9 @@ def page():
   <div class="hdr__in">
     <a class="hdr__logo" href="#live" aria-label="Woodward Sports Network, back to the top"><img src="img/logo.svg" width="40" height="40" alt=""></a>
     <nav class="hdr__nav" aria-label="Primary"><ul>{nav}</ul><span class="hdr__mark" aria-hidden="true" data-navmark><i></i><i></i><i></i><i></i><i></i></span></nav>
-    <span class="hdr__clock mono" aria-hidden="true"><span data-clock>ET</span></span>
-    <a class="pill" href="#lineup" data-pill data-surf><span class="pill__in" data-surf-content><i class="pill__dot"></i><span class="pill__txt mono" data-pill-txt>WEEKDAYS 8AM–7PM ET</span></span></a>
-    <button class="hdr__find" type="button" data-find-open aria-keyshortcuts="Meta+K Control+K /">{icon("search")}<span class="hdr__findl">Find</span><kbd class="mono">⌘K</kbd><span class="sr-only">: shows, teams, stories, videos</span></button>
+    <span class="hdr__clock" aria-hidden="true"><span data-clock>ET</span></span>
+    <a class="pill" href="#lineup" data-pill data-surf><span class="pill__in" data-surf-content><i class="pill__dot"></i><span class="pill__txt" data-pill-txt>WEEKDAYS <span class="nw">8AM–7PM ET</span></span></span></a>
+    <button class="hdr__find" type="button" data-find-open aria-keyshortcuts="Meta+K Control+K /">{icon("search")}<span class="hdr__findl">Find</span><kbd>⌘K</kbd><span class="sr-only">: shows, teams, stories, videos</span></button>
     <a class="btn btn--blade hdr__watch" href="{e(YT["live_url"])}" target="_blank" rel="noopener" data-live-open>{icon("play")}<span>Watch Live</span><span class="sr-only"> (opens in new tab)</span></a>
   </div>
   <span class="hdr__prog" aria-hidden="true"></span>
