@@ -1,98 +1,116 @@
-# Woodward Sports Network: new site preview
+# Woodward Sports Network — website (Next.js)
 
-This is a one-page preview of a new **woodwardsports.com**, built as "ON AIR ON WOODWARD". The page plays like WSN's live channel. It has a station bug, an ET clock, a headline ticker, lower-thirds, a Day Rail lineup that knows what is on air right now, channel surfing between shows and a YouTube **Live Room**. Every broadcast graphic is cut from the Woodward street-sign stock used in the logo.
+A multi-page **Next.js 16 (App Router, TypeScript)** site for Woodward Sports Network, built from the
+"ON AIR ON WOODWARD" one-page preview. It keeps the preview's design exactly (same markup classes, same CSS,
+same fonts, same motion and live logic) and adds the pages in [SITEMAP.md](SITEMAP.md).
 
-- Preview URL: https://the-ethos-team.github.io/website-woodward-sports/
 - Client's live site, which this does not replace yet: https://woodwardsports.com/
-- Static HTML, CSS and vanilla JS. There is no framework, no build step to deploy and no third-party scripts. YouTube is loaded only after a visitor presses play, and the page holds at most one iframe.
+- Hosting: Vercel (`vercel.json` forces the Next.js framework preset).
+- No UI library, no CSS framework, no third-party scripts. YouTube loads only after a visitor presses play, and
+  the whole site holds at most one iframe.
+
+## Run it
+
+```bash
+npm install
+npm run dev            # http://localhost:3000
+npm run build          # production build (type-checks)
+npm run start          # serve the build, e.g. npm run start -- -p 8988
+npm run lint           # ESLint (flat config, eslint-config-next)
+```
+
+Node 20.9 or newer.
 
 ## Structure
 
 ```
-index.html            all content is server-rendered (reads fine without JS); schedule JSON is inline
-css/main.css          design tokens, components, motion (transform/opacity only)
-js/main.js            live logic, ident, reveals, split-flap, channel surf, Live Room, Find, Show sheet, team filter
-fonts/*.woff2         self-hosted, latin only (84 KB): Anton 400 (display), Schibsted Grotesk
-                      (variable 400–900, text/UI), Newsreader Italic 500 (show taglines only)
-img/                  logo.svg (dark) + logo-on-light.svg, favicons, og-image.jpg (1200×630),
-                      show-*.webp, news/<post-id>.webp, videos/<youtube-id>-480|960.webp,
-                      shop/, party/, atmo-*.webp, badges/app-store.svg (Apple's official badge), noise.webp
-data/                 content.json (facts), media.json (local image map), shop.json (merch)
-tools/build.py        regenerates index.html from data/*.json (Python 3.9+, standard library only)
-404.html              small branded "Off air" page
-site.webmanifest, robots.txt, .nojekyll
+app/
+  layout.tsx            global shell: header (status pill, ET clock, Find), ticker, footer, mobile dock,
+                        Find overlay, show sheet, Live Room (mounted here so the mini player survives navigation),
+                        metadata (title template, OG/Twitter, icons, manifest, robots)
+  globals.css           the preview's main.css (unchanged) + the inner-page additions at the end
+  page.tsx              home: hero, lineup, teams, stories, replays, listen, watch parties, shop, app, advertise
+  watch/ listen/ shows/ shows/[slug]/ teams/ teams/[slug]/ stories/ stories/author/[slug]/
+  watch-parties/ shop/ app/ advertise/ privacy/
+  not-found.tsx         branded "Off air." page
+  sitemap.ts robots.ts  /sitemap.xml and /robots.txt
+components/
+  sections/             server components: one per home section (reused by the inner pages)
+  ui/                   presentational pieces (icons, section heads, story/video cards, images, page hero)
+  client/               client islands: Boot, Ident, Header, Pill, Dock, Live Room, show sheet, Find,
+                        hero facade, Day Rail, stories filter, ticker, tapes, phone mock
+lib/
+  site.ts               base URL, the INDEXING switch, revalidate windows, fetch timeout
+  config.ts             editorial config: team colours/categories/keywords, nav, advertise inventory, contact
+  snapshot.ts           the bundled snapshot (data/*.json)
+  data/                 typed loaders: wp.ts, youtube.ts, podcasts.ts, shop.ts (+ fetcher.ts, site.ts)
+  live/                 live schedule logic (America/Detroit, DST-safe) and the shared 1 Hz clock store
+  ui/                   motion helpers (surf, split-flap, fit), overlay stack, command bus
+data/                   content.json, media.json, shop.json: the snapshot every loader falls back to
+public/                 img/, fonts/, site.webmanifest
 ```
 
 ## Editing content
 
-**Recommended path:** edit the JSON in `data/` and run:
-
-```
-python3 tools/build.py
-```
-
-This rewrites `index.html` and stamps a new `?v=` cache-buster on the CSS and JS links, so Safari does not keep stale files. You can edit `index.html` by hand for one-off fixes. The next build overwrites those edits.
-
 | What | Where |
 |---|---|
-| Shows: name, tagline, hosts, description, podcast links (Apple, Spotify, RSS) | `data/content.json` → `shows[]` |
-| Schedule (start and end times, America/Detroit) | `data/content.json` → `shows[].start` / `end`, and `schedule.days` (1 = Mon … 5 = Fri) |
-| Stories (the 16 newest) | `data/content.json` → `articles[]`, with images in `data/media.json` → `news` |
-| Replays rail (15 videos) | `data/content.json` → `videos[]`, with thumbnails in `img/videos/<id>-480.webp` and `-960.webp` |
-| Merch (8 products) | `data/shop.json` |
-| Watch-party recap and board | `data/content.json` → `watch_party`; the board rows are in `tools/build.py` → `watch_party()` |
-| Advertise inventory cards | `tools/build.py` → `advertise()` |
+| Shows: name, tagline, hosts, description, podcast links | `data/content.json` → `shows[]` |
+| **Schedule** (start/end, America/Detroit) | `data/content.json` → `shows[].start` / `end`; weekdays in `schedule.days` (1 = Mon … 5 = Fri); the "between shows" gaps in `schedule.gaps_in_day` |
+| Curated merch (8 products, by Shopify handle) | `data/shop.json` |
+| Team colours, WP categories, YouTube keywords, team merch | `lib/config.ts` |
+| Advertise inventory, contact links | `lib/config.ts` → `INVENTORY`, `CONTACT` |
+| Watch-party board, recap | `lib/config.ts` → `PARTY_BOARD`, `data/content.json` → `watch_party` |
+| Writers (author pages) | `data/content.json` → `writers[]`, WP user slugs in `lib/config.ts` → `WRITER_WP_SLUG` |
 
-**The schedule and live logic.** `js/main.js` reads the inline `<script type="application/json" id="schedule">`. That script is generated from `shows[].start` and `shows[].end`. All times are America/Detroit, and DST is handled. The states are as follows:
+**Live logic.** Everything runs in America/Detroit time and handles DST. States: **LIVE** during a show;
+**UP NEXT** before 8 AM and between shows ("STARTING SOON" within 15 minutes); **OFF AIR** after 7 PM and at
+weekends, with a countdown to the next weekday's first show. If a slot changes (for example Heavyweights moving to
+4:45 PM), change `start` in `content.json` and redeploy.
 
-- **LIVE** during a show.
-- **UP NEXT** before 8 AM or in the gaps between shows. It reads "STARTING SOON" within 15 minutes of the start.
-- **OFF AIR** after 7 PM and at weekends, with a countdown to the next Monday 8 AM show.
+## Data sources and caching
 
-If a slot changes, for example Heavyweights moving to 4:45 PM, change `start` and rebuild.
+Every loader fetches live with Next's data cache (`fetch(..., { next: { revalidate } })`) and a hard 5-second
+timeout, and falls back to the bundled snapshot in `data/*.json` on **any** error, non-2xx status or timeout.
+Pages are statically generated and refreshed in the background (ISR) on the same windows.
 
-**Article dates** are stored in UTC and shown in Detroit time. For example, post 21295 shows as "Oct 5, 2026".
+| Source | Loader | Revalidate | Notes |
+|---|---|---|---|
+| WordPress REST: posts, categories, media, users, privacy page (`woodwardsports.com/wp-json/wp/v2/…`) | `lib/data/wp.ts` | 10 min | Cloudflare needs a full browser User-Agent and may still block Vercel's servers, so the fallback is mandatory. Stories always link out to woodwardsports.com (new tab). |
+| YouTube RSS (`feeds/videos.xml?channel_id=UC8sYt4QHV6ZgOyL57ATacwQ`) | `lib/data/youtube.ts` | 10 min | 15 newest uploads; Shorts detected via `/shorts/<id>`; show matched from the title |
+| Spreaker RSS (URLs in `content.json` → `shows[].rss`) | `lib/data/podcasts.ts` | 1 h | Feeds are 0.4–6 MB, so only the first 300 KB is requested (HTTP Range) |
+| Shopify (`shop.woodwardsports.com/products/<handle>.json`) | `lib/data/shop.ts` | 1 h | Only the curated 8 from `shop.json`, with live price and image |
 
-## Switching search indexing on
+**Images.** Local images in `public/img` are pre-sized webp with hand-written `srcset`. Live images from YouTube
+and Shopify go through `next/image` (`images.remotePatterns` in `next.config.ts`). WordPress images load straight
+from woodwardsports.com in its own sizes, because Cloudflare can block Vercel's image optimizer.
 
-The preview is deliberately **`noindex`**, because the client's real site is live at woodwardsports.com. When this becomes the production site, change one line in `tools/build.py`, or in `index.html` directly:
+**No email is published.** `content.json` → `contact.email` is `null`; the Advertise button opens Instagram DM
+(Messenger as the alternative). When the client provides an advertising address, change `CONTACT` in `lib/config.ts`.
 
-```html
-<meta name="robots" content="noindex, follow">   →   <meta name="robots" content="index, follow">
+## Turning indexing on
+
+The site ships with `<meta name="robots" content="noindex, follow">` because the client's real site is still live.
+The switch is one constant:
+
+```ts
+// lib/site.ts
+export const INDEXING = false;   // → true when this becomes woodwardsports.com
 ```
 
-Then rebuild. `robots.txt` blocks nothing, so the meta tag is the only switch. If the site moves to its own domain, also update `SITE` in `tools/build.py`, which sets the absolute Open Graph and Twitter image URL and `og:url`. Also update the base-path line in `404.html`.
+`/robots.txt` never blocks crawling and always points to `/sitemap.xml`, so this constant is the only switch.
 
-## Advertise contact hook
+## Environment variables
 
-The "Advertise with WSN" button is `<a data-contact href="https://ig.me/m/woodwardsports">`, an Instagram DM. The secondary link (`data-contact-alt`) opens Facebook Messenger at `https://m.me/WoodwardSports`. To switch to email when the client provides an advertising address, change the `href` to `mailto:…` in `tools/build.py` → `advertise()`. No email address is published anywhere on the site.
+| Variable | Default | Used for |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | `https://website-woodward-sports.vercel.app` | canonical URLs, Open Graph/Twitter images, `sitemap.xml`, `robots.txt` |
 
-## Sources
-
-Every fact comes from `data/content.json`, which was compiled from the following:
-
-- woodwardsports.com and its WordPress REST API: posts, categories and pages.
-- The official YouTube channel @WoodwardSports: RSS, the About page and video thumbnails.
-- Apple and iTunes lookups: podcasts and the WSN Live! app.
-- Spreaker RSS feeds and Spotify show embeds.
-- shop.woodwardsports.com: products and prices.
-
-The YouTube figures in the Advertise section (111K subscribers, 163M+ views, 22K+ videos) were read from the channel's About page on 2026-10-08 and are labelled "YouTube, Oct 2026". Shop prices are live "from" prices and may change. No other audience numbers appear on the site.
+No secrets are needed: every source is public.
 
 ## Gaps the client must confirm
 
-1. **Advertising contact.** woodwardsports.com/advertise returns 404 and no advertising email is published. The CTA currently points to Instagram DM and Messenger. An email exists, but only as a podcast-feed owner address in `data/content.json` → `contact.email`, and it is intentionally **not** used.
-2. **Crunch Time on Spotify.** No Spotify listing was found for the WSN "Crunch Time Sports" feed, so that show has Apple Podcasts and RSS only. The other three shows have Spotify links.
-3. **Android app.** The Google Play link in YouTube descriptions returns 404, so only the iOS app (WSN Live!) is shown. Android users are pointed to YouTube Live.
-4. These are also not stated anywhere and were not invented:
-   - a founding year or company history
-   - leadership
-   - host bios or headshots, beyond the show art
-   - weekend programming
-   - what airs in the gaps between shows (shown simply as "Replays")
-   - upcoming watch parties. The last one was on 9/17/26, so the section is a recap.
-
-## Before publishing
-
-- `data/content.json` contains `contact.email`, the feed-owner address noted above. GitHub Pages publishes every file in the repo. Either keep `data/` out of the published branch or delete that field.
-- Test through a web server, not `file://`, because self-hosted fonts are blocked over `file://`. For example, run `python3 -m http.server` in this folder.
+1. **Advertising contact.** No advertising email is published; the CTA is an Instagram DM.
+2. **Crunch Time on Spotify.** No Spotify listing was found, so that show has Apple Podcasts and RSS only.
+3. **Android app.** The Google Play link 404s, so only the iOS app (WSN Live!) is shown.
+4. Not stated anywhere and not invented: founding year, leadership, host bios/headshots, weekend programming,
+   what airs between shows ("Between shows"), upcoming watch parties (the last one was 9/17/26).

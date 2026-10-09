@@ -1,5 +1,0 @@
-# Preview build of the new Woodward Sports Network site.
-# Nothing is disallowed here: indexing is controlled by the
-# <meta name="robots" content="noindex, follow"> tag in index.html.
-User-agent: *
-Disallow:
