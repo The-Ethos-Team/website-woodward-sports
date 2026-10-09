@@ -2,7 +2,8 @@
 
 This is a one-page preview of a new **woodwardsports.com**, built as "ON AIR ON WOODWARD". The page plays like WSN's live channel. It has a station bug, an ET clock, a headline ticker, lower-thirds, a Day Rail lineup that knows what is on air right now, channel surfing between shows and a YouTube **Live Room**. Every broadcast graphic is cut from the Woodward street-sign stock used in the logo.
 
-- Preview URL: https://the-ethos-team.github.io/website-woodward-sports/
+- Live preview: https://website-woodward-sports.vercel.app/ (Vercel, auto-deploys from main)
+- Also on GitHub Pages: https://the-ethos-team.github.io/website-woodward-sports/
 - Client's live site, which this does not replace yet: https://woodwardsports.com/
 - Static HTML, CSS and vanilla JS. There is no framework, no build step to deploy and no third-party scripts. YouTube is loaded only after a visitor presses play, and the page holds at most one iframe.
 

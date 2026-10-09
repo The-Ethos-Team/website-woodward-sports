@@ -19,7 +19,7 @@ SHOP = json.loads((ROOT / 'data/shop.json').read_text())
 for _p in SHOP:  # typographic apostrophes, like every other string on the page
     _p['title'] = re.sub(r"(\w)'", '\\1’', _p['title'])
 DET = ZoneInfo('America/Detroit')
-SITE = 'https://the-ethos-team.github.io/website-woodward-sports/'
+SITE = 'https://website-woodward-sports.vercel.app/'
 STAMP = sys.argv[sys.argv.index('--stamp') + 1] if '--stamp' in sys.argv else datetime.datetime.now().strftime('%Y%m%d%H%M')
 
 e = lambda s: html.escape(str(s), quote=True)
@@ -340,7 +340,7 @@ def stories():
           <a class="st__a" href="{e(a["url"])}" target="_blank" rel="noopener" data-find-type="story" data-find-title="{e(a["title_display"])}" data-find-keys="{e(keys)}">
             <div class="st__media">{media}</div>
             <div class="st__body">
-              <p class="st__tag"><i class="st__dot{ring}" style="--team:{col}"></i><span>{e(tag)}</span><span class="st__min">· <span class="nw">{a["reading_minutes"]} min read</span></span></p>
+              <p class="st__tag"><i class="st__dot{ring}" style="--team:{col}"></i><span>{e(tag)}</span><span class="st__sep" aria-hidden="true">·</span><span class="st__min"><span class="nw">{a["reading_minutes"]} min read</span></span></p>
               <h3 class="st__title">{nw(a["title_display"])}</h3>
               <p class="st__by">{e(a["author"])} · <time class="nw" datetime="{e(a["date"])}">{fdate(a["date"])}</time></p>
             </div>{NEWTAB}
@@ -413,7 +413,7 @@ def listen():
             <img class="pod__art" src="{sm}" width="480" height="480" alt="" loading="lazy" decoding="async">
             <div class="pod__id">
               <h3 class="pod__name">{e(s["podcast_name"])}</h3>
-              <p class="pod__meta">{nw(slot_short(s) + " · MON–FRI")}</p>
+              <p class="pod__meta"><span class="nw">{nw(slot_short(s))} ·</span> <span class="nw">MON–FRI</span></p>
             </div>
             <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           </div>
@@ -499,7 +499,7 @@ def app():
             <div class="phone__status"><span data-phone-time>WSN</span><span class="phone__isl"></span><span>LTE</span></div>
             <div class="phone__bar"><img src="img/logo.svg" width="34" height="34" alt=""><span class="phone__title">WSN LIVE!</span></div>
             <div class="phone__video"><img data-phone-art src="img/videos/{replay_for(SHOWS[0])["id"]}-480.webp" width="480" height="270" alt="" loading="lazy" decoding="async"><span class="bug bug--air" data-airbug><i class="bug__dot"></i><span data-airbug-txt>REPLAY</span></span></div>
-            <div class="phone__l3 blade"><span class="phone__kick" data-phone-kick>UP NEXT</span><span class="phone__name" data-phone-name>{e(SHOWS[0]["name"])}</span></div>
+            <div class="phone__l3 blade"><span class="phone__kick" data-phone-kick>UP NEXT</span><span class="phone__name" data-phone-name style="--nw:{NAME_FIT[SHOWS[0]["id"]]}">{e(SHOWS[0]["name"])}</span></div>
             <div class="phone__count"><span class="phone__lbl" data-phone-lbl>STARTS IN</span><span class="flaps" data-flaps-phone></span></div>
             <div class="phone__list">{''.join(f'<span><img src="{art(s)[0]}" width="480" height="480" alt="" loading="lazy" decoding="async"><b>{e(s["short_name"])}</b><i>{nw(slot_range(s))}</i></span>' for s in SHOWS)}</div>
             <div class="phone__tabs"><span>{icon("shows")}</span><span>{icon("teams")}</span><span class="is-on">{icon("play")}</span><span>{icon("listen")}</span><span>{icon("shop")}</span></div>
@@ -516,7 +516,7 @@ def advertise():
            ('Bug & lower-third placements', 'Your logo on screen, next to the people Detroit fans tune in for.'),
            ('Ticker', 'Your name in the WSN headline crawl that runs across this site.'),
            ('Podcast ads', 'Pre-roll and mid-roll on all 4 show podcasts.'),
-           ('Watch-party activations', 'Put your bar or brand at the centre of the next fan watch party.'),
+           ('Watch-party activations', 'Put your bar or brand at the center of the next fan watch party.'),
            ('Merch collabs', 'Co-branded drops in the Woodward Sports store.'),
            ('YouTube & social integrations', 'Branded segments, clips and posts across the WSN channels.')]
     cards = ''.join(f'<li class="inv" style="--i:{min(i, 5)}"><span class="inv__n" aria-hidden="true">{i + 1:02d}</span><h3 class="inv__t">{nw(t)}</h3><p class="inv__d">{nw(dsc)}</p></li>' for i, (t, dsc) in enumerate(inv))
@@ -541,7 +541,7 @@ def advertise():
           <p class="stats__src">YouTube, <span class="nw">Oct 2026</span> · @WoodwardSports</p>
           <div class="adv__cta">
             <a class="btn btn--blade btn--xl" data-contact href="https://ig.me/m/woodwardsports" target="_blank" rel="noopener">{icon("chat")}<span>Advertise with WSN</span><span class="sr-only"> (opens Instagram in a new tab)</span></a>
-            <a class="textlink textlink--light" data-contact-alt href="https://m.me/WoodwardSports" target="_blank" rel="noopener">Prefer Messenger? Message us on Facebook{ARROW}<span class="sr-only"> (opens in new tab)</span></a>
+            <a class="textlink textlink--light" data-contact-alt href="https://m.me/WoodwardSports" target="_blank" rel="noopener"><span>Prefer Messenger? Message us on <span class="nw">Facebook{ARROW}</span></span><span class="sr-only"> (opens in new tab)</span></a>
           </div>
         </div>
       </div>
@@ -603,6 +603,10 @@ SPRITE = '''<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="
 </svg>'''
 
 
+# lower-third fit-to-width: Anton advance width of each show name in em (typography spec §4i)
+NAME_FIT = {'big-d-energy': 5.0, 'crunch-time': 5.1, 'braylon-edwards-show': 11.2, 'woodward-heavyweights': 10.3}
+
+
 def schedule_json():
     shows = []
     for i, s in enumerate(SHOWS):
@@ -613,7 +617,7 @@ def schedule_json():
             'slot': s['slot_display'], 'slotShort': slot_short(s), 'tagline': s['tagline'], 'hosts': s['hosts'],
             'desc': s['description'], 'art': sm, 'artL': lg, 'apple': s['apple_podcasts'], 'spotify': s.get('spotify'),
             'rss': s['rss'], 'spreaker': s['spreaker'], 'page': s['page_url'], 'replay': r['id'], 'replayTitle': r['title'],
-            'pod': s['podcast_name'],
+            'pod': s['podcast_name'], 'nw': NAME_FIT[s['id']],
         })
     return json.dumps({
         'tz': DATA['schedule']['timezone'], 'days': DATA['schedule']['days'],

@@ -124,7 +124,8 @@ const etShort = new Intl.DateTimeFormat('en-US', { timeZone: DATA.tz, hour: 'num
 const clean = s => s.replace(/[  ]/g, ' ');
 const clockText = t => clean(etFmt.format(new Date(t))) + ' ET';
 /* "8 AM ET", "8:30 AM ET" — same style as the slot ranges ("8–10 AM ET") */
-const firstHour = (s, et = true) => { const [h, m] = hm(s.start); return `${h % 12 || 12}${m ? ':' + pad(m) : ''} ${h < 12 ? 'AM' : 'PM'}${et ? ' ET' : ''}`; };
+/* no-break spaces: a time never splits across lines */
+const firstHour = (s, et = true) => { const [h, m] = hm(s.start); return `${h % 12 || 12}${m ? ':' + pad(m) : ''}\u00A0${h < 12 ? 'AM' : 'PM'}${et ? '\u00A0ET' : ''}`; };
 const backAt = (n, et) => `BACK ${WD[n.wd].toUpperCase()} ${firstHour(SHOWS[n.i], et)}`;
 const endsIn = ms => { const m = Math.max(1, Math.ceil(ms / 60000)); return m >= 60 ? `${Math.floor(m / 60)}H ${pad(m % 60)}M` : `${m}M`; };
 function stateLine(n) {
@@ -209,6 +210,13 @@ let st = null, lastKey = '', lastHead = 0;
 const vidThumb = id => `img/videos/${id}`;
 const subs = [];
 
+/* keep the pill text whole when the header runs out of room: drop the Find label first, then the "LIVE · " prefix */
+function fitPill() {
+  const over = () => pillTxt.scrollWidth > pillTxt.clientWidth + 1;
+  H.classList.remove('pill-np', 'pill-nf');
+  if (over()) H.classList.add('pill-nf');
+  if (over()) H.classList.add('pill-np');
+}
 function renderPill(n) {
   const s = SHOWS[n.i];
   let txt;
@@ -217,7 +225,7 @@ function renderPill(n) {
   if (n.state === 'live') txt = pre('LIVE') + esc(s.short.toUpperCase());
   else if (n.state === 'next') txt = n.left <= 15 * 60000 ? 'STARTING SOON' : `UP NEXT ${num(cd(n.left))}`;
   else txt = pre('OFF AIR') + num(backAt(n, false));
-  pillTxt.innerHTML = txt;
+  if (pillTxt.innerHTML !== txt) { pillTxt.innerHTML = txt; fitPill(); }
   pill.dataset.state = n.state;
   pill.setAttribute('aria-label', stateLine(n) + (n.state === 'live' ? ' Open the Live Room.' : ' See the lineup.'));
 }
@@ -316,7 +324,7 @@ subs.push((n, now) => {
   const pk = $('[data-phone-kick]'), pn = $('[data-phone-name]'), pl = $('[data-phone-lbl]');
   if (pk) {
     pk.innerHTML = live ? `${DOT}LIVE NOW` : n.state === 'next' ? (n.left <= 15 * 60000 ? 'STARTING SOON' : 'UP NEXT') : `OFF AIR · ${backAt(n, false)}`;
-    pn.textContent = s.name;
+    pn.textContent = s.name; pn.style.setProperty('--nw', s.nw);
     pl.textContent = live ? 'ENDS IN' : n.state === 'next' ? 'STARTS IN' : 'BACK IN';
     $('.phone__count').classList.toggle('is-live', live);
     phoneFlaps.set(cd(n.left), $('.app__stage')._vis === true);
@@ -992,7 +1000,7 @@ addEventListener('keydown', e => {
 })();
 function relayout() {
   tickerSpeed();
-  chipPeek(); moveInd($('.fchip.is-on'), false); chipFade();
+  fitPill();   chipPeek(); moveInd($('.fchip.is-on'), false); chipFade();
   fitL3(); if (lr.open) fitLR();
   markNav(); railBtns();
   if (st) renderRail(st, Date.now(), true);
