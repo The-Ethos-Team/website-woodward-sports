@@ -1,0 +1,965 @@
+{
+  "logo": {
+    "svg": "img/logo.svg",
+    "svg_on_light": "img/logo-on-light.svg",
+    "png_512": "img/logo-512.png",
+    "webp": "img/logo.webp",
+    "viewBox": "0 0 500 500",
+    "aspect": "1:1",
+    "colors": {
+      "green": "#087656",
+      "white": "#ffffff",
+      "site_green_reference": "#057d5a"
+    },
+    "structure": {
+      "#post": "green post pieces (cap + shaft segments visible between/below the signs), drawn first",
+      "#sign-top": "WOODWARD sign: path.plate (green fill + same-colour round-join stroke for softened corners) + path.ink (white border frame + stencil letters)",
+      "#sign-bottom": "SPORTS sign: path.plate + path.ink, drawn above #sign-top (it overlaps the top sign's lower-right corner)",
+      "#network": "white NETWORK wordmark (path.word) + two sets of tapered speed lines (path.lines); sits on the post below the signs"
+    },
+    "pivots_viewbox_units": {
+      "post_center_x": 248.6,
+      "sign-top": [
+        248.6,
+        129.7
+      ],
+      "sign-bottom": [
+        248.6,
+        313.8
+      ],
+      "post_base": [
+        248.6,
+        500
+      ],
+      "post_x_range": [
+        214.8,
+        282.5
+      ]
+    },
+    "animation_hint": "Inline the SVG (fetch img/logo.svg and inject, or paste) so the groups are addressable. For a swing-in: '#sign-top,#sign-bottom{transform-box:view-box}' then '#sign-top{transform-origin:248.6px 129.7px}' '#sign-bottom{transform-origin:248.6px 313.8px}' and animate rotate(-12deg)->rotate(0) with a springy cubic-bezier; '#post{transform-origin:248.6px 500px}' scaleY(0)->1 first; '#network' fade/slide last. Pivots sit on the post centre so the post stays covered while the signs swing (small rotations, <15deg, look best). The SVG uses fill attributes (not classes in a <style>), so page CSS can recolour e.g. '#network{fill:...}'.",
+    "light_background": "The original logo's NETWORK + speed lines are white and disappear on white/light backgrounds (same as the source art). Use img/logo-on-light.svg there (NETWORK in brand green), or set #network{fill:#087656}.",
+    "bytes": {
+      "svg": 37561
+    },
+    "source_url": "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Sports_logo.webp"
+  },
+  "icons": {
+    "favicon_svg": "img/favicon.svg",
+    "favicon_png_32": "img/favicon-32.png",
+    "apple_touch_icon": "img/apple-touch-icon.png",
+    "icon_192": "img/icon-192.png",
+    "icon_512": "img/icon-512.png",
+    "og_image": "img/og-image.jpg",
+    "notes": "favicon.svg = logo without the NETWORK tagline (transparent). apple-touch-icon (180) and icon-192/512 = full-colour logo on a near-black green radial background (#11402f -> #0a1a14) with padding. og-image.jpg = 1200x630 crop of the official brand banner (green gradient, centred logo, LIVE SHOWS EVERY WEEKDAY / MADE FOR THE FANS boxes).",
+    "theme_color": "#0a1a14"
+  },
+  "shows": {
+    "big-d-energy": {
+      "name": "Big D Energy",
+      "file": "img/show-big-d-energy.webp",
+      "file_small": "img/show-big-d-energy-480.webp",
+      "w": 900,
+      "h": 900,
+      "w_small": 480,
+      "h_small": 480,
+      "description": "Square show art: hosts Neal Ruhl (left, grey check blazer, smiling) and Sean Baligian (right, Michigan State cap, mouth open, on a Woodward Sports mic) over a blue-toned Detroit skyline; 'BIG D ENERGY' wordmark in electric blue with an Old English D, credit line 'NEAL RUHL & SEAN BALIGIAN'. Cool blue/navy palette.",
+      "colors": [
+        {
+          "hex": "#161a23",
+          "share": 0.248
+        },
+        {
+          "hex": "#5f6369",
+          "share": 0.247
+        },
+        {
+          "hex": "#b7aba5",
+          "share": 0.223
+        },
+        {
+          "hex": "#353842",
+          "share": 0.143
+        },
+        {
+          "hex": "#1d2c3b",
+          "share": 0.139
+        }
+      ],
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/DBE.png",
+      "accent": "#03ace7",
+      "content_id": "big-d-energy"
+    },
+    "crunch-time": {
+      "name": "Crunch Time",
+      "file": "img/show-crunch-time.webp",
+      "file_small": "img/show-crunch-time-480.webp",
+      "w": 900,
+      "h": 900,
+      "w_small": 480,
+      "h_small": 480,
+      "description": "Square show art: Jeff Iafrate and Booner in black 'Crunch Time' hoodies in front of a desaturated grey Detroit skyline and clouds; chrome/silver 'CRUNCH TIME' logo with a stopwatch ring and 'WITH JEFF IAFRATE & BOONER'. Monochrome charcoal/silver palette.",
+      "colors": [
+        {
+          "hex": "#32302f",
+          "share": 0.321
+        },
+        {
+          "hex": "#080809",
+          "share": 0.235
+        },
+        {
+          "hex": "#a08f88",
+          "share": 0.171
+        },
+        {
+          "hex": "#251e1e",
+          "share": 0.144
+        },
+        {
+          "hex": "#151214",
+          "share": 0.128
+        }
+      ],
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/Crunchtime-Pod-Thumb.png",
+      "accent": "#ffffff",
+      "content_id": "crunch-time"
+    },
+    "braylon-edwards": {
+      "name": "The Braylon Edwards Show",
+      "file": "img/show-braylon-edwards.webp",
+      "file_small": "img/show-braylon-edwards-480.webp",
+      "w": 900,
+      "h": 900,
+      "w_small": 480,
+      "h_small": 480,
+      "description": "Square show art: former Michigan/NFL WR Braylon Edwards (maize Michigan 'M' cap, black polo) and co-host Anson Wells (white tee) grinning; 'THE BRAYLON EDWARDS SHOW WITH ANSON' badge on a blue microphone, Woodward Sports credit, maize side bars on a royal-blue background. Michigan maize & blue palette.",
+      "colors": [
+        {
+          "hex": "#241b1f",
+          "share": 0.352
+        },
+        {
+          "hex": "#37455f",
+          "share": 0.238
+        },
+        {
+          "hex": "#9c8371",
+          "share": 0.154
+        },
+        {
+          "hex": "#e3d08a",
+          "share": 0.128
+        },
+        {
+          "hex": "#061c33",
+          "share": 0.128
+        }
+      ],
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/Braylon-Anson-Pod-Thumb.png",
+      "accent": "#f5c824",
+      "accent_2": "#023a71",
+      "content_id": "braylon-edwards-show"
+    },
+    "heavyweights": {
+      "name": "Woodward Heavyweights",
+      "file": "img/show-heavyweights.webp",
+      "file_small": "img/show-heavyweights-480.webp",
+      "w": 900,
+      "h": 900,
+      "w_small": 480,
+      "h_small": 480,
+      "description": "Square show art: hosts Spencer Raxter and Eazy, arms-folded tough-guy poses in front of a smoky crimson Detroit skyline; big glossy red 'WOODWARD' block letters with white script 'Heavyweights'. Dark red/maroon palette.",
+      "colors": [
+        {
+          "hex": "#1f1a1c",
+          "share": 0.316
+        },
+        {
+          "hex": "#5c3a3c",
+          "share": 0.208
+        },
+        {
+          "hex": "#4a2328",
+          "share": 0.206
+        },
+        {
+          "hex": "#886667",
+          "share": 0.16
+        },
+        {
+          "hex": "#bfa7a7",
+          "share": 0.11
+        }
+      ],
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Heavyweights.webp",
+      "accent": "#9e2431",
+      "content_id": "woodward-heavyweights"
+    }
+  },
+  "news": {
+    "https://woodwardsports.com/wp-content/uploads/2026/10/fd4ec7aafc9147328b6d089434cd2a2f_exif_1791254696803-scaled.jpg": {
+      "post_id": 21295,
+      "media_id": 21300,
+      "date": "2026-10-06T02:55:54",
+      "file": "img/news/21295.webp",
+      "file_small": "img/news/21295-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "3 Areas of Concern and Comfort for the 2026-27 Detroit Pistons",
+      "orig_w": 2560,
+      "orig_h": 1440
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/10/IMG_6306.JPG": {
+      "post_id": 21291,
+      "media_id": 21292,
+      "date": "2026-10-05T14:55:05",
+      "file": "img/news/21291.webp",
+      "file_small": "img/news/21291-600.webp",
+      "w": 660,
+      "h": 372,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "The Detroit Red Wings Are A Hot Mess!",
+      "orig_w": 660,
+      "orig_h": 372
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_6134.JPG": {
+      "post_id": 21284,
+      "media_id": 21285,
+      "date": "2026-09-29T02:05:57",
+      "file": "img/news/21284.webp",
+      "file_small": "img/news/21284-600.webp",
+      "w": 1200,
+      "h": 600,
+      "w_small": 600,
+      "h_small": 300,
+      "alt": "A man in a Detroit Tigers cap and orange jacket hugs a girl in a navy jacket on a baseball field, stands blurred in the background.",
+      "orig_w": 1536,
+      "orig_h": 768
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_2448-scaled.jpg": {
+      "post_id": 21281,
+      "media_id": 21282,
+      "date": "2026-09-25T16:47:25",
+      "file": "img/news/21281.webp",
+      "file_small": "img/news/21281-600.webp",
+      "w": 1200,
+      "h": 801,
+      "w_small": 600,
+      "h_small": 400,
+      "alt": "A New River Found in Detroit: Detroit Tiger Ryan River",
+      "orig_w": 2560,
+      "orig_h": 1708
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-40-scaled.png": {
+      "post_id": 21278,
+      "media_id": 21279,
+      "date": "2026-09-21T11:37:43",
+      "file": "img/news/21278.webp",
+      "file_small": "img/news/21278-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Split-screen stadium crowd: left side in yellow Michigan colors, right side in green, showing rival fans at a football game.",
+      "orig_w": 2560,
+      "orig_h": 1440
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5829.JPG": {
+      "post_id": 21256,
+      "media_id": 21257,
+      "date": "2026-09-15T16:19:09",
+      "file": "img/news/21256.webp",
+      "file_small": "img/news/21256-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "VOTE: Woodward sports Detroit vs Buffalo Watch Party",
+      "orig_w": 1920,
+      "orig_h": 1080
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5817-2.JPG": {
+      "post_id": 21251,
+      "media_id": 21254,
+      "date": "2026-09-14T13:47:47",
+      "file": "img/news/21251.webp",
+      "file_small": "img/news/21251-600.webp",
+      "w": 770,
+      "h": 432,
+      "w_small": 600,
+      "h_small": 337,
+      "alt": "Reasons to Worry After Detroit Lions SLIM Victory Over The Saints?!",
+      "orig_w": 770,
+      "orig_h": 432
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5816.JPG": {
+      "post_id": 21248,
+      "media_id": 21249,
+      "date": "2026-09-14T13:38:28",
+      "file": "img/news/21248.webp",
+      "file_small": "img/news/21248-600.webp",
+      "w": 1200,
+      "h": 801,
+      "w_small": 600,
+      "h_small": 401,
+      "alt": "Terry Foster: 'The 9-11 Experience, That Happened Before 9-11!'",
+      "orig_w": 2500,
+      "orig_h": 1669
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5814.WEBP": {
+      "post_id": 21245,
+      "media_id": 21246,
+      "date": "2026-09-14T13:16:37",
+      "file": "img/news/21245.webp",
+      "file_small": "img/news/21245-600.webp",
+      "w": 1200,
+      "h": 600,
+      "w_small": 600,
+      "h_small": 300,
+      "alt": "Michigan State Football: Pat Fitzgerald Ready For Redemption",
+      "orig_w": 1200,
+      "orig_h": 600
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5622.JPG": {
+      "post_id": 21119,
+      "media_id": 21120,
+      "date": "2026-09-08T14:51:55",
+      "file": "img/news/21119.webp",
+      "file_small": "img/news/21119-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Michigan Football's Answered Prayer Dooms Western's Upset Bid",
+      "orig_w": 1792,
+      "orig_h": 1008
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-28.PNG": {
+      "post_id": 21114,
+      "media_id": 21115,
+      "date": "2026-09-03T20:29:22",
+      "file": "img/news/21114.webp",
+      "file_small": "img/news/21114-600.webp",
+      "w": 1200,
+      "h": 900,
+      "w_small": 600,
+      "h_small": 450,
+      "alt": "Two young men stand together holding large banners with bold names, one reading GUNNINGHAM and the other WILLIAMS, in front of a dark display backdrop.",
+      "orig_w": 2040,
+      "orig_h": 1530
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output-1-scaled.png": {
+      "post_id": 21106,
+      "media_id": 21110,
+      "date": "2026-08-26T20:03:47",
+      "file": "img/news/21106.webp",
+      "file_small": "img/news/21106-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "REPORT: Detroit Pistons, Jalen Duren Nearing Deal. Ausar Thompson Next?",
+      "orig_w": 2560,
+      "orig_h": 1440
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output.png": {
+      "post_id": 21103,
+      "media_id": 21104,
+      "date": "2026-08-26T18:25:52",
+      "file": "img/news/21103.webp",
+      "file_small": "img/news/21103-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Top 5 Drunk Eats",
+      "orig_w": 2048,
+      "orig_h": 1152
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/download.jpeg": {
+      "post_id": 21091,
+      "media_id": 21093,
+      "date": "2026-08-25T15:43:26",
+      "file": "img/news/21091.webp",
+      "file_small": "img/news/21091-600.webp",
+      "w": 599,
+      "h": 399,
+      "w_small": 599,
+      "h_small": 399,
+      "alt": "Detroit Tigers: Mo Money, Mo Problems",
+      "orig_w": 599,
+      "orig_h": 399
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5287.jpg": {
+      "post_id": 21087,
+      "media_id": 21088,
+      "date": "2026-08-14T14:13:41",
+      "file": "img/news/21087.webp",
+      "file_small": "img/news/21087-600.webp",
+      "w": 683,
+      "h": 384,
+      "w_small": 600,
+      "h_small": 337,
+      "alt": "TOP FIVE CITIES IN MICHIGAN!",
+      "orig_w": 683,
+      "orig_h": 384
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_1572.JPG": {
+      "post_id": 21079,
+      "media_id": 21080,
+      "date": "2026-08-03T11:10:29",
+      "file": "img/news/21079.webp",
+      "file_small": "img/news/21079-600.webp",
+      "w": 1179,
+      "h": 1190,
+      "w_small": 600,
+      "h_small": 606,
+      "alt": "Breaking Down BLOCKBUSTER Tarik Skubal Trade to LA DODGERS, Detroit Tigers’ Return",
+      "orig_w": 1179,
+      "orig_h": 1190
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5100-2.JPG": {
+      "post_id": 21072,
+      "media_id": 21073,
+      "date": "2026-08-02T20:57:43",
+      "file": "img/news/21072.webp",
+      "file_small": "img/news/21072-600.webp",
+      "w": 655,
+      "h": 572,
+      "w_small": 600,
+      "h_small": 524,
+      "alt": "Top 5 Detroit Athletes All-Time!",
+      "orig_w": 655,
+      "orig_h": 572,
+      "extra": "content.json more_articles"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-66.jpg": {
+      "post_id": 20786,
+      "media_id": 20785,
+      "date": "2024-11-22T21:28:19",
+      "file": "img/news/20786.webp",
+      "file_small": "img/news/20786-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Bryce Underwood to Michigan: Future Star or the Next Dante Moore?",
+      "orig_w": 1280,
+      "orig_h": 720,
+      "extra": "content.json more_articles"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-48.jpg": {
+      "post_id": 20749,
+      "media_id": 20748,
+      "date": "2024-10-23T00:38:15",
+      "file": "img/news/20749.webp",
+      "file_small": "img/news/20749-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Sherrone Moore HAS TO Out-Coach Jonathan Smith — Michigan's Season Depends on It",
+      "orig_w": 1280,
+      "orig_h": 720,
+      "extra": "content.json more_articles"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-15.jpg": {
+      "post_id": 20679,
+      "media_id": 20678,
+      "date": "2024-08-22T20:30:00",
+      "file": "img/news/20679.webp",
+      "file_small": "img/news/20679-600.webp",
+      "w": 1200,
+      "h": 675,
+      "w_small": 600,
+      "h_small": 338,
+      "alt": "Michigan's Playoff Path Is the Same as Last Year — Just Win the Games You're Supposed to Win",
+      "orig_w": 1280,
+      "orig_h": 720,
+      "extra": "content.json more_articles"
+    }
+  },
+  "atmo": [
+    {
+      "slug": "banner",
+      "file": "img/atmo-banner.webp",
+      "file_small": "img/atmo-banner-1000.webp",
+      "w": 1792,
+      "h": 1008,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "Official WSN brand banner (16:9): green-to-near-black gradient with ghosted repeating stencil 'WOODWARD SPORTS' type, the street-sign logo with NETWORK in the centre, white '/////' slash motifs, and boxed copy 'LIVE SHOWS EVERY WEEKDAY FROM 8AM-7PM' (left, red live dot) and 'MADE FOR THE FANS, MADE BY THE FANS' (right). Has baked-in text: best as a social/OG image or brand panel, not as a photo background.",
+      "focus": "50% 50%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/05/485785752_1577310903211993_2081622249164858498_n-1.jpg"
+    },
+    {
+      "slug": "woodward-pistons-sign",
+      "file": "img/atmo-woodward-pistons-sign.webp",
+      "file_small": "img/atmo-woodward-pistons-sign-1000.webp",
+      "w": 1625,
+      "h": 1625,
+      "w_small": 1000,
+      "h_small": 1000,
+      "description": "Transparent PNG brand graphic: the street-sign mark recoloured Pistons blue (WOODWARD / PISTONS) with white stencil letters, white post and red flames shooting from the post top and the lower sign. Alpha preserved - drop on any dark or light background (great for a Pistons/teams section).",
+      "focus": "50% 50%",
+      "transparent": true,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/IMG_3156.PNG"
+    },
+    {
+      "slug": "detroit-dusk",
+      "file": "img/atmo-detroit-dusk.webp",
+      "file_small": "img/atmo-detroit-dusk-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "Drone/aerial shot of a Metro Detroit downtown (Royal Oak area, used on the watch-party page) at dusk: a grid of streets with warm amber street lights and lit storefronts under a deep blue sky with a thin orange horizon. Moody, low-key - ideal full-bleed background with a dark overlay.",
+      "focus": "50% 60%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5674-scaled.jpg"
+    },
+    {
+      "slug": "arena-bowl",
+      "file": "img/atmo-arena-bowl.webp",
+      "file_small": "img/atmo-arena-bowl-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN courtside photo: wide view of a packed Little Caesars Arena bowl during a Pistons game (vs Dallas), centre-hung video board showing the score, red upper-deck fascia, court glowing in the middle. Strong wide 'big night in Detroit' atmosphere shot.",
+      "focus": "50% 55%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2024/03/IMG_3267-scaled-1.jpeg"
+    },
+    {
+      "slug": "good-luck-lions",
+      "file": "img/atmo-good-luck-lions.webp",
+      "file_small": "img/atmo-good-luck-lions-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN photo inside Little Caesars Arena: the Pistons' giant blue video board reads 'GOOD LUCK LIONS' with the Lions and Pistons logos and the score below, 'Little Caesars arena' sign above - Detroit teams backing each other. Great for a 'Detroit sports' or community section.",
+      "focus": "45% 40%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2024/01/IMG_1814-scaled-1.jpeg"
+    },
+    {
+      "slug": "pyro-intro",
+      "file": "img/atmo-pyro-intro.webp",
+      "file_small": "img/atmo-pyro-intro-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN photo of the Pistons' pregame player intros: arena lights down, magenta/purple haze, fire cannons blasting on the court and players on the Little Caesars Arena video board. Grainy low-light phone shot - use dimmed/blurred as an atmosphere background, not as a sharp feature photo.",
+      "focus": "60% 55%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2025/02/IMG_3370-scaled-1.jpeg"
+    },
+    {
+      "slug": "center-court",
+      "file": "img/atmo-center-court.webp",
+      "file_small": "img/atmo-center-court-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN courtside photo: Pistons in black City Edition uniforms (Jalen Duren #0) squaring up with Toronto Raptors players around the Detroit Pistons centre-court logo, clean hardwood foreground. Clear game-action shot.",
+      "focus": "50% 55%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2025/01/IMG_6888-scaled-1.jpeg"
+    },
+    {
+      "slug": "cade-jumper",
+      "file": "img/atmo-cade-jumper.webp",
+      "file_small": "img/atmo-cade-jumper-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN courtside photo: Cade Cunningham (#2, royal-blue Pistons uniform) rising for a jump shot against the Washington Wizards while a defender closes out, 'Friday February' NBC courtside signage behind. Hero-worthy action shot of the franchise star.",
+      "focus": "52% 40%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2025/11/IMG_7685-scaled-1.jpeg"
+    },
+    {
+      "slug": "starting-five",
+      "file": "img/atmo-starting-five.webp",
+      "file_small": "img/atmo-starting-five-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN courtside photo: Pistons players in blue (Duren #0, Cade Cunningham #2, Ausar Thompson #9) on the floor next to Chicago Bulls players in red during a stoppage - team-together shot with lots of Pistons blue and red.",
+      "focus": "45% 40%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2025/02/IMG_7505-scaled-1.jpeg"
+    },
+    {
+      "slug": "comerica-opening-day",
+      "file": "img/atmo-comerica-opening-day.webp",
+      "file_small": "img/atmo-comerica-opening-day-1000.webp",
+      "w": 2000,
+      "h": 1125,
+      "w_small": 1000,
+      "h_small": 562,
+      "description": "WSN photo at Comerica Park on a sunny day: men in suits shaking hands near the field, Opening Day video board with the Tigers Old English D, green outfield grass and blue sky - the Tigers/baseball coverage image.",
+      "focus": "40% 60%",
+      "transparent": false,
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/IMG_2251-scaled.jpg"
+    }
+  ],
+  "party": [
+    {
+      "slug": "hopcat",
+      "venue": "HopCat",
+      "file": "img/party/hopcat.webp",
+      "w": 1000,
+      "h": 667,
+      "description": "HopCat storefront in daylight: yellow-and-black HopCat cat logo sign over a black awning and glass doors, red-brick facade, yellow patio umbrella.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-37.png"
+    },
+    {
+      "slug": "otooles",
+      "venue": "O'Toole's",
+      "file": "img/party/otooles.webp",
+      "w": 1000,
+      "h": 667,
+      "description": "O'Toole's corner bar at night: green neon O'TOOLES signs, warm amber street lights and glowing windows on an empty street corner.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5667.webp"
+    },
+    {
+      "slug": "rock-and-brews",
+      "venue": "Rock & Brews",
+      "file": "img/party/rock-and-brews.webp",
+      "w": 1000,
+      "h": 535,
+      "description": "Rock & Brews restaurant at dusk: red facade with the Rock & Brews sign, a giant guitar-neck 'ROYAL OAK' sign, rooftop string lights and people on the sidewalk.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5666.jpg"
+    },
+    {
+      "slug": "fifth-avenue",
+      "venue": "Fifth Ave",
+      "file": "img/party/fifth-avenue.webp",
+      "w": 988,
+      "h": 630,
+      "description": "Fifth Avenue (Royal Oak) at night: red neon 'Fifth Avenue' script sign, string lights and a crowd of people gathered outside under a street lamp.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5670.jpg"
+    },
+    {
+      "slug": "bar-louie",
+      "venue": "Bar Louie",
+      "file": "img/party/bar-louie.webp",
+      "w": 1000,
+      "h": 631,
+      "description": "Bar Louie exterior in daylight: white 'Bar Louie' lettering on a brick building with black awnings, two black SUVs/pickups parked in front.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5671.webp"
+    },
+    {
+      "slug": "blind-owl",
+      "venue": "Blind Owl",
+      "file": "img/party/blind-owl.webp",
+      "w": 1000,
+      "h": 667,
+      "description": "Blind Owl bar exterior: grey painted-brick corner building with an owl-with-sunglasses logo and 'BLIND OWL' sign, OPEN neon, blue sky and a mural on the side.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-38.png"
+    },
+    {
+      "slug": "collage",
+      "venue": "All six venues",
+      "file": "img/party/collage.webp",
+      "w": 1000,
+      "h": 563,
+      "description": "16:9 collage of the six Royal Oak watch-party venue storefronts: HopCat, Rock & Brews, O'Toole's (top row); Blind Owl, Fifth Avenue, Bar Louie (bottom row).",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-39-scaled.png"
+    },
+    {
+      "slug": "collage-square",
+      "venue": "All six venues (square)",
+      "file": "img/party/collage-square.webp",
+      "w": 1000,
+      "h": 1000,
+      "description": "Square 3x2 collage of the same six venues (HopCat, Rock & Brews, O'Toole's / Blind Owl, Fifth Avenue, Bar Louie) - handy for a mobile card or social square.",
+      "source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/d0529e24c4fb1c2e9f946281057079d8_exif_1789049816492.jpg"
+    }
+  ],
+  "shop": "data/shop.json",
+  "notes": [
+    "All raster outputs are WebP (Pillow, method=6), EXIF stripped, never upscaled beyond the source size. Files ending -480/-600/-1000 are the small variants for srcset.",
+    "news is keyed by the ORIGINAL WordPress media source_url (exactly as in wp/v2/media 'source_url', which for these 16 posts never carries a -WxH suffix; '-scaled' is part of WP's original name and is kept). Each entry also has post_id/media_id so you can join on the post id instead.",
+    "News selection rule: the 16 most recent published posts by date (wp/v2/posts, 226 total) with featured_media != 0. Several originals are smaller than 1200px wide (660, 770, 599, 683, 1179 px) and were kept at native size - see w/h.",
+    "news also contains 4 extra entries (flag extra) for the posts in content.json more_articles (21072 + three 2026/05 YouTube-thumbnail featured images), so every article in content.json has a local image.",
+    "by_source_url maps EVERY original WordPress URL used (show art, news, atmo, party, logo) to its local file - the simplest join for content.json fields like art_source_url / image_source_url / venues[].image / hero_image / venues_image. shows[*].content_id gives content.json's show id.",
+    "Show art: most recent square artwork per show (2026/07 for Big D Energy, Crunch Time, Braylon Edwards; 2026/04 for Woodward Heavyweights). colors = 5-colour median-cut palette with share; accent = most saturated prominent colour, good for a per-show accent/glow.",
+    "Show-art text: Big D Energy artwork credits 'NEAL RUHL & SEAN BALIGIAN'; Crunch Time credits 'WITH JEFF IAFRATE & BOONER'; Braylon artwork reads 'THE BRAYLON EDWARDS SHOW WITH ANSON'.",
+    "atmo: arena/court photos are WSN's own courtside phone photos from Little Caesars Arena (2024-2025 Pistons game recaps) plus a 2026 Comerica Park shot; USA TODAY (USATSI_*) wire photos and YouTube thumbnails were deliberately skipped. focus = suggested CSS object-position.",
+    "atmo-pyro-intro is grainy (low-light) - use darkened/blurred behind text. atmo-banner contains baked-in text.",
+    "atmo-woodward-pistons-sign is a transparent PNG-derived WebP (Pistons-blue street sign with flames) - keep it on a solid/gradient background, no overlay needed.",
+    "party: Royal Oak watch-party venue photos from the 2026-09 Lions vs Buffalo watch-party vote (HopCat, O'Toole's, Rock & Brews, Fifth Avenue, Bar Louie, Blind Owl) + two collages. IMG_5670 is the Fifth Avenue venue (red neon 'Fifth Avenue' sign).",
+    "shop: 8 products picked from 197 in shop.woodwardsports.com/products.json (all product URLs verified HTTP 200). Images are transparent mockups trimmed and centred on a 700x700 square - place them on a light card (#f1f2ef-ish or a soft radial) because the black hoodie/beanie disappear on near-black. Prices are variants[0].price in USD."
+  ],
+  "by_source_url": {
+    "https://woodwardsports.com/wp-content/uploads/2026/07/DBE.png": {
+      "kind": "show",
+      "key": "big-d-energy",
+      "file": "img/show-big-d-energy.webp",
+      "file_small": "img/show-big-d-energy-480.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/07/Crunchtime-Pod-Thumb.png": {
+      "kind": "show",
+      "key": "crunch-time",
+      "file": "img/show-crunch-time.webp",
+      "file_small": "img/show-crunch-time-480.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/07/Braylon-Anson-Pod-Thumb.png": {
+      "kind": "show",
+      "key": "braylon-edwards",
+      "file": "img/show-braylon-edwards.webp",
+      "file_small": "img/show-braylon-edwards-480.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Heavyweights.webp": {
+      "kind": "show",
+      "key": "heavyweights",
+      "file": "img/show-heavyweights.webp",
+      "file_small": "img/show-heavyweights-480.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/10/fd4ec7aafc9147328b6d089434cd2a2f_exif_1791254696803-scaled.jpg": {
+      "kind": "news",
+      "key": 21295,
+      "file": "img/news/21295.webp",
+      "file_small": "img/news/21295-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/10/IMG_6306.JPG": {
+      "kind": "news",
+      "key": 21291,
+      "file": "img/news/21291.webp",
+      "file_small": "img/news/21291-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_6134.JPG": {
+      "kind": "news",
+      "key": 21284,
+      "file": "img/news/21284.webp",
+      "file_small": "img/news/21284-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_2448-scaled.jpg": {
+      "kind": "news",
+      "key": 21281,
+      "file": "img/news/21281.webp",
+      "file_small": "img/news/21281-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-40-scaled.png": {
+      "kind": "news",
+      "key": 21278,
+      "file": "img/news/21278.webp",
+      "file_small": "img/news/21278-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5829.JPG": {
+      "kind": "news",
+      "key": 21256,
+      "file": "img/news/21256.webp",
+      "file_small": "img/news/21256-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5817-2.JPG": {
+      "kind": "news",
+      "key": 21251,
+      "file": "img/news/21251.webp",
+      "file_small": "img/news/21251-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5816.JPG": {
+      "kind": "news",
+      "key": 21248,
+      "file": "img/news/21248.webp",
+      "file_small": "img/news/21248-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5814.WEBP": {
+      "kind": "news",
+      "key": 21245,
+      "file": "img/news/21245.webp",
+      "file_small": "img/news/21245-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5622.JPG": {
+      "kind": "news",
+      "key": 21119,
+      "file": "img/news/21119.webp",
+      "file_small": "img/news/21119-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-28.PNG": {
+      "kind": "news",
+      "key": 21114,
+      "file": "img/news/21114.webp",
+      "file_small": "img/news/21114-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output-1-scaled.png": {
+      "kind": "news",
+      "key": 21106,
+      "file": "img/news/21106.webp",
+      "file_small": "img/news/21106-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output.png": {
+      "kind": "news",
+      "key": 21103,
+      "file": "img/news/21103.webp",
+      "file_small": "img/news/21103-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/download.jpeg": {
+      "kind": "news",
+      "key": 21091,
+      "file": "img/news/21091.webp",
+      "file_small": "img/news/21091-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5287.jpg": {
+      "kind": "news",
+      "key": 21087,
+      "file": "img/news/21087.webp",
+      "file_small": "img/news/21087-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_1572.JPG": {
+      "kind": "news",
+      "key": 21079,
+      "file": "img/news/21079.webp",
+      "file_small": "img/news/21079-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5100-2.JPG": {
+      "kind": "news",
+      "key": 21072,
+      "file": "img/news/21072.webp",
+      "file_small": "img/news/21072-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-66.jpg": {
+      "kind": "news",
+      "key": 20786,
+      "file": "img/news/20786.webp",
+      "file_small": "img/news/20786-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-48.jpg": {
+      "kind": "news",
+      "key": 20749,
+      "file": "img/news/20749.webp",
+      "file_small": "img/news/20749-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-15.jpg": {
+      "kind": "news",
+      "key": 20679,
+      "file": "img/news/20679.webp",
+      "file_small": "img/news/20679-600.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/05/485785752_1577310903211993_2081622249164858498_n-1.jpg": {
+      "kind": "atmo",
+      "key": "banner",
+      "file": "img/atmo-banner.webp",
+      "file_small": "img/atmo-banner-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/07/IMG_3156.PNG": {
+      "kind": "atmo",
+      "key": "woodward-pistons-sign",
+      "file": "img/atmo-woodward-pistons-sign.webp",
+      "file_small": "img/atmo-woodward-pistons-sign-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5674-scaled.jpg": {
+      "kind": "atmo",
+      "key": "detroit-dusk",
+      "file": "img/atmo-detroit-dusk.webp",
+      "file_small": "img/atmo-detroit-dusk-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2024/03/IMG_3267-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "arena-bowl",
+      "file": "img/atmo-arena-bowl.webp",
+      "file_small": "img/atmo-arena-bowl-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2024/01/IMG_1814-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "good-luck-lions",
+      "file": "img/atmo-good-luck-lions.webp",
+      "file_small": "img/atmo-good-luck-lions-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2025/02/IMG_3370-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "pyro-intro",
+      "file": "img/atmo-pyro-intro.webp",
+      "file_small": "img/atmo-pyro-intro-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2025/01/IMG_6888-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "center-court",
+      "file": "img/atmo-center-court.webp",
+      "file_small": "img/atmo-center-court-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2025/11/IMG_7685-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "cade-jumper",
+      "file": "img/atmo-cade-jumper.webp",
+      "file_small": "img/atmo-cade-jumper-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2025/02/IMG_7505-scaled-1.jpeg": {
+      "kind": "atmo",
+      "key": "starting-five",
+      "file": "img/atmo-starting-five.webp",
+      "file_small": "img/atmo-starting-five-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/07/IMG_2251-scaled.jpg": {
+      "kind": "atmo",
+      "key": "comerica-opening-day",
+      "file": "img/atmo-comerica-opening-day.webp",
+      "file_small": "img/atmo-comerica-opening-day-1000.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-37.png": {
+      "kind": "party",
+      "key": "hopcat",
+      "file": "img/party/hopcat.webp",
+      "file_small": "img/party/hopcat.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5667.webp": {
+      "kind": "party",
+      "key": "otooles",
+      "file": "img/party/otooles.webp",
+      "file_small": "img/party/otooles.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5666.jpg": {
+      "kind": "party",
+      "key": "rock-and-brews",
+      "file": "img/party/rock-and-brews.webp",
+      "file_small": "img/party/rock-and-brews.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5670.jpg": {
+      "kind": "party",
+      "key": "fifth-avenue",
+      "file": "img/party/fifth-avenue.webp",
+      "file_small": "img/party/fifth-avenue.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5671.webp": {
+      "kind": "party",
+      "key": "bar-louie",
+      "file": "img/party/bar-louie.webp",
+      "file_small": "img/party/bar-louie.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-38.png": {
+      "kind": "party",
+      "key": "blind-owl",
+      "file": "img/party/blind-owl.webp",
+      "file_small": "img/party/blind-owl.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-39-scaled.png": {
+      "kind": "party",
+      "key": "collage",
+      "file": "img/party/collage.webp",
+      "file_small": "img/party/collage.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/09/d0529e24c4fb1c2e9f946281057079d8_exif_1789049816492.jpg": {
+      "kind": "party",
+      "key": "collage-square",
+      "file": "img/party/collage-square.webp",
+      "file_small": "img/party/collage-square.webp"
+    },
+    "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Sports_logo.webp": {
+      "kind": "logo",
+      "file": "img/logo.svg",
+      "file_small": "img/logo-512.png"
+    }
+  }
+}

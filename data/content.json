@@ -1,0 +1,2039 @@
+{
+  "meta": {
+    "generated": "2026-10-08",
+    "generated_by": "content & data extraction role",
+    "rule": "Only facts from woodwardsports.com, its WP REST API, the official YouTube channel/RSS, Apple/iTunes lookup, Spreaker feeds, Spotify embeds and the Shopify store. Unknowns are null and listed in gaps.",
+    "all_dates_utc": "Article/video dates are UTC ISO strings (the WP install runs on UTC: date == date_gmt)."
+  },
+  "brand": {
+    "name": "Woodward Sports Network",
+    "short": "WSN",
+    "also_called": [
+      "Woodward Sports",
+      "WSN"
+    ],
+    "tagline": "Unfiltered Detroit Sports",
+    "title_tag": "Woodward Sports Network | Unfiltered Detroit Sports Talk",
+    "description": "No corporate BS, just real Detroit sports talk. Woodward Sports Network delivers unfiltered reactions, live shows, and raw coverage of the Lions, Pistons, Red Wings, and Tigers. Run by Detroit fans, for Detroit fans. Tune in and sound off.",
+    "slogans": [
+      "Live shows every weekday from 8am-7pm",
+      "Made for the fans, made by the fans"
+    ],
+    "slogans_source": "Text on the brand banner image (og:image) as recorded in its WP alt text; the banner itself renders them in caps.",
+    "site_copy": {
+      "lineup_kicker": "THE NETWORK",
+      "lineup_heading": "The Lineup",
+      "lineup_intro": "Every take. Every host. All the noise. Welcome to the Detroit sports mothership.",
+      "app_heading": "Take us with you",
+      "app_subheading": "Live, anytime, anywhere",
+      "app_subheading_verbatim": "Live live, anytime, anywhere",
+      "app_buttons": [
+        "APP STORE",
+        "YOUTUBE LIVE"
+      ],
+      "on_air_label": "ON AIR NOW",
+      "section_latest": "/// THE LATEST",
+      "section_lineup": "/// THE LINEUP",
+      "section_today": "/// TODAY’S LINEUP",
+      "social_heading": "STAY LOUD.",
+      "newsletter_heading": "Join the Mob",
+      "newsletter_text": "Get the latest news, picks, and takes directly to your inbox. No spam, just sports.",
+      "newsletter_button": "Sub",
+      "news_kicker": "THE LATEST DROP",
+      "news_badge": "Updated 24/7",
+      "news_heading": "The Latest News",
+      "news_intro": "Breaking coverage, inside scoops, and raw reactions from the Woodward Newsroom. If it’s going down in the 313, it’s dropping here first.",
+      "news_team_filters": [
+        "Lions",
+        "Tigers",
+        "Pistons",
+        "Wings"
+      ],
+      "off_air": "Catch us live Monday — Friday • Replays playing now",
+      "watch_latest_cta": "▶ Watch Latest Episode",
+      "youtube_about": "Woodward Sports creates experiences that unleash the power and imagination of sports. Uniting fans and providing unique storytelling. Woodward Sports Detroit’s #1 Sports Network",
+      "copyright": "© 2026 Woodward Sports Network."
+    },
+    "logo_source_url": "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Sports_logo.webp",
+    "logo_alternates": {
+      "header_cropped_500": "https://woodwardsports.com/wp-content/uploads/2026/04/cropped-Woodward-Sports_logo.webp",
+      "favicon_192": "https://woodwardsports.com/wp-content/uploads/2026/04/cropped-favicon-32x32-1-192x192.png",
+      "apple_touch_180": "https://woodwardsports.com/wp-content/uploads/2026/04/cropped-favicon-32x32-1-180x180.png",
+      "og_banner_1792x1008": "https://woodwardsports.com/wp-content/uploads/2026/05/485785752_1577310903211993_2081622249164858498_n-1.jpg",
+      "shop_logo": "https://shop.woodwardsports.com/cdn/shop/files/woodwardStoreLogo_a2bfc724-e5ba-4fb3-b08e-39f38f351d83.png",
+      "youtube_avatar": "https://yt3.googleusercontent.com/vNiY_ivfIrGG4i0BW7tB2fO8oqaN5KDJNJDLfkDlPPGcOOaPYrTuOzStsmxeZp09TtOHRtea=s800-c-k-c0x00ffffff-no-rj",
+      "app_icon_512": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/cf/d0/9d/cfd09d36-7432-fb8f-9ce2-7a5e6487b52c/AppIcon-1x_U007emarketing-0-5-0-85-220.png/512x512bb.jpg"
+    },
+    "palette_current_site": {
+      "green": "#057d5a",
+      "red": "#e51937",
+      "black": "#0a0a0a",
+      "charcoal": "#2a2a2a",
+      "gray": "#9ca3af",
+      "light_gray": "#e5e7eb",
+      "off_white": "#F7FAFC",
+      "white": "#ffffff",
+      "extras": [
+        "#13612e",
+        "#1159af",
+        "#b82105",
+        "#f7630c",
+        "#f5a524"
+      ]
+    },
+    "fonts_current_site": [
+      "Space Grotesk (300–700)",
+      "Barlow Condensed (700 italic, used for big uppercase headings)"
+    ],
+    "motifs": [
+      "/// slash prefix on section headings",
+      "Woodward Ave street-sign logo, white stencil lettering on green"
+    ],
+    "founded": null,
+    "founded_note": "No founding year is stated by any official source. YouTube channel joined Aug 6, 2020; iOS app first released 2021-02-17 — neither is a founding date.",
+    "audience_area": "Detroit / Metro Detroit (\"the 313\", \"the D\")"
+  },
+  "schedule": {
+    "timezone": "America/Detroit",
+    "days": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "days_display": "Monday – Friday",
+    "window_display": "8AM – 7PM ET",
+    "shows": [
+      {
+        "id": "big-d-energy",
+        "name": "Big D Energy",
+        "start": "08:00",
+        "end": "10:00",
+        "display": "8AM – 10AM"
+      },
+      {
+        "id": "crunch-time",
+        "name": "Crunch Time",
+        "start": "11:00",
+        "end": "13:00",
+        "display": "11AM – 1PM"
+      },
+      {
+        "id": "braylon-edwards-show",
+        "name": "The Braylon Edwards Show",
+        "start": "14:00",
+        "end": "16:00",
+        "display": "2PM – 4PM"
+      },
+      {
+        "id": "woodward-heavyweights",
+        "name": "Woodward Heavyweights",
+        "start": "17:00",
+        "end": "19:00",
+        "display": "5PM – 7PM"
+      }
+    ],
+    "gaps_in_day": [
+      "10:00–11:00",
+      "13:00–14:00",
+      "16:00–17:00"
+    ],
+    "off_air_message": "Catch us live Monday — Friday • Replays playing now",
+    "notes": "Times follow the /watch-live/ page, every show page (\"Live 8AM – 10AM\" etc.) and the schedule block in every official YouTube description (\"Big D Energy | Monday-Friday 8am-10am / Crunch Time 11am-1pm / The Braylon Edwards Show 2pm-4pm / Woodward Heavyweights 5pm-7pm\"). Conflicts resolved: (1) /shows/ hub card says Crunch Time \"10AM – 12PM\" — overruled by the Crunch Time show page, the podcast feed (\"TAKING OVER the 11am-1pm slot\") and YouTube descriptions; (2) site countdown JS starts Heavyweights at 4:45 PM — overruled by all visible copy (5PM – 7PM); (3) a stale JS array still lists \"Sean Baligian Mornings 8–10\", \"Big D Energy 11–1\", \"Braylon Edwards Show with Shep\" — ignored as legacy."
+  },
+  "shows": [
+    {
+      "id": "big-d-energy",
+      "name": "Big D Energy",
+      "short_name": "Big D Energy",
+      "slot_display": "8AM – 10AM",
+      "days_display": "Mon – Fri",
+      "start": "08:00",
+      "end": "10:00",
+      "tagline": "Start your day angry.",
+      "description": "The morning home of Detroit’s loudest opinions. Big D Energy brings bold takes, deep analysis, and pure sports adrenaline right through your screen every single day.",
+      "description_verbatim": "The midday home of Detroit’s loudest opinions. Big D Energy brings bold takes, deep analysis, and pure sports adrenaline right through your screen every single day.",
+      "about_host": "The midday pulse of Detroit sports. Hosted by veteran broadcaster Neal Ruhl and radio broadcast legend Sean Baligian, this duo brings unfiltered takes, ELITE-level insights, and loud opinions you won’t hear anywhere else.",
+      "hosts": [
+        "Neal Ruhl",
+        "Sean Baligian"
+      ],
+      "host_descriptors": {
+        "Neal Ruhl": "veteran broadcaster",
+        "Sean Baligian": "radio broadcast legend"
+      },
+      "also_on_air": [],
+      "page_url": "https://woodwardsports.com/shows/big-d-energy/",
+      "apple_podcasts": "https://podcasts.apple.com/us/podcast/big-d-energy-show/id1543767466",
+      "spotify": "https://open.spotify.com/show/1ooE31QAHvIwc64HTNiZUW",
+      "spreaker": "https://www.spreaker.com/podcast/big-d-energy-show--4703848",
+      "rss": "https://www.spreaker.com/show/4703848/episodes/feed",
+      "youtube_search": "https://www.youtube.com/@WoodwardSports/search?query=Big%20D%20Energy",
+      "art_source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/DBE.png",
+      "art_alt": "Two podcast hosts posing at a microphone with a blue 'Big D Energy' logo and city skyline graphic behind them (promo image).",
+      "podcast_name": "Big D Energy Show",
+      "podcast_description": "The Big D Energy morning show is hosted by Neal Ruhl and Sean Baligian.",
+      "podcast_art_url": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/0493d2e7a5c72da85d07d209cd2d906c.jpg",
+      "podcast_art_apple_600": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/e6/df/a8/e6dfa8bb-c7ea-95a1-b822-86bd4074e2ed/mza_17649196174884788805.jpg/600x600bb.jpg",
+      "podcast_genre": "Sports",
+      "podcast_episode_count": 1000,
+      "podcast_episode_count_note": "Spreaker feed caps at 1000 items, so 1000 means 1000+",
+      "latest_episodes": [
+        {
+          "title": "Detroit Lions Season SPIRALING?! Look Ahead To Week 5 | Big D Energy | Wednesday, October 7th, 2026",
+          "published": "Wed, 07 Oct 2026 15:33:56 +0000",
+          "url": "https://www.spreaker.com/episode/detroit-lions-season-spiraling-look-ahead-to-week-5-big-d-energy-wednesday-october-7th-2026--75622723",
+          "duration_seconds": 7417,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75622723/bde100726.mp3"
+        },
+        {
+          "title": "Dont Worry Brian Branch Can Fix This, Right?!?! | Big D Energy | Tuesday, October 6th, 2026",
+          "published": "Wed, 07 Oct 2026 15:33:13 +0000",
+          "url": "https://www.spreaker.com/episode/dont-worry-brian-branch-can-fix-this-right-big-d-energy-tuesday-october-6th-2026--75622711",
+          "duration_seconds": 7700,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75622711/bde100626.mp3"
+        },
+        {
+          "title": "Lions Embarrassed In Primetime What The Next Move? | Big D Energy | Monday, October 5th, 2026",
+          "published": "Wed, 07 Oct 2026 15:28:23 +0000",
+          "url": "https://www.spreaker.com/episode/lions-embarrassed-in-primetime-what-the-next-move-big-d-energy-monday-october-5th-2026--75622710",
+          "duration_seconds": 8212,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75622710/bde100526.mp3"
+        }
+      ],
+      "notes": "Show page copy says \"midday\"; the show airs 8–10 AM ET and its own podcast feed calls it \"the Big D Energy morning show\", so `description` swaps midday→morning. `description_verbatim` is the untouched site text."
+    },
+    {
+      "id": "crunch-time",
+      "name": "Crunch Time",
+      "short_name": "Crunch Time",
+      "slot_display": "11AM – 1PM",
+      "days_display": "Mon – Fri",
+      "start": "11:00",
+      "end": "13:00",
+      "tagline": "Exactly what it sounds like.",
+      "description": "Start your day ON TIME with CRUNCH TIME! Jeff Iafrate and Booner bring unfiltered truth, heavy Detroit sports analysis, and zero apologies every single afternoon.",
+      "description_verbatim": "Start your day ON TIME with CRUNCH TIME! Jeff Iafrate and Booner bring unfiltered truth, heavy Detroit sports analysis, and zero apologies every single afternoon.",
+      "about_host": "Start your day ON TIME with CRUNCH TIME! Jeff Iafrate and Booner bring unfiltered truth, heavy Detroit sports analysis, and zero apologies every single afternoon.",
+      "hosts": [
+        "Jeff Iafrate",
+        "Booner"
+      ],
+      "host_descriptors": {},
+      "also_on_air": [
+        {
+          "names": [
+            "Caleb Czarnik",
+            "KG"
+          ],
+          "source": "Every recent episode description in the official Crunch Time Sports podcast feed and YouTube uploads (Sep–Oct 2026): \"Jeff Iafrate, Booner, Caleb Czarnik, and KG discuss…\""
+        }
+      ],
+      "page_url": "https://woodwardsports.com/shows/crunch-time/",
+      "apple_podcasts": "https://podcasts.apple.com/us/podcast/crunch-time-sports/id6786401792",
+      "spotify": null,
+      "spreaker": "https://www.spreaker.com/podcast/crunch-time-sports--7042776",
+      "rss": "https://www.spreaker.com/show/7042776/episodes/feed",
+      "youtube_search": "https://www.youtube.com/@WoodwardSports/search?query=Crunch%20Time",
+      "art_source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/Crunchtime-Pod-Thumb.png",
+      "art_alt": "Two men in dark hoodies pose in front of a grayscale cityscape with a bold 'Crunch Time' logo at the bottom.",
+      "podcast_name": "Crunch Time Sports",
+      "podcast_description": "Jeff Iafrate and Booner have repartnered with Woodward Sports and are TAKING OVER the 11am-1pm slot. The BEST breakdowns, BIGGEST guests and most entertaining content in the Detroit Sports landscape back where it all began at Woodward Sports.",
+      "podcast_art_url": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/e8d65919b81dc3542f45cba02d26d70a.jpg",
+      "podcast_art_apple_600": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts221/v4/92/63/ad/9263adcf-411b-4e63-997d-a52b853d6b2d/mza_18415328258319468192.jpg/600x600bb.jpg",
+      "podcast_genre": "Sports",
+      "podcast_episode_count": 90,
+      "podcast_episode_count_note": "exact count of items in the Spreaker feed on 2026-10-08",
+      "latest_episodes": [
+        {
+          "title": "Kelvin Sheppard RESPONDS To Detroit Lions Criticism! | Crunch Time | October 8th, 2026",
+          "published": "Thu, 08 Oct 2026 17:34:08 +0000",
+          "url": "https://www.spreaker.com/episode/kelvin-sheppard-responds-to-detroit-lions-criticism-crunch-time-october-8th-2026--75646121",
+          "duration_seconds": 7537,
+          "audio_url": "https://api.spreaker.com/download/episode/75646121/ctaudiooct8.mp3"
+        },
+        {
+          "title": "NFL Insider On Detroit Lions TRADE Rumors & News! | Crunch Time | October 7th, 2026",
+          "published": "Thu, 08 Oct 2026 17:28:23 +0000",
+          "url": "https://www.spreaker.com/episode/nfl-insider-on-detroit-lions-trade-rumors-news-crunch-time-october-7th-2026--75625319",
+          "duration_seconds": 7771,
+          "audio_url": "https://api.spreaker.com/download/episode/75625319/ctaudiooct7.mp3"
+        },
+        {
+          "title": "BREAKING: Detroit Lions Get Brian Branch & Cade Mays BACK! | Crunch Time | October 6th, 2026",
+          "published": "Tue, 06 Oct 2026 19:03:44 +0000",
+          "url": "https://www.spreaker.com/episode/breaking-detroit-lions-get-brian-branch-cade-mays-back-crunch-time-october-6th-2026--75599826",
+          "duration_seconds": 7571,
+          "audio_url": "https://api.spreaker.com/download/episode/75599826/ctaudiooct6.mp3"
+        }
+      ],
+      "notes": "Podcast is published as \"Crunch Time Sports\". No Spotify listing found for this WSN feed (Spreaker 7042776). A separate older Spotify show \"Crunch Time Sports Show\" (open.spotify.com/show/7pg1PxFvbFPgt9Jw0mlo3P) belongs to the hosts’ previous independent feed (its own description says LIVE 8–10 PM), so it is NOT used."
+    },
+    {
+      "id": "braylon-edwards-show",
+      "name": "The Braylon Edwards Show",
+      "short_name": "Braylon Edwards",
+      "slot_display": "2PM – 4PM",
+      "days_display": "Mon – Fri",
+      "start": "14:00",
+      "end": "16:00",
+      "tagline": "Real talk from a real Pro.",
+      "description": "Former NFL All-Pro wide receiver Braylon Edwards teams up with Detroit sports personality Anson Wells to bring you the best afternoon sports talk in Detroit. Heavy Lions analysis, raw takes, and high-energy debate.",
+      "description_verbatim": "Former NFL All-Pro wide receiver Braylon Edwards teams up with Detroit sports personality Anson Wells to bring you the best afternoon sports talk in Detroit. Heavy Lions analysis, raw takes, and high-energy debate.",
+      "about_host": "Former NFL All-Pro wide receiver Braylon Edwards teams up with Detroit sports personality Anson Wells to bring you the best afternoon sports talk in Detroit. Heavy Lions analysis, raw takes, and high-energy debate.",
+      "hosts": [
+        "Braylon Edwards",
+        "Anson Wells"
+      ],
+      "host_descriptors": {
+        "Braylon Edwards": "Former NFL All-Pro wide receiver (as stated on the show page)",
+        "Anson Wells": "Detroit sports personality"
+      },
+      "also_on_air": [
+        {
+          "names": [
+            "Justin Satawa",
+            "Sweet Patata Cam"
+          ],
+          "source": "YouTube description of 8VO1arwMX4w (2026-10-08): \"JOIN Braylon Edwards, Anson Wells, Justin Satawa, and Sweet Patata Cam…\" — single episode, treat as guests/crew, not hosts"
+        }
+      ],
+      "page_url": "https://woodwardsports.com/shows/the-braylon-edwards-show/",
+      "apple_podcasts": "https://podcasts.apple.com/us/podcast/braylon-edwards-show/id1556523200",
+      "spotify": "https://open.spotify.com/show/401D41eV73vaOidqcHDF3o",
+      "spreaker": "https://www.spreaker.com/podcast/braylon-edwards-show--4811839",
+      "rss": "https://www.spreaker.com/show/4811839/episodes/feed",
+      "youtube_search": "https://www.youtube.com/@WoodwardSports/search?query=Braylon%20Edwards%20Show",
+      "art_source_url": "https://woodwardsports.com/wp-content/uploads/2026/07/Braylon-Anson-Pod-Thumb.png",
+      "art_alt": "Promotional image for The Braylon Edwards Show on Woodward Sports, featuring two male hosts with a microphone in front of a blue backdrop and show logo at the bottom.",
+      "podcast_name": "Braylon Edwards Show",
+      "podcast_description": "Welcome to The Braylon Edwards Show with Anson.",
+      "podcast_art_url": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/e5d9e52ac528d2e9b157c11cb3f8896b.jpg",
+      "podcast_art_apple_600": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/77/70/ec/7770ec69-c74c-1339-b4e0-087c2afd7632/mza_8731866102984290897.jpg/600x600bb.jpg",
+      "podcast_genre": "Sports",
+      "podcast_episode_count": 1000,
+      "podcast_episode_count_note": "Spreaker feed caps at 1000 items, so 1000 means 1000+",
+      "latest_episodes": [
+        {
+          "title": "Detroit Lions BACK IN on All-Pro Corner",
+          "published": "Wed, 07 Oct 2026 23:38:28 +0000",
+          "url": "https://www.spreaker.com/episode/detroit-lions-back-in-on-all-pro-corner--75629051",
+          "duration_seconds": 7382,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75629051/ee_10_7.mp3"
+        },
+        {
+          "title": "Detroit Lions WON'T make the Playoffs | Braylon Edwards Show | 10/06/26",
+          "published": "Tue, 06 Oct 2026 23:16:57 +0000",
+          "url": "https://www.spreaker.com/episode/detroit-lions-won-t-make-the-playoffs-braylon-edwards-show-10-06-26--75601219",
+          "duration_seconds": 7264,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75601219/ee_10_6.mp3"
+        },
+        {
+          "title": "Detroit Lions BODIED BY Carolina Panthers...Is the season OVER?",
+          "published": "Tue, 06 Oct 2026 03:51:57 +0000",
+          "url": "https://www.spreaker.com/episode/detroit-lions-bodied-by-carolina-panthers-is-the-season-over--75586039",
+          "duration_seconds": 7411,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75586039/ee_10_5.mp3"
+        }
+      ],
+      "notes": "Podcast is published as \"Braylon Edwards Show\". Its Spotify page is still titled \"Braylon Edwards Show With Shep\" in search results, but the embed’s latest episode matches the Spreaker feed exactly. Feed <itunes:subtitle> is stale (\"Ermanni & Edwards\") — ignored."
+    },
+    {
+      "id": "woodward-heavyweights",
+      "name": "Woodward Heavyweights",
+      "short_name": "Heavyweights",
+      "slot_display": "5PM – 7PM",
+      "days_display": "Mon – Fri",
+      "start": "17:00",
+      "end": "19:00",
+      "tagline": "Drive home, full volume.",
+      "description": "The biggest show to come out of the Woodward Sports studios. Spencer Raxter and Eazy close out your day with hilariously epic takes, heavy Detroit sports analysis, and loud pop-culture debates. The drive home just got a lot heavier.",
+      "description_verbatim": "The biggest show to come out of the Woodward Sports studios. Spencer Raxter and Eazy close out your day with hilariously epic takes, heavy Detroit sports analysis, and loud pop-culture debates. The drive home just got a lot heavier.",
+      "about_host": "The ‘BIGGEST’ show to come out of the Woodward Sports studios yet. Spencer Raxter and Eazy collide every afternoon to talk Detroit sports and pop culture in heavyweight fashion. It’s loud, it’s hilariously epic, and it hits harder than anyone else in the D. Step into the ring.",
+      "hosts": [
+        "Spencer Raxter",
+        "Eazy"
+      ],
+      "host_descriptors": {},
+      "also_on_air": [
+        {
+          "names": [
+            "Chris Platte",
+            "Nick Kohloff"
+          ],
+          "source": "YouTube description of _2glmLpDPr8 (2026-10-07): \"Spencer Raxter, EZ, Chris Platte & Nick Kohloff are LIVE…\" — single episode"
+        }
+      ],
+      "page_url": "https://woodwardsports.com/shows/woodward-heavyweights/",
+      "apple_podcasts": "https://podcasts.apple.com/us/podcast/woodward-heavyweights/id1610793862",
+      "spotify": "https://open.spotify.com/show/77jFfffoqcg3Fh1MWeCdb7",
+      "spreaker": "https://www.spreaker.com/podcast/woodward-heavyweights--5367285",
+      "rss": "https://www.spreaker.com/show/5367285/episodes/feed",
+      "youtube_search": "https://www.youtube.com/@WoodwardSports/search?query=Woodward%20Heavyweights",
+      "art_source_url": "https://woodwardsports.com/wp-content/uploads/2026/04/Woodward-Heavyweights.webp",
+      "art_alt": "Woodward Heavyweights",
+      "podcast_name": "Woodward Heavyweights",
+      "podcast_description": "The \"BIGGEST\" podcast to come out of Woodward Sports Studios YET! Spencer Raxter & Eazy collab on all things sports, & pop-culture in HEAVYWEIGHT FASHION! Don't miss this hilariously epic podcast featuring some of the biggest names in the NFL, UFC, & more!!",
+      "podcast_art_url": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/df8d98f045fa486aacce2e8d77db5285.jpg",
+      "podcast_art_apple_600": "https://is1-ssl.mzstatic.com/image/thumb/Podcasts211/v4/7b/78/6f/7b786f92-9770-da26-174e-bd3de509e8ce/mza_17306886173806903423.jpg/600x600bb.jpg",
+      "podcast_genre": "Football",
+      "podcast_episode_count": 716,
+      "podcast_episode_count_note": "exact count of items in the Spreaker feed on 2026-10-08",
+      "latest_episodes": [
+        {
+          "title": "Legendary Detroit Lions RB Talks Detroit Lions",
+          "published": "Thu, 08 Oct 2026 00:02:40 +0000",
+          "url": "https://www.spreaker.com/episode/legendary-detroit-lions-rb-talks-detroit-lions--75629306",
+          "duration_seconds": 7095,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75629306/legendary_detroit_lions_rb_talks_detroit_lions.mp3"
+        },
+        {
+          "title": "Darius Slay & Dave Birkett on the Detroit Lions Defense",
+          "published": "Wed, 07 Oct 2026 00:31:58 +0000",
+          "url": "https://www.spreaker.com/episode/darius-slay-dave-birkett-on-the-detroit-lions-defense--75604289",
+          "duration_seconds": 7099,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75604289/darius_slay_dave_birkett_on_the_detroit_lions_defense.mp3"
+        },
+        {
+          "title": "The Detroit Lions are Doomed",
+          "published": "Tue, 06 Oct 2026 00:01:44 +0000",
+          "url": "https://www.spreaker.com/episode/the-detroit-lions-are-doomed--75587715",
+          "duration_seconds": 7270,
+          "audio_url": "https://dts.podtrac.com/redirect.mp3/api.spreaker.com/download/episode/75587715/the_detroit_lions_are_doomed.mp3"
+        }
+      ],
+      "notes": "Site JS countdown starts this show at 4:45 PM; all visible pages and YouTube descriptions say 5–7 PM, so 17:00 is used. \"Eazy\" appears as \"EZ\" in some YouTube descriptions; WP user \"Eazy Ezerkis\" (slug eazy) authored 1 post."
+    }
+  ],
+  "teams": [
+    {
+      "id": "lions",
+      "name": "Detroit Lions",
+      "short": "Lions",
+      "league": "NFL",
+      "category_url": "https://woodwardsports.com/category/detroit-lions/",
+      "alt_category_urls": [],
+      "post_count": 96,
+      "wp_category_counts": {
+        "detroit-lions": 96
+      },
+      "latest_article_ids": [
+        21256,
+        21251,
+        21114,
+        21072
+      ],
+      "latest_post_date": "2026-09-15T16:19:09Z",
+      "colors": {
+        "primary": "#0076B6",
+        "secondary": "#B0B7BC"
+      }
+    },
+    {
+      "id": "pistons",
+      "name": "Detroit Pistons",
+      "short": "Pistons",
+      "league": "NBA",
+      "category_url": "https://woodwardsports.com/category/detroit-pistons/",
+      "alt_category_urls": [],
+      "post_count": 70,
+      "wp_category_counts": {
+        "detroit-pistons": 70
+      },
+      "latest_article_ids": [
+        21295,
+        21114,
+        21106,
+        21072
+      ],
+      "latest_post_date": "2026-10-06T02:55:54Z",
+      "colors": {
+        "primary": "#C8102E",
+        "secondary": "#1D42BA"
+      }
+    },
+    {
+      "id": "tigers",
+      "name": "Detroit Tigers",
+      "short": "Tigers",
+      "league": "MLB",
+      "category_url": "https://woodwardsports.com/category/detroit-tigers/",
+      "alt_category_urls": [],
+      "post_count": 43,
+      "wp_category_counts": {
+        "detroit-tigers": 43
+      },
+      "latest_article_ids": [
+        21284,
+        21281,
+        21114,
+        21091
+      ],
+      "latest_post_date": "2026-09-29T02:05:57Z",
+      "colors": {
+        "primary": "#0C2340",
+        "secondary": "#FA4616"
+      }
+    },
+    {
+      "id": "red-wings",
+      "name": "Detroit Red Wings",
+      "short": "Red Wings",
+      "league": "NHL",
+      "category_url": "https://woodwardsports.com/category/detroit-red-wings/",
+      "alt_category_urls": [],
+      "post_count": 3,
+      "wp_category_counts": {
+        "detroit-red-wings": 3
+      },
+      "latest_article_ids": [
+        21291,
+        21114,
+        21072
+      ],
+      "latest_post_date": "2026-10-05T14:55:05Z",
+      "colors": {
+        "primary": "#CE1126",
+        "secondary": "#FFFFFF"
+      }
+    },
+    {
+      "id": "michigan",
+      "name": "Michigan",
+      "short": "U of M",
+      "league": "NCAA (Big Ten)",
+      "category_url": "https://woodwardsports.com/category/michigan/",
+      "alt_category_urls": [
+        "https://woodwardsports.com/category/u-of-m/"
+      ],
+      "post_count": 6,
+      "wp_category_counts": {
+        "michigan": 6,
+        "u-of-m": 1
+      },
+      "latest_article_ids": [
+        21278,
+        20786,
+        20749,
+        20679
+      ],
+      "latest_post_date": "2026-09-21T11:37:43Z",
+      "colors": {
+        "primary": "#FFCB05",
+        "secondary": "#00274C"
+      }
+    },
+    {
+      "id": "michigan-state",
+      "name": "Michigan State",
+      "short": "MSU",
+      "league": "NCAA (Big Ten)",
+      "category_url": "https://woodwardsports.com/category/michigan-state/",
+      "alt_category_urls": [
+        "https://woodwardsports.com/category/msu/"
+      ],
+      "post_count": 3,
+      "wp_category_counts": {
+        "michigan-state": 3,
+        "msu": 1
+      },
+      "latest_article_ids": [
+        21278,
+        21245,
+        20749
+      ],
+      "latest_post_date": "2026-09-21T11:37:43Z",
+      "colors": {
+        "primary": "#18453B",
+        "secondary": "#FFFFFF"
+      }
+    }
+  ],
+  "articles": [
+    {
+      "id": 21295,
+      "title": "3 Areas of Concern and Comfort for the 2026-27 Detroit Pistons",
+      "title_display": "3 Areas of Concern and Comfort for the 2026-27 Detroit Pistons",
+      "excerpt": "The Detroit Pistons tipped off pre-season versus the Phoenix Suns with an exciting 109-107 win.",
+      "date": "2026-10-06T02:55:54Z",
+      "author": "Brandon Dent",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Pistons",
+        "Detroit Sports",
+        "Featured News",
+        "NBA",
+        "Trending News"
+      ],
+      "team": "pistons",
+      "teams": [
+        "pistons"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 5,
+      "word_count": 980,
+      "url": "https://woodwardsports.com/3-areas-of-concern-and-comfort-for-the-2026-27-detroit-pistons/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/10/fd4ec7aafc9147328b6d089434cd2a2f_exif_1791254696803-scaled.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/10/fd4ec7aafc9147328b6d089434cd2a2f_exif_1791254696803-1024x576.jpg",
+      "image_width": 2560,
+      "image_height": 1440,
+      "image_alt": "3 Areas of Concern and Comfort for the 2026-27 Detroit Pistons"
+    },
+    {
+      "id": 21291,
+      "title": "The Detroit Red Wings Are A Hot MEss!",
+      "title_display": "The Detroit Red Wings Are A Hot Mess!",
+      "excerpt": "People often ask me who I think will be the next Detroit professional team to win a championship. Without thinking, I always said the Detroit Red Wings.",
+      "date": "2026-10-05T14:55:05Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Red Wings",
+        "Detroit Sports",
+        "Featured News",
+        "NHL",
+        "Trending News"
+      ],
+      "team": "red-wings",
+      "teams": [
+        "red-wings"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 2,
+      "word_count": 414,
+      "url": "https://woodwardsports.com/the-detroit-red-wings-are-a-hot-mess/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/10/IMG_6306.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/10/IMG_6306.JPG",
+      "image_width": 660,
+      "image_height": 372,
+      "image_alt": "The Detroit Red Wings Are A Hot Mess!"
+    },
+    {
+      "id": 21284,
+      "title": "Justin Verlander Was Must See TV in Detroit One Last TIme",
+      "title_display": "Justin Verlander Was Must See TV in Detroit One Last Time",
+      "excerpt": "Justin Verlander wasn’t the only person to get choked up after he pitched the final ball of his career. I did too.",
+      "date": "2026-09-29T02:05:57Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Sports",
+        "Detroit Tigers",
+        "Featured News",
+        "MLB",
+        "Pop Culture",
+        "Trending News"
+      ],
+      "team": "tigers",
+      "teams": [
+        "tigers"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 1,
+      "word_count": 194,
+      "url": "https://woodwardsports.com/how-justin-verlander-was-must-see-tv-in-detroit-one-last-time/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_6134.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_6134-1024x512.jpg",
+      "image_width": 1536,
+      "image_height": 768,
+      "image_alt": "A man in a Detroit Tigers cap and orange jacket hugs a girl in a navy jacket on a baseball field, stands blurred in the background."
+    },
+    {
+      "id": 21281,
+      "title": "A New River Found in Detroit",
+      "title_display": "A New River Found in Detroit",
+      "excerpt": "When the Detroit Tigers decided to trade back-to-back Cy Young winner Tarik Skubal, the question was simple: What would they get in return?",
+      "date": "2026-09-25T16:47:25Z",
+      "author": "Nicholas Kohloff",
+      "author_role": "Detroit Tigers Beat Reporter",
+      "author_source": "in-article byline",
+      "categories": [
+        "Detroit Tigers",
+        "Featured News",
+        "MLB",
+        "Trending News"
+      ],
+      "team": "tigers",
+      "teams": [
+        "tigers"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 488,
+      "url": "https://woodwardsports.com/a-new-river-found-in-detroit/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_2448-scaled.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_2448-1024x683.jpg",
+      "image_width": 2560,
+      "image_height": 1708,
+      "image_alt": "A New River Found in Detroit: Detroit Tiger Ryan River"
+    },
+    {
+      "id": 21278,
+      "title": "Five favorite WSN college football teams",
+      "title_display": "Five favorite WSN college football teams",
+      "excerpt": "Our heroes at Woodward Sports said “Go Blue” when asked to name their five favorite college football teams. Michigan State (Go green. Go white) finished a close second in our poll.",
+      "date": "2026-09-21T11:37:43Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Big Ten",
+        "Featured News",
+        "Michigan",
+        "Michigan State",
+        "NCAA",
+        "Pop Culture",
+        "Trending News",
+        "U of M"
+      ],
+      "team": null,
+      "teams": [
+        "michigan",
+        "michigan-state"
+      ],
+      "team_basis": "multiple teams tagged; no single primary",
+      "reading_minutes": 2,
+      "word_count": 292,
+      "url": "https://woodwardsports.com/five-favorite-wsn-college-football-teams/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-40-scaled.png",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-40-1024x576.png",
+      "image_width": 2560,
+      "image_height": 1440,
+      "image_alt": "Split-screen stadium crowd: left side in yellow Michigan colors, right side in green, showing rival fans at a football game."
+    },
+    {
+      "id": 21256,
+      "title": "VOTE: Woodward sports Detroit vs Buffalo Watch Party",
+      "title_display": "VOTE: Woodward sports Detroit vs Buffalo Watch Party",
+      "excerpt": "The votes are in! Woodward Sports has teamed up with Downtown Royal Oak for Thursday Night Football. HopCat is the winner!",
+      "date": "2026-09-15T16:19:09Z",
+      "author": "Woodward Sports",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Lions",
+        "Featured News",
+        "NFL",
+        "Pop Culture",
+        "Trending News"
+      ],
+      "team": "lions",
+      "teams": [
+        "lions"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 566,
+      "url": "https://woodwardsports.com/vote-woodward-sports-detroit-vs-buffalo-watch-party/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5829.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5829-1024x576.jpg",
+      "image_width": 1920,
+      "image_height": 1080,
+      "image_alt": "VOTE: Woodward sports Detroit vs Buffalo Watch Party",
+      "related_page": "https://woodwardsports.com/woodwardwatchparty/"
+    },
+    {
+      "id": 21251,
+      "title": "Reasons to Worry After Detroit Lions SLIM Victory Over The Saints?!",
+      "title_display": "Reasons to Worry After Detroit Lions SLIM Victory Over The Saints?!",
+      "excerpt": "I saw a young man proudly wearing a Jahmyr Gibbs jersey during the Detroit Lions season-opening game. He wore that jersey with pride.",
+      "date": "2026-09-14T13:47:47Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Lions",
+        "Featured News",
+        "NFL",
+        "Trending News"
+      ],
+      "team": "lions",
+      "teams": [
+        "lions"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 2,
+      "word_count": 387,
+      "url": "https://woodwardsports.com/reasons-to-worry-after-detroit-lions-slim-victory-over-the-saints/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5817-2.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5817-2-768x431.jpg",
+      "image_width": 770,
+      "image_height": 432,
+      "image_alt": "Reasons to Worry After Detroit Lions SLIM Victory Over The Saints?!"
+    },
+    {
+      "id": 21248,
+      "title": "Terry Foster: ‘The 9-11 Experience, That Happened Before 9-11!’",
+      "title_display": "Terry Foster: ‘The 9-11 Experience, That Happened Before 9-11!’",
+      "excerpt": "My 9-11 experience began exactly three months before the towers fell in New York City.",
+      "date": "2026-09-14T13:38:28Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Pop Culture",
+        "Trending News"
+      ],
+      "team": null,
+      "teams": [],
+      "team_basis": null,
+      "reading_minutes": 4,
+      "word_count": 693,
+      "url": "https://woodwardsports.com/terry-foster-the-9-11-experience-that-happened-before-9-11/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5816.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5816-1024x684.jpg",
+      "image_width": 2500,
+      "image_height": 1669,
+      "image_alt": "Terry Foster: 'The 9-11 Experience, That Happened Before 9-11!'"
+    },
+    {
+      "id": 21245,
+      "title": "Michigan State Football: Pat Fitzgerald Ready For Redemption",
+      "title_display": "Michigan State Football: Pat Fitzgerald Ready For Redemption",
+      "excerpt": "Michigan State got off to a rocky start under the Pat Fitzgerald era, but we discovered a lot about him during the Spartans 30-20 come from behind victory over Toledo at Spartan Stadium.",
+      "date": "2026-09-14T13:16:37Z",
+      "author": "Ryan O’Bleness",
+      "author_role": null,
+      "author_source": "in-article byline",
+      "categories": [
+        "Big Ten",
+        "Featured News",
+        "Michigan State",
+        "MSU",
+        "Trending News"
+      ],
+      "team": "michigan-state",
+      "teams": [
+        "michigan-state"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 687,
+      "url": "https://woodwardsports.com/michigan-state-football-pat-fitzgerald-ready-for-redemption/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5814.WEBP",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5814-1024x512.webp",
+      "image_width": 1200,
+      "image_height": 600,
+      "image_alt": "Michigan State Football: Pat Fitzgerald Ready For Redemption"
+    },
+    {
+      "id": 21119,
+      "title": "Michigan Football’s Answered Prayer Dooms Western’s Upset Bid",
+      "title_display": "Michigan Football’s Answered Prayer Dooms Western’s Upset Bid",
+      "excerpt": "You saw it. I saw it. We all saw it. Western Michigan got jobbed by officials during the final seconds of its 13-12 loss to Michigan.",
+      "date": "2026-09-08T14:51:55Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Uncategorized"
+      ],
+      "team": "michigan",
+      "teams": [
+        "michigan"
+      ],
+      "team_basis": "title (post is filed under Uncategorized)",
+      "reading_minutes": 1,
+      "word_count": 214,
+      "url": "https://woodwardsports.com/michigan-footballs-answered-prayer-dooms-westerns-upset-bid/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5622.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5622-1024x576.jpg",
+      "image_width": 1792,
+      "image_height": 1008,
+      "image_alt": "Michigan Football's Answered Prayer Dooms Western's Upset Bid"
+    },
+    {
+      "id": 21114,
+      "title": "Ranking Detroit’s Top College and Pro Teams of 2026",
+      "title_display": "Ranking Detroit’s Top College and Pro Teams of 2026",
+      "excerpt": "Before every fall Monday show when I worked at the flagship, we’d get a flood of calls begging us not to talk Detroit Lions football.",
+      "date": "2026-09-03T20:29:22Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Lions",
+        "Detroit Pistons",
+        "Detroit Red Wings",
+        "Detroit Sports",
+        "Detroit Tigers"
+      ],
+      "team": null,
+      "teams": [
+        "lions",
+        "pistons",
+        "red-wings",
+        "tigers"
+      ],
+      "team_basis": "multiple teams tagged; no single primary",
+      "reading_minutes": 2,
+      "word_count": 343,
+      "url": "https://woodwardsports.com/ranking-detroits-top-college-and-pro-teams-of-2026/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-28.PNG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-28-1024x768.png",
+      "image_width": 2040,
+      "image_height": 1530,
+      "image_alt": "Two young men stand together holding large banners with bold names, one reading GUNNINGHAM and the other WILLIAMS, in front of a dark display backdrop."
+    },
+    {
+      "id": 21106,
+      "title": "REPORT: Detroit Pistons, Jalen Duren Nearing Deal. Ausar Thompson Next?",
+      "title_display": "REPORT: Detroit Pistons, Jalen Duren Nearing Deal. Ausar Thompson Next?",
+      "excerpt": "The Detroit Pistons took center stage in the NBA after reports of an impending deal with All-NBA big man Jalen Duren. Jake Fischer broke the news Tuesday, via Bleacher Report on August 25, 2026.",
+      "date": "2026-08-26T20:03:47Z",
+      "author": "Brandon Dent",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Pistons",
+        "Featured News",
+        "NBA",
+        "Trending News"
+      ],
+      "team": "pistons",
+      "teams": [
+        "pistons"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 4,
+      "word_count": 767,
+      "url": "https://woodwardsports.com/report-detroit-pistons-jalen-duren-nearing-deal-ausar-thompson-next/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output-1-scaled.png",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output-1-1024x576.png",
+      "image_width": 2560,
+      "image_height": 1440,
+      "image_alt": "REPORT: Detroit Pistons, Jalen Duren Nearing Deal. Ausar Thompson Next?"
+    },
+    {
+      "id": 21103,
+      "title": "TOP 5 DRUNK EATS",
+      "title_display": "TOP 5 DRUNK EATS",
+      "excerpt": "You have left the bar at 2 a.m. on a weekend night. You are drunk and hungry. What is your next stop?",
+      "date": "2026-08-26T18:25:52Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Featured News",
+        "Pop Culture",
+        "Trending News"
+      ],
+      "team": null,
+      "teams": [],
+      "team_basis": null,
+      "reading_minutes": 3,
+      "word_count": 514,
+      "url": "https://woodwardsports.com/top-5-drunk-eats/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output.png",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/photo-output-1024x576.png",
+      "image_width": 2048,
+      "image_height": 1152,
+      "image_alt": "Top 5 Drunk Eats"
+    },
+    {
+      "id": 21091,
+      "title": "DETROIT TIGERS: MO MONEY, MO PROBLEMS",
+      "title_display": "DETROIT TIGERS: MO MONEY, MO PROBLEMS",
+      "excerpt": "The Detroit Tigers dropped a BAG in the offseason, leading to sky-high expectations in 2026 that ultimately were never met. I thought this team could win the American League, hands up.",
+      "date": "2026-08-25T15:43:26Z",
+      "author": "Woodward Sports",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Tigers",
+        "Featured News",
+        "MLB",
+        "Trending News"
+      ],
+      "team": "tigers",
+      "teams": [
+        "tigers"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 588,
+      "url": "https://woodwardsports.com/detroit-tigers-mo-money-more-problems/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/download.jpeg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/download.jpeg",
+      "image_width": 599,
+      "image_height": 399,
+      "image_alt": "Detroit Tigers: Mo Money, Mo Problems"
+    },
+    {
+      "id": 21087,
+      "title": "These are the TOP 5 CITIES in MICHIGAN!!!",
+      "title_display": "These are the TOP 5 CITIES in MICHIGAN!!!",
+      "excerpt": "Detroit is king. And it’s not even close.",
+      "date": "2026-08-14T14:13:41Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Featured News",
+        "Pop Culture",
+        "Trending News"
+      ],
+      "team": null,
+      "teams": [],
+      "team_basis": null,
+      "reading_minutes": 3,
+      "word_count": 595,
+      "url": "https://woodwardsports.com/these-are-the-top-five-cities-in-michigan/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5287.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5287.jpg",
+      "image_width": 683,
+      "image_height": 384,
+      "image_alt": "TOP FIVE CITIES IN MICHIGAN!"
+    },
+    {
+      "id": 21079,
+      "title": "Breaking Down BLOCKBUSTER Tarik Skubal Trade to LA DODGERS, Detroit Tigers’ Return",
+      "title_display": "Breaking Down BLOCKBUSTER Tarik Skubal Trade to LA DODGERS, Detroit Tigers’ Return",
+      "excerpt": "Blockbuster Trade! A blockbuster goes down in MLB as the back-to-back Cy Young Award winner Tarik Skubal gets traded to the Los Angeles Dodgers for OF Zhir Hope, RHP River Ryan, and RHP Brady Smith.",
+      "date": "2026-08-03T11:10:29Z",
+      "author": "Nicholas Kohloff",
+      "author_role": "Detroit Tigers Beat Reporter",
+      "author_source": "in-article byline",
+      "categories": [
+        "Detroit Sports",
+        "Detroit Tigers",
+        "Featured News",
+        "MLB",
+        "Trending News"
+      ],
+      "team": "tigers",
+      "teams": [
+        "tigers"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 4,
+      "word_count": 824,
+      "url": "https://woodwardsports.com/breaking-down-blockbuster-tarik-skubal-trade-to-la-dodgers-detroit-tigers-return/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_1572.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_1572-1015x1024.jpg",
+      "image_width": 1179,
+      "image_height": 1190,
+      "image_alt": "Breaking Down BLOCKBUSTER Tarik Skubal Trade to LA DODGERS, Detroit Tigers’ Return"
+    }
+  ],
+  "more_articles": [
+    {
+      "id": 21072,
+      "title": "Top 5 Detroit AThletes ALL-Time!",
+      "title_display": "Top 5 Detroit Athletes ALL-Time!",
+      "excerpt": "Gordie Howe did not make the list. Neither did Al Kaline, Steve Yzerman or Joe Louis.",
+      "date": "2026-08-02T20:57:43Z",
+      "author": "Terry Foster",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Detroit Lions",
+        "Detroit Pistons",
+        "Detroit Red Wings",
+        "Detroit Sports",
+        "Detroit Tigers",
+        "Featured News"
+      ],
+      "team": null,
+      "teams": [
+        "lions",
+        "pistons",
+        "red-wings",
+        "tigers"
+      ],
+      "team_basis": "multiple teams tagged; no single primary",
+      "reading_minutes": 3,
+      "word_count": 663,
+      "url": "https://woodwardsports.com/top-5-detroit-athletes-all-time/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5100-2.JPG",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/08/IMG_5100-2.JPG",
+      "image_width": 655,
+      "image_height": 572,
+      "image_alt": "Top 5 Detroit Athletes All-Time!"
+    },
+    {
+      "id": 20786,
+      "title": "Bryce Underwood to Michigan: Future Star or the Next Dante Moore?",
+      "title_display": "Bryce Underwood to Michigan: Future Star or the Next Dante Moore?",
+      "excerpt": "Five-star quarterback Bryce Underwood has Michigan fans losing their minds, but let’s pump the brakes — the recruiting graveyard is full of can’t-miss prospects who absolutely missed.",
+      "date": "2024-11-22T21:28:19Z",
+      "author": "Woodward Sports",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Michigan",
+        "NCAA"
+      ],
+      "team": "michigan",
+      "teams": [
+        "michigan"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 479,
+      "url": "https://woodwardsports.com/bryce-underwood-michigan-bust-potential-five-star-qb/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-66.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-66-1024x576.jpg",
+      "image_width": 1280,
+      "image_height": 720,
+      "image_alt": "Bryce Underwood to Michigan: Future Star or the Next Dante Moore?"
+    },
+    {
+      "id": 20749,
+      "title": "Sherrone Moore HAS TO Out-Coach Jonathan Smith — Michigan’s Season Depends on It",
+      "title_display": "Sherrone Moore HAS TO Out-Coach Jonathan Smith — Michigan’s Season Depends on It",
+      "excerpt": "Michigan’s season is cooked against the big boys. The Wolverines have no shot at Ohio State, no shot at Oregon — which means this MSU game IS their championship.",
+      "date": "2024-10-23T00:38:15Z",
+      "author": "Woodward Sports",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Michigan",
+        "Michigan State",
+        "NCAA"
+      ],
+      "team": null,
+      "teams": [
+        "michigan",
+        "michigan-state"
+      ],
+      "team_basis": "multiple teams tagged; no single primary",
+      "reading_minutes": 3,
+      "word_count": 508,
+      "url": "https://woodwardsports.com/sherrone-moore-must-out-coach-jonathan-smith-michigan-msu/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-48.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-48-1024x576.jpg",
+      "image_width": 1280,
+      "image_height": 720,
+      "image_alt": "Sherrone Moore HAS TO Out-Coach Jonathan Smith — Michigan's Season Depends on It"
+    },
+    {
+      "id": 20679,
+      "title": "Michigan’s Playoff Path Is the Same as Last Year — Just Win the Games You’re Supposed to Win",
+      "title_display": "Michigan’s Playoff Path Is the Same as Last Year — Just Win the Games You’re Supposed to Win",
+      "excerpt": "Everyone’s panicking about Michigan’s brutal 2024 schedule. Here’s the reality: the Wolverines can lose to Ohio State, Oregon, AND Texas and still make the expanded playoff.",
+      "date": "2024-08-22T20:30:00Z",
+      "author": "Woodward Sports",
+      "author_role": null,
+      "author_source": "WordPress author",
+      "categories": [
+        "Featured News",
+        "Michigan",
+        "NCAA"
+      ],
+      "team": "michigan",
+      "teams": [
+        "michigan"
+      ],
+      "team_basis": "category",
+      "reading_minutes": 3,
+      "word_count": 550,
+      "url": "https://woodwardsports.com/michigan-football-playoff-path-2024-schedule/",
+      "image_source_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-15.jpg",
+      "image_large_url": "https://woodwardsports.com/wp-content/uploads/2026/05/maxresdefault-15-1024x576.jpg",
+      "image_width": 1280,
+      "image_height": 720,
+      "image_alt": "Michigan's Playoff Path Is the Same as Last Year — Just Win the Games You're Supposed to Win"
+    }
+  ],
+  "more_articles_note": "Posts referenced by teams[].latest_article_ids that are not among the 16 newest; same shape as articles.",
+  "videos": [
+    {
+      "id": "8VO1arwMX4w",
+      "title": "Brian Branch RETURNS for Detroit Lions MUST-WIN VS. Arizona | Braylon Edwards Show | 10/08/26",
+      "published": "2026-10-08T20:08:23+00:00",
+      "show": "braylon-edwards-show",
+      "show_match_basis": "title tag",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=8VO1arwMX4w",
+      "thumb": "https://i.ytimg.com/vi/8VO1arwMX4w/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/8VO1arwMX4w/maxresdefault.jpg",
+      "description_first_line": "JOIN Braylon Edwards, Anson Wells, Justin Satawa, and Sweet Patata Cam discussing How crucrcial Brian Branch is for the Detroit Lions defense going into this matchup against the Arizona Cardinals! We also Discuss some trouble brewing in Ann Arbor with Bryce Underwood and the coaching staff!",
+      "views_at_fetch": 2411
+    },
+    {
+      "id": "hW68ZwaHSIQ",
+      "title": "LEGENDARY Detroit Lions OT Lomas Brown on Defense!",
+      "published": "2026-10-08T20:00:41+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=hW68ZwaHSIQ",
+      "thumb": "https://i.ytimg.com/vi/hW68ZwaHSIQ/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/hW68ZwaHSIQ/maxresdefault.jpg",
+      "description_first_line": "Detroit Lions LEGEND Lomas Brown breaks down the current state of the team and whats going on with the Detroit Lions defense. Do you think that Kelvin Sheppard is the guy to right the ship for the Lions on that side of the ball?",
+      "views_at_fetch": 153
+    },
+    {
+      "id": "MaJPqc3pLRw",
+      "title": "Kelvin Sheppard defends the Detroit Lions defense #detroitlions #nfl #nflfootball",
+      "published": "2026-10-08T19:54:34+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/MaJPqc3pLRw",
+      "thumb": "https://i.ytimg.com/vi/MaJPqc3pLRw/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/MaJPqc3pLRw/maxresdefault.jpg",
+      "description_first_line": null,
+      "views_at_fetch": 1266
+    },
+    {
+      "id": "yD7ewkVkiFQ",
+      "title": "Arizona Cardinals Host Said THIS On Detroit Lions Defense!",
+      "published": "2026-10-08T18:27:04+00:00",
+      "show": "crunch-time",
+      "show_match_basis": "hosts named in video description",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=yD7ewkVkiFQ",
+      "thumb": "https://i.ytimg.com/vi/yD7ewkVkiFQ/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/yD7ewkVkiFQ/maxresdefault.jpg",
+      "description_first_line": "Jeff Iafrate, Booner, Caleb Czarnik, and KG discuss Detroit Lions vs. Arizona Cardinals with Bo Brack from @PHNX_Sports",
+      "views_at_fetch": 406
+    },
+    {
+      "id": "tcWmKewD7LQ",
+      "title": "Tyliek Williams BACK at Detroit Lions practice. #nfl #football",
+      "published": "2026-10-08T18:01:44+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/tcWmKewD7LQ",
+      "thumb": "https://i.ytimg.com/vi/tcWmKewD7LQ/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/tcWmKewD7LQ/maxresdefault.jpg",
+      "description_first_line": null,
+      "views_at_fetch": 2050
+    },
+    {
+      "id": "KYzT77KEWxY",
+      "title": "Darius Slay on Brian Branch saving the Detroit Lions secondary.",
+      "published": "2026-10-08T17:26:04+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/KYzT77KEWxY",
+      "thumb": "https://i.ytimg.com/vi/KYzT77KEWxY/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/KYzT77KEWxY/maxresdefault.jpg",
+      "description_first_line": null,
+      "views_at_fetch": 3207
+    },
+    {
+      "id": "8jY-i5fPYCk",
+      "title": "Kelvin Sheppard RESPONDS To Detroit Lions Criticism! | Crunch Time | October 8th, 2026",
+      "published": "2026-10-08T17:11:57+00:00",
+      "show": "crunch-time",
+      "show_match_basis": "title tag",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=8jY-i5fPYCk",
+      "thumb": "https://i.ytimg.com/vi/8jY-i5fPYCk/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/8jY-i5fPYCk/maxresdefault.jpg",
+      "description_first_line": "Jeff Iafrate, Booner, Caleb Czarnik, and KG discuss the Detroit Lions latest injury news, trade rumors, issues on the defense, Kelvin Sheppard's job security, Sam LaPorta contract news around the NFL, & MORE!",
+      "views_at_fetch": 11439
+    },
+    {
+      "id": "e_R_uya5LXo",
+      "title": "Detroit Lions Fans ARE SCARED of Arizona Cardinals?!",
+      "published": "2026-10-08T15:37:14+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=e_R_uya5LXo",
+      "thumb": "https://i.ytimg.com/vi/e_R_uya5LXo/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/e_R_uya5LXo/maxresdefault.jpg",
+      "description_first_line": "Like, Subscribe and leave your comment below!",
+      "views_at_fetch": 2365
+    },
+    {
+      "id": "fN2kleiMnMI",
+      "title": "Can the Detroit Lions still win the NFC North? #detroitlions #nfl #nflfootball",
+      "published": "2026-10-08T14:37:15+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/fN2kleiMnMI",
+      "thumb": "https://i.ytimg.com/vi/fN2kleiMnMI/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/fN2kleiMnMI/maxresdefault.jpg",
+      "description_first_line": null,
+      "views_at_fetch": 5872
+    },
+    {
+      "id": "MKV9tSScg7g",
+      "title": "Big D Energy | Thursday, October 8th, 2026",
+      "published": "2026-10-08T14:15:23+00:00",
+      "show": "big-d-energy",
+      "show_match_basis": "title tag",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=MKV9tSScg7g",
+      "thumb": "https://i.ytimg.com/vi/MKV9tSScg7g/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/MKV9tSScg7g/maxresdefault.jpg",
+      "description_first_line": "Like, Subscribe and leave your comment below!",
+      "views_at_fetch": 10055
+    },
+    {
+      "id": "nzqnSteklio",
+      "title": "Detroit Lions Season SPIRALING?! Look Ahead To Week 5 | Big D Energy | Wednesday, October 7th, 2026",
+      "published": "2026-10-08T02:10:34+00:00",
+      "show": "big-d-energy",
+      "show_match_basis": "title tag",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=nzqnSteklio",
+      "thumb": "https://i.ytimg.com/vi/nzqnSteklio/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/nzqnSteklio/maxresdefault.jpg",
+      "description_first_line": "Like, Subscribe and leave your comment below!",
+      "views_at_fetch": 11219
+    },
+    {
+      "id": "cme9XPsNTSA",
+      "title": "Zach Zenner on Detroit Lions RB Jahmyr Gibbs",
+      "published": "2026-10-08T00:36:41+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/cme9XPsNTSA",
+      "thumb": "https://i.ytimg.com/vi/cme9XPsNTSA/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/cme9XPsNTSA/maxresdefault.jpg",
+      "description_first_line": null,
+      "views_at_fetch": 3925
+    },
+    {
+      "id": "kdMRyerbAOc",
+      "title": "Should The Detroit Lions EXTEND Sam Laporta or get DEFENSIVE HELP?",
+      "published": "2026-10-08T00:08:45+00:00",
+      "show": null,
+      "show_match_basis": null,
+      "is_short": true,
+      "url": "https://www.youtube.com/shorts/kdMRyerbAOc",
+      "thumb": "https://i.ytimg.com/vi/kdMRyerbAOc/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/kdMRyerbAOc/maxresdefault.jpg",
+      "description_first_line": "Lions Fans, Do YOU think we should EXTEND Sam Laporta or get DEFENSIVE HELP?",
+      "views_at_fetch": 14755
+    },
+    {
+      "id": "EIUgUJ_MlcI",
+      "title": "Did Dan Campbell Admit the Lions Offense is the ONLY Chance!?",
+      "published": "2026-10-08T00:02:45+00:00",
+      "show": "woodward-heavyweights",
+      "show_match_basis": "hosts named in video description",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=EIUgUJ_MlcI",
+      "thumb": "https://i.ytimg.com/vi/EIUgUJ_MlcI/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/EIUgUJ_MlcI/maxresdefault.jpg",
+      "description_first_line": "Did Detroit Lions Head Coach, Dan Campbell admit the Lions offense is the only way the Detroit Lions will have success this season after the Detroit Lions defense is off to a historically bad start? The Woodward Heavyweights React. Like, Subscribe and leave your comment below!",
+      "views_at_fetch": 2149
+    },
+    {
+      "id": "_2glmLpDPr8",
+      "title": "Legendary Detroit Lions RB Joins the Show  | Woodward Heavyweights | October 7th 2026",
+      "published": "2026-10-07T23:06:54+00:00",
+      "show": "woodward-heavyweights",
+      "show_match_basis": "title tag",
+      "is_short": false,
+      "url": "https://www.youtube.com/watch?v=_2glmLpDPr8",
+      "thumb": "https://i.ytimg.com/vi/_2glmLpDPr8/hqdefault.jpg",
+      "thumb_max": "https://i.ytimg.com/vi/_2glmLpDPr8/maxresdefault.jpg",
+      "description_first_line": "Spencer Raxter, EZ, Chris Platte & Nick Kohloff are LIVE to react to the Detroit Lions getting back Brian Branch and Cade Mays. We debate who will help the team more and what the new ceiling is for this Detroit Lions team this season.",
+      "views_at_fetch": 10602
+    }
+  ],
+  "youtube_channel": {
+    "id": "UC8sYt4QHV6ZgOyL57ATacwQ",
+    "handle": "@WoodwardSports",
+    "url": "https://www.youtube.com/@WoodwardSports",
+    "live_embed": "https://www.youtube.com/embed/live_stream?channel=UC8sYt4QHV6ZgOyL57ATacwQ",
+    "uploads_embed": "https://www.youtube.com/embed/videoseries?list=UU8sYt4QHV6ZgOyL57ATacwQ",
+    "live_url": "https://www.youtube.com/@WoodwardSports/live",
+    "videos_url": "https://www.youtube.com/@WoodwardSports/videos",
+    "membership_url": "https://www.youtube.com/channel/UC8sYt4QHV6ZgOyL57ATacwQ/join",
+    "membership_cta": "Become a #WoodwardSports Member!",
+    "subscriber_text": "111K subscribers",
+    "video_count_text": "22,150 videos",
+    "view_count_text": "163,827,195 views",
+    "joined_text": "Joined Aug 6, 2020",
+    "country": "United States",
+    "description": "Woodward Sports creates experiences that unleash the power and imagination of sports. Uniting fans and providing unique storytelling. Woodward Sports Detroit’s #1 Sports Network",
+    "stats_as_of": "2026-10-08",
+    "stats_source": "https://www.youtube.com/@WoodwardSports/about (aboutChannelViewModel)",
+    "rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UC8sYt4QHV6ZgOyL57ATacwQ"
+  },
+  "watch_party": {
+    "title": "VOTE: Woodward sports Detroit vs Buffalo Watch Party",
+    "headline": "Detroit vs. Buffalo Showdown",
+    "subheadline": "Vote for the Ultimate Watch Party Location!",
+    "page_url": "https://woodwardsports.com/woodwardwatchparty/",
+    "post_url": "https://woodwardsports.com/vote-woodward-sports-detroit-vs-buffalo-watch-party/",
+    "game": "Detroit Lions vs. Buffalo Bills — Thursday Night Football",
+    "game_date": "2026-09-17",
+    "game_date_display": "9/17/26 · THURSDAY NIGHT SHOWDOWN",
+    "location": "Downtown Royal Oak, MI",
+    "partner": "Downtown Royal Oak",
+    "vote": "Fans voted between 6 Downtown Royal Oak locations. 1st place gets the official Woodward Sports Watch Party + Postgame Show; 2nd place gets the live Pregame Show leading into kickoff; the other 4 locations get coverage from the street team for social content. Voting ended September 16th, 2026 at 12:00 PM.",
+    "result": "The votes are in! Woodward Sports has teamed up with Downtown Royal Oak for Thursday Night Football. HopCat is the winner!",
+    "result_detail": "Watch party and post game show at HopCat in Downtown Royal Oak; 2nd place Bar Louie hosted the Woodward Sports Pre-Game Show; the content team visited the other 4 locations (Rock & Brews, O’Tooles, 5th Avenue, Blind Owl).",
+    "venues": [
+      {
+        "name": "HopCat",
+        "city": "Royal Oak, MI",
+        "website": "https://www.hopcat.com/royal-oak/home",
+        "result": "Winner — Watch Party + Postgame Show",
+        "blurb": "Things you can expect at every HopCat: friendly faces, craft beer, and comfort food.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-37.png"
+      },
+      {
+        "name": "Bar Louie",
+        "city": "Royal Oak, MI",
+        "website": "https://barlouie.com/",
+        "result": "2nd place — Pregame Show",
+        "blurb": "Eat. Drink. Be Happy. The tenets of the Original Gastrobar.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5671.webp"
+      },
+      {
+        "name": "Rock & Brews",
+        "city": "Royal Oak, MI",
+        "website": "https://www.rockandbrews.com/royal-oak",
+        "website_note": "Cloudflare bot challenge (403 to scripts); link taken verbatim from the WSN page",
+        "result": "Street-team coverage",
+        "blurb": "Founded by rock legends Paul Stanley and Gene Simmons of KISS, Rock & Brews offers classic American comfort food.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5666.jpg"
+      },
+      {
+        "name": "O’Tooles",
+        "city": "Royal Oak, MI",
+        "website": "https://otoolespubs.com/",
+        "result": "Street-team coverage",
+        "blurb": "O’Tooles Irish Pub is a casual public house with an Irish-American bar menu, sports-filled HDTVs, theme nights, and a stone fireplace.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5667.webp"
+      },
+      {
+        "name": "Fifth Avenue",
+        "city": "Royal Oak, MI",
+        "website": "https://www.fifthaveroyaloak.com/",
+        "result": "Street-team coverage",
+        "blurb": "With 40 gameday TVs and 20 rotating beers on tap, Fifth Ave is the perfect destination for a night out with friends or a private event.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5670.jpg"
+      },
+      {
+        "name": "Blind Owl",
+        "city": "Royal Oak, MI",
+        "website": "https://blindowlrestaurant.com/",
+        "result": "Street-team coverage",
+        "blurb": "Where American comfort meets global inspiration.",
+        "image": "https://woodwardsports.com/wp-content/uploads/2026/09/photo-output-38.png"
+      }
+    ],
+    "hero_image": "https://woodwardsports.com/wp-content/uploads/2026/09/IMG_5829.JPG",
+    "venues_image": "https://woodwardsports.com/wp-content/uploads/2026/09/d0529e24c4fb1c2e9f946281057079d8_exif_1789049816492.jpg",
+    "status": "past",
+    "status_note": "Game was 2026-09-17; today is 2026-10-08. No upcoming watch party is announced anywhere on the site.",
+    "past_events": [
+      {
+        "title": "Game 7 Is Here: Pistons-Magic Watch Party Rolling Into New Buffalo",
+        "url": "https://woodwardsports.com/pistons-magic-game-7-watch-party-new-buffalo-lume/",
+        "published": "2026-05-02",
+        "summary": "Woodward Heavyweights hosted a Pistons–Magic Game 7 watch party at Lume’s grand opening in New Buffalo, riding in with Mad Packs (a decked-out RV), with a $5,000 Tulum trip giveaway.",
+        "game_day_text": "Sunday (exact date not stated in the post)"
+      }
+    ]
+  },
+  "writers": [
+    {
+      "name": "Woodward Sports",
+      "role": null,
+      "post_count": 200,
+      "author_url": "https://woodwardsports.com/author/jwarner/",
+      "note": "House/staff byline (WP user slug \"jwarner\")."
+    },
+    {
+      "name": "Terry Foster",
+      "role": null,
+      "post_count": 14,
+      "author_url": "https://woodwardsports.com/author/tfoster/",
+      "note": null
+    },
+    {
+      "name": "Brandon Dent",
+      "role": null,
+      "post_count": 7,
+      "author_url": "https://woodwardsports.com/author/brandondent/",
+      "note": null
+    },
+    {
+      "name": "Nicholas Kohloff",
+      "role": "Detroit Tigers Beat Reporter",
+      "post_count": 2,
+      "author_url": null,
+      "note": "Byline inside articles; also appears as \"Nick Kohloff\" on Woodward Heavyweights (YouTube description 2026-10-07)."
+    },
+    {
+      "name": "Ryan O’Bleness",
+      "role": null,
+      "post_count": 1,
+      "author_url": null,
+      "note": "Byline inside article 21245."
+    },
+    {
+      "name": "Darren McCarty",
+      "role": null,
+      "post_count": 1,
+      "author_url": null,
+      "note": "Byline inside article 20970 (\"Will This Solve Detroit’s Championship Drought?!\")."
+    },
+    {
+      "name": "Eazy Ezerkis",
+      "role": null,
+      "post_count": 1,
+      "author_url": "https://woodwardsports.com/author/eazy/",
+      "note": "WP user slug \"eazy\"; Woodward Heavyweights co-host \"Eazy\" per the show page."
+    }
+  ],
+  "writers_note": "post_count over all 226 published posts in the WP REST API; in-article bylines (e.g. \"By Nicholas Kohloff\") override the WP author \"Woodward Sports\".",
+  "app": {
+    "name": "WSN Live!",
+    "ios_url": "https://apps.apple.com/us/app/wsn-live/id1553068845",
+    "android_url": null,
+    "android_note": "Official YouTube descriptions link https://play.google.com/store/apps/details?id=com.wsnlive.androidapp but it returns 404 (removed); a Play Store search for \"WSN Live\" shows no matching app.",
+    "description": "Woodward Sports Network is here to deliver all things Detroit Sports. We cover the NFL, MLB, NBA, NHL, Fantasy Football and so much more!",
+    "seller": "RDX Solutions, Inc.",
+    "seller_url": "https://woodwardsports.com",
+    "price": "Free",
+    "rating": 4.6,
+    "rating_count": 48,
+    "rating_note": "iTunes lookup averageUserRating 4.625 from 48 ratings (US store, 2026-10-08)",
+    "current_version": "1.0.4",
+    "last_updated": "2023-03-24",
+    "first_released": "2021-02-17",
+    "minimum_ios": "14.0",
+    "icon_512": "https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/cf/d0/9d/cfd09d36-7432-fb8f-9ce2-7a5e6487b52c/AppIcon-1x_U007emarketing-0-5-0-85-220.png/512x512bb.jpg"
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/WoodwardSports/",
+    "x": "https://x.com/woodwardsports",
+    "instagram": "https://www.instagram.com/woodwardsports/",
+    "tiktok": "https://www.tiktok.com/@woodwardsports",
+    "youtube": "https://www.youtube.com/@WoodwardSports",
+    "handle": "@woodwardsports"
+  },
+  "contact": {
+    "email": null,
+    "email_source": "Not published — ask the client for an advertising/contact email.",
+    "phone": null,
+    "address": null,
+    "advertise_url": null,
+    "advertise_note": "Footer links to /advertise, which returns 404 (as do /lineup, /shop, /about, /contact). No sponsor or advertising info exists on the site.",
+    "newsletter_note": "The \"Join the Mob\" form has no action/provider — it does not submit anywhere."
+  },
+  "shop": {
+    "url": "https://shop.woodwardsports.com/",
+    "nav_url_used_by_site": "https://shop.woodwardsports.com/?ref=app",
+    "name": "Woodward Sports Store",
+    "description": "The Woodward Store is the official home of all of the Woodward Sports gear. Detroit Lions, Detroit Tigers, Detroit Pistons, Detroit Red Wings and more!",
+    "logo": "https://shop.woodwardsports.com/cdn/shop/files/woodwardStoreLogo_a2bfc724-e5ba-4fb3-b08e-39f38f351d83.png",
+    "collections": [
+      {
+        "name": "New Arrivals",
+        "url": "https://shop.woodwardsports.com/collections/new"
+      },
+      {
+        "name": "Woodward Sports",
+        "url": "https://shop.woodwardsports.com/collections/woodward-sports-brand",
+        "image": "https://shop.woodwardsports.com/cdn/shop/collections/DynamicImageHandler_74265b4f-7b45-4abc-9d71-a5c771af308c.png"
+      },
+      {
+        "name": "Football",
+        "tagline": "WSN FOOTBALL GEAR",
+        "url": "https://shop.woodwardsports.com/collections/detroit-football",
+        "image": "https://shop.woodwardsports.com/cdn/shop/collections/DynamicImageHandler_48005753-1ee8-45fb-95c7-0bd67417d7fa.png"
+      },
+      {
+        "name": "Baseball",
+        "tagline": "WSN BASEBALL GEAR",
+        "url": "https://shop.woodwardsports.com/collections/detroit-baseball",
+        "image": "https://shop.woodwardsports.com/cdn/shop/collections/DynamicImageHandler_468dcc31-9b94-40dc-8a27-15f509ebe74f.png"
+      },
+      {
+        "name": "Basketball",
+        "tagline": "WSN BASKETBALL GEAR",
+        "url": "https://shop.woodwardsports.com/collections/detroit-basketball",
+        "image": "https://shop.woodwardsports.com/cdn/shop/collections/DynamicImageHandler_b8afe571-8340-4564-91c3-65c2c7accef0.png"
+      },
+      {
+        "name": "Hockey",
+        "tagline": "WSN HOCKEY GEAR",
+        "url": "https://shop.woodwardsports.com/collections/woodward-hockey",
+        "image": "https://shop.woodwardsports.com/cdn/shop/collections/DynamicImageHandler_e5583660-75c2-4fd4-9059-4f1d8bb52899.png"
+      },
+      {
+        "name": "Golf",
+        "tagline": "WSN GOLF GEAR",
+        "url": "https://shop.woodwardsports.com/collections/woodward-golf"
+      },
+      {
+        "name": "University",
+        "url": "https://shop.woodwardsports.com/collections/michigan-gear"
+      },
+      {
+        "name": "Seasonal",
+        "url": "https://shop.woodwardsports.com/collections/ugly-christmas-sweaters"
+      }
+    ],
+    "featured_products": [
+      {
+        "title": "Kerb Stomp",
+        "price_from": "29.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/untitled-design-3",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_fa9d2b0e-6a9f-4600-9f61-dc19520b3936.png?v=1736178959",
+        "available": true
+      },
+      {
+        "title": "BTA LIONS NFC NORTH CHAMPIONS",
+        "price_from": "39.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/rimberio-1",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_3233a30c-80ea-40b4-a387-95693dde43d9.png?v=1736176779",
+        "available": true
+      },
+      {
+        "title": "Dan Gamble Casino",
+        "price_from": "24.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/untitled-design-1",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_03fe134a-a0b4-4e7b-978a-756c837b75bd.png?v=1733929076",
+        "available": true
+      },
+      {
+        "title": "Graffiti Detroit Kings",
+        "price_from": "29.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/white-kings",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_6878efbf-6d9d-432b-81a3-e3929a7027a2.png?v=1733762311",
+        "available": true
+      },
+      {
+        "title": "Not America's Team, Detroit's Team",
+        "price_from": "29.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/grit-lions-o-3",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_959d284a-d06b-4dc0-a06c-36b71a5d522a.png?v=1733757269",
+        "available": true
+      },
+      {
+        "title": "Grit Lions O",
+        "price_from": "29.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/grit-lions-o-2",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_64da9309-94b5-4546-80bb-b81a9c7b477d.png?v=1732120719",
+        "available": true
+      },
+      {
+        "title": "Civilian Goff",
+        "price_from": "24.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/untitled-design",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_ab4300ca-16da-4286-9856-38f804e8fa8d.png?v=1732115849",
+        "available": true
+      },
+      {
+        "title": "Lions Fans",
+        "price_from": "49.99",
+        "currency": "USD",
+        "product_type": "Hoodies",
+        "url": "https://shop.woodwardsports.com/products/red-and-beige-bold-typography-cosmetic-brand-logo-4",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_a490cc45-c721-46c9-907e-f93b8641eafe.png?v=1732047204",
+        "available": true
+      },
+      {
+        "title": "Lions Fans",
+        "price_from": "34.99",
+        "currency": "USD",
+        "product_type": "T-Shirts",
+        "url": "https://shop.woodwardsports.com/products/red-and-beige-bold-typography-cosmetic-brand-logo-3",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_f9fb2adf-277d-4798-87a3-2d084036fe77.png?v=1732047176",
+        "available": true
+      },
+      {
+        "title": "grit. Detroit Football",
+        "price_from": "24.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/red-and-beige-bold-typography-cosmetic-brand-logo-1",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_0724436f-a30c-428f-bb5b-c6c81a45aa0a.png?v=1732044993",
+        "available": true
+      },
+      {
+        "title": "DR CAMPBELL",
+        "price_from": "29.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/dr-campbell",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_e9c1a153-aee8-4b94-b465-827c2a435419.png?v=1731949991",
+        "available": true
+      },
+      {
+        "title": "DETROIT Lion King Logo",
+        "price_from": "25.99",
+        "currency": "USD",
+        "product_type": "Apparel",
+        "url": "https://shop.woodwardsports.com/products/black-minimalist-lion-king-logo",
+        "image": "https://cdn.shopify.com/s/files/1/0605/7266/3969/files/DynamicImageHandler_c650b743-bd5e-4740-8651-a5312ef54d74.png?v=1731438181",
+        "available": true
+      }
+    ],
+    "featured_products_note": "Order and selection = the \"Featured Products\" carousel on shop.woodwardsports.com (2026-10-08); prices are \"From\" (lowest variant). Several Shopify titles are raw (\"untitled-design\" handles) but the display titles above are what the store shows.",
+    "return_policy_url": "https://shop.woodwardsports.com/pages/return-policy"
+  },
+  "footer_links": [
+    {
+      "label": "Home",
+      "href": "/home",
+      "status": 200,
+      "resolves_to": "https://woodwardsports.com/"
+    },
+    {
+      "label": "News",
+      "href": "/news",
+      "status": 200,
+      "resolves_to": "https://woodwardsports.com/news/"
+    },
+    {
+      "label": "Shop",
+      "href": "/shop",
+      "status": 404,
+      "should_be": "https://shop.woodwardsports.com/"
+    },
+    {
+      "label": "Lineup",
+      "href": "/lineup",
+      "status": 404,
+      "should_be": "https://woodwardsports.com/shows/"
+    },
+    {
+      "label": "Advertise",
+      "href": "/advertise",
+      "status": 404,
+      "should_be": null
+    }
+  ],
+  "main_nav": [
+    {
+      "label": "Home",
+      "url": "https://woodwardsports.com/"
+    },
+    {
+      "label": "News",
+      "url": "https://woodwardsports.com/news/"
+    },
+    {
+      "label": "Shows",
+      "url": "https://woodwardsports.com/shows/"
+    },
+    {
+      "label": "Shop",
+      "url": "https://shop.woodwardsports.com/?ref=app"
+    },
+    {
+      "label": "WATCH LIVE",
+      "url": "https://woodwardsports.com/watch-live/"
+    }
+  ],
+  "privacy_policy_url": "https://woodwardsports.com/privacy-policy/",
+  "privacy_policy_note": "Live page, but it is the stock WordPress template text (comments/Gravatar/cookies boilerplate), not a tailored policy.",
+  "categories": [
+    {
+      "name": "Detroit Lions",
+      "slug": "detroit-lions",
+      "count": 96,
+      "url": "https://woodwardsports.com/category/detroit-lions/"
+    },
+    {
+      "name": "NFL",
+      "slug": "nfl",
+      "count": 94,
+      "url": "https://woodwardsports.com/category/nfl/"
+    },
+    {
+      "name": "Featured News",
+      "slug": "featured-news",
+      "count": 92,
+      "url": "https://woodwardsports.com/category/featured-news/"
+    },
+    {
+      "name": "Trending News",
+      "slug": "trending-news",
+      "count": 76,
+      "url": "https://woodwardsports.com/category/trending-news/"
+    },
+    {
+      "name": "Detroit Pistons",
+      "slug": "detroit-pistons",
+      "count": 70,
+      "url": "https://woodwardsports.com/category/detroit-pistons/"
+    },
+    {
+      "name": "NBA",
+      "slug": "nba",
+      "count": 66,
+      "url": "https://woodwardsports.com/category/nba/"
+    },
+    {
+      "name": "Detroit Tigers",
+      "slug": "detroit-tigers",
+      "count": 43,
+      "url": "https://woodwardsports.com/category/detroit-tigers/"
+    },
+    {
+      "name": "MLB",
+      "slug": "mlb",
+      "count": 42,
+      "url": "https://woodwardsports.com/category/mlb/"
+    },
+    {
+      "name": "Detroit Sports",
+      "slug": "detroit-sports",
+      "count": 8,
+      "url": "https://woodwardsports.com/category/detroit-sports/"
+    },
+    {
+      "name": "Pop Culture",
+      "slug": "pop-culture",
+      "count": 8,
+      "url": "https://woodwardsports.com/category/pop-culture/"
+    },
+    {
+      "name": "Michigan",
+      "slug": "michigan",
+      "count": 6,
+      "url": "https://woodwardsports.com/category/michigan/"
+    },
+    {
+      "name": "NCAA",
+      "slug": "ncaa",
+      "count": 6,
+      "url": "https://woodwardsports.com/category/ncaa/"
+    },
+    {
+      "name": "Woodward Heavyweights",
+      "slug": "woodward-heavyweights",
+      "count": 4,
+      "url": "https://woodwardsports.com/category/woodward-heavyweights/"
+    },
+    {
+      "name": "Detroit Red Wings",
+      "slug": "detroit-red-wings",
+      "count": 3,
+      "url": "https://woodwardsports.com/category/detroit-red-wings/"
+    },
+    {
+      "name": "Michigan State",
+      "slug": "michigan-state",
+      "count": 3,
+      "url": "https://woodwardsports.com/category/michigan-state/"
+    },
+    {
+      "name": "The Braylon Edwards Show",
+      "slug": "the-braylon-edwards-show",
+      "count": 3,
+      "url": "https://woodwardsports.com/category/the-braylon-edwards-show/"
+    },
+    {
+      "name": "Big D Energy",
+      "slug": "big-d-energy",
+      "count": 2,
+      "url": "https://woodwardsports.com/category/big-d-energy/"
+    },
+    {
+      "name": "Big Ten",
+      "slug": "big-ten",
+      "count": 2,
+      "url": "https://woodwardsports.com/category/big-ten/"
+    },
+    {
+      "name": "NHL",
+      "slug": "nhl",
+      "count": 2,
+      "url": "https://woodwardsports.com/category/nhl/"
+    },
+    {
+      "name": "Sean Baligian in the Morning",
+      "slug": "sean-baligian-in-the-morning",
+      "count": 2,
+      "url": "https://woodwardsports.com/category/sean-baligian-in-the-morning/"
+    },
+    {
+      "name": "Uncategorized",
+      "slug": "uncategorized",
+      "count": 2,
+      "url": "https://woodwardsports.com/category/uncategorized/"
+    },
+    {
+      "name": "MSU",
+      "slug": "msu",
+      "count": 1,
+      "url": "https://woodwardsports.com/category/msu/"
+    },
+    {
+      "name": "Soccer",
+      "slug": "soccer",
+      "count": 1,
+      "url": "https://woodwardsports.com/category/soccer/"
+    },
+    {
+      "name": "U of M",
+      "slug": "u-of-m",
+      "count": 1,
+      "url": "https://woodwardsports.com/category/u-of-m/"
+    },
+    {
+      "name": "World Cup",
+      "slug": "world-cup",
+      "count": 1,
+      "url": "https://woodwardsports.com/category/world-cup/"
+    }
+  ],
+  "stats": {
+    "published_posts_in_api": 226,
+    "oldest_post_in_api": "2024-01-04",
+    "newest_post_in_api": "2026-10-06"
+  },
+  "gaps": [
+    "Founding year / company history / \"About\" copy: not stated anywhere official (/about is 404). Do not invent a founded date or origin story.",
+    "Owner/leadership: the site names no owner, executives or staff titles (WP has users \"Joey Namou\"/\"Joseph Namou\" with 0 posts). Do not present anyone as founder/CEO.",
+    "Contact: no phone, street address or contact form on the site (/contact 404). Only email found is [admin email removed — ask client] as podcast-feed owner (Big D Energy feed) — confirm before publishing.",
+    "Advertising/sponsorship: /advertise is 404; no rate card, media kit, audience numbers or sponsor list exist on the site. Any \"Advertise with us\" section must be a generic CTA without invented stats or partner logos.",
+    "Audience stats: only YouTube figures are verifiable (111K subscribers, 22,150 videos, 163,827,195 views as of 2026-10-08). No follower counts for Facebook/X/Instagram/TikTok, no download numbers, no listener/visitor stats.",
+    "Spotify for Crunch Time (WSN feed \"Crunch Time Sports\", Spreaker 7042776): not found — spotify is null; use Apple Podcasts/Spreaker.",
+    "Android app: no live Google Play listing (the link in YouTube descriptions 404s). Show iOS only.",
+    "Weekend programming: none listed (one YouTube description says \"7 Days a Week\" but all schedules are Mon–Fri). Treat weekends as off-air/replays.",
+    "Exact hours between shows (10–11 AM, 1–2 PM, 4–5 PM) are not described — do not fill them with invented programming.",
+    "Host bios/headshots: only the one-paragraph show descriptions exist; no individual host bios, photos or social handles are published (show art images contain the hosts).",
+    "Show pages' \"Watch Live / Apple Podcasts / Spotify\" buttons are dead \"#\" links on the current site — the URLs in shows[] were sourced from Apple/Spreaker/Spotify directly.",
+    "Homepage \"APP STORE\" and \"YOUTUBE LIVE\" buttons are unlinked spans on the current site; use app.ios_url and youtube_channel.live_url.",
+    "Newsletter (\"Join the Mob\") has no backend — any signup form in the rebuild needs a provider decided by the client; do not claim subscriber counts.",
+    "Detroit Teams page (/detroit-teams/) is empty; team hubs must be built from categories.",
+    "Red Wings coverage is thin (3 posts) and Michigan State has 3 (+1 MSU); NCAA/Big Ten coverage is small — avoid implying deep beat coverage there.",
+    "Braylon Edwards \"All-Pro\" descriptor is the site's own wording; keep it as quoted copy rather than adding career stats.",
+    "Upcoming watch parties/events: none announced as of 2026-10-08 (last was 2026-09-17).",
+    "Shop: products.json gave the first 50 products only; some Shopify titles are raw/untidy. Prices are \"From\" the lowest variant and may change.",
+    "Article reading_minutes are computed (words/230, rounded up) and can differ from the site plugin (e.g. 21295: site says 4, computed 5).",
+    "Article dates are UTC; evening posts in Detroit show the next day (e.g. 21295 = Oct 5 evening ET, Oct 6 UTC, site shows \"October 6, 2026\")."
+  ],
+  "conflicts_resolved": [
+    {
+      "topic": "Crunch Time time slot",
+      "values": [
+        "/shows/ hub: 10AM – 12PM",
+        "show page, /watch-live/, podcast feed, YouTube descriptions: 11AM – 1PM"
+      ],
+      "resolution": "11:00–13:00"
+    },
+    {
+      "topic": "Woodward Heavyweights start",
+      "values": [
+        "site countdown JS: 4:45 PM",
+        "all visible pages + YouTube descriptions: 5PM"
+      ],
+      "resolution": "17:00–19:00"
+    },
+    {
+      "topic": "Legacy show names in site JS",
+      "values": [
+        "Sean Baligian Mornings 8–10",
+        "Big D Energy 11–1",
+        "Braylon Edwards Show with Shep"
+      ],
+      "resolution": "Ignored (stale array; a second, current array matches the visible lineup)."
+    },
+    {
+      "topic": "Big D Energy \"midday\"",
+      "values": [
+        "show page: \"The midday home/pulse of Detroit sports\"",
+        "airs 8–10 AM; podcast feed: \"morning show\""
+      ],
+      "resolution": "description uses \"morning\"; verbatim kept in description_verbatim."
+    },
+    {
+      "topic": "Big D Energy hosts",
+      "values": [
+        "show page + feed description: Neal Ruhl & Sean Baligian",
+        "stale feed subtitle: Neal Ruhl & Darren McCarty"
+      ],
+      "resolution": "Neal Ruhl & Sean Baligian."
+    },
+    {
+      "topic": "Braylon Edwards co-host",
+      "values": [
+        "show page + feed description: Anson Wells",
+        "stale feed subtitle: Ryan Ermanni; old Spotify title: \"with Shep\""
+      ],
+      "resolution": "Anson Wells."
+    },
+    {
+      "topic": "App banner copy",
+      "values": [
+        "site: \"Live live, anytime, anywhere\""
+      ],
+      "resolution": "Typo cleaned to \"Live, anytime, anywhere\" (verbatim kept)."
+    },
+    {
+      "topic": "Article titles with caps typos",
+      "values": [
+        "\"Hot MEss!\"",
+        "\"One Last TIme\"",
+        "\"AThletes\""
+      ],
+      "resolution": "title = verbatim; title_display fixes only the obvious casing typos."
+    },
+    {
+      "topic": "In-article bylines",
+      "values": [
+        "WP author \"Woodward Sports\"",
+        "content starts \"By Nicholas Kohloff…\", \"By Ryan O’Bleness…\", \"Nicholas Kohloff | Detroit Tigers Beat Reporter…\""
+      ],
+      "resolution": "Real byline used as author."
+    }
+  ],
+  "sources": {
+    "homepage": "https://woodwardsports.com/",
+    "news_page": "https://woodwardsports.com/news/",
+    "shows_page": "https://woodwardsports.com/shows/",
+    "watch_live_page": "https://woodwardsports.com/watch-live/",
+    "show_pages": [
+      "https://woodwardsports.com/shows/big-d-energy/",
+      "https://woodwardsports.com/shows/crunch-time/",
+      "https://woodwardsports.com/shows/the-braylon-edwards-show/",
+      "https://woodwardsports.com/shows/woodward-heavyweights/"
+    ],
+    "watch_party_page": "https://woodwardsports.com/woodwardwatchparty/",
+    "game7_watch_party_post": "https://woodwardsports.com/pistons-magic-game-7-watch-party-new-buffalo-lume/",
+    "wp_rest_posts": "https://woodwardsports.com/wp-json/wp/v2/posts?per_page=100&page=1..3",
+    "wp_rest_media": "https://woodwardsports.com/wp-json/wp/v2/media?per_page=100&page=1..3",
+    "wp_rest_pages": "https://woodwardsports.com/wp-json/wp/v2/pages",
+    "wp_rest_categories": "https://woodwardsports.com/wp-json/wp/v2/categories",
+    "wp_rest_users": "https://woodwardsports.com/wp-json/wp/v2/users",
+    "youtube_rss": "https://www.youtube.com/feeds/videos.xml?channel_id=UC8sYt4QHV6ZgOyL57ATacwQ",
+    "youtube_about": "https://www.youtube.com/@WoodwardSports/about",
+    "youtube_shorts_check": "https://www.youtube.com/shorts/<id> (200 = Short, 303 to /watch = regular video)",
+    "itunes_podcasts": "https://itunes.apple.com/lookup?id=1610793862,1556523200,6786401792,1543767466&entity=podcast",
+    "itunes_app": "https://itunes.apple.com/lookup?id=1553068845&country=us",
+    "spreaker_feeds": [
+      "https://www.spreaker.com/show/4703848/episodes/feed",
+      "https://www.spreaker.com/show/7042776/episodes/feed",
+      "https://www.spreaker.com/show/4811839/episodes/feed",
+      "https://www.spreaker.com/show/5367285/episodes/feed"
+    ],
+    "spotify_verification": "https://open.spotify.com/embed/show/<id> — latest episode title compared with the matching Spreaker feed (exact match for Big D Energy, Braylon Edwards Show, Woodward Heavyweights)",
+    "google_play_search": "https://play.google.com/store/search?q=WSN%20Live&c=apps",
+    "shop_home": "https://shop.woodwardsports.com/",
+    "shop_products": "https://shop.woodwardsports.com/products.json",
+    "url_check": "Every URL in this file was requested on 2026-10-08 and returned 200, except: play.google.com com.wsnlive.androidapp (404, documented as dead), rockandbrews.com/royal-oak (Cloudflare 403 to scripts; real page). apps.apple.com and facebook.com needed browser headers."
+  }
+}
