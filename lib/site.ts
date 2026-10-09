@@ -17,6 +17,13 @@ export const INDEXING = false;
 const GTM_ENV = (process.env.NEXT_PUBLIC_GTM_ID || '').trim();
 export const GTM_ID = GTM_ENV.toLowerCase() === 'off' ? '' : GTM_ENV || 'GTM-MB6LV6QX';
 
+/**
+ * Google Analytics 4 (gtag.js) measurement ID. NEXT_PUBLIC_GA_ID overrides it; "off" disables it.
+ * GA4 is wired directly (not through GTM) — don't also add a GA4 tag inside the GTM container, or every hit counts twice.
+ */
+const GA_ENV = (process.env.NEXT_PUBLIC_GA_ID || '').trim();
+export const GA_ID = GA_ENV.toLowerCase() === 'off' ? '' : GA_ENV || 'G-0W7MJPEC93';
+
 export const SITE_NAME = 'Woodward Sports Network';
 export const SITE_TITLE = 'Woodward Sports Network — Unfiltered Detroit Sports';
 export const OG_ALT = 'Woodward Sports Network: unfiltered Detroit sports, live every weekday 8AM–7PM ET';

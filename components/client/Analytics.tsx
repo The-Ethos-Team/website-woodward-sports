@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 
 type DL = Record<string, unknown>[];
 
-/** Push to GTM's dataLayer (no-op when GTM isn't configured). */
+/** Send a click event to GA4 (gtag) and to GTM's dataLayer (for GTM triggers). No-op when neither is loaded. */
 export function track(event: string, params: Record<string, unknown> = {}) {
-  const w = window as unknown as { dataLayer?: DL };
-  if (!w.dataLayer) return;
-  w.dataLayer.push({ event, ...params });
+  const w = window as unknown as { dataLayer?: DL; gtag?: (...a: unknown[]) => void };
+  if (w.gtag) w.gtag('event', event, params);
+  if (w.dataLayer) w.dataLayer.push({ event, ...params });
 }
 
 /* Outbound destinations worth reporting as conversions / sponsor touchpoints. */
@@ -26,8 +26,8 @@ const RULES: [RegExp, string][] = [
 ];
 
 /**
- * One delegated click listener that reports Watch / Listen / Shop / Advertise / story clicks to GTM's dataLayer.
- * Mounted only when NEXT_PUBLIC_GTM_ID is set.
+ * One delegated click listener that reports Watch / Listen / Shop / Advertise / story clicks to GA4 and GTM.
+ * Mounted when GA4 and/or GTM is configured (lib/site.ts).
  */
 export function Analytics() {
   useEffect(() => {

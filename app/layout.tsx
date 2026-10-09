@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
-import { GTM_ID, INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
+import { GA_ID, GTM_ID, INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
 import { Analytics } from '@/components/client/Analytics';
 import { BRAND, SOC, YT } from '@/lib/snapshot';
 import { getStories } from '@/lib/data/wp';
@@ -63,7 +63,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang="en" className="no-js" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {GTM_ID ? (
-          /* Google Tag Manager — as high in <head> as possible */
+          /* Google Tag Manager — as high in <head> as possible (inline on purpose, per Google's snippet) */
+          // eslint-disable-next-line @next/next/next-script-for-ga
           <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -73,6 +74,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${GTM_ID}');`,
             }}
           />
+        ) : null}
+        {GA_ID ? (
+          <>
+            {/* Google tag (gtag.js) — GA4 */}
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`,
+              }}
+            />
+          </>
         ) : null}
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
         <link rel="preload" href="/fonts/anton-400.woff2" as="font" type="font/woff2" crossOrigin="" />
@@ -103,7 +118,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <Find index={find} shows={schedule.shows.map(s => ({ id: s.id, short: s.short }))} />
           <LiveHtml shows={schedule.shows} />
         </LiveProvider>
-        {GTM_ID ? <Analytics /> : null}
+        {GTM_ID || GA_ID ? <Analytics /> : null}
       </body>
     </html>
   );

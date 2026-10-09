@@ -115,6 +115,12 @@ No secrets are needed: every source is public.
 4. Not stated anywhere and not invented: founding year, leadership, host bios/headshots, weekend programming,
    what airs between shows ("Between shows"), upcoming watch parties (the last one was 9/17/26).
 
+## Google Analytics 4
+
+GA4 **G-0W7MJPEC93** is installed directly with Google's gtag.js snippet in `<head>` (`app/layout.tsx`); `NEXT_PUBLIC_GA_ID` overrides it (`off` disables).
+Client-side page changes are counted by GA4's Enhanced measurement ("Page changes based on browser history events" — keep it on).
+The click events listed below are also sent to GA4 as events. **Don't add a GA4 tag inside GTM as well**, or every hit is counted twice.
+
 ## Google Tag Manager
 
 Container **GTM-MB6LV6QX** is installed in `app/layout.tsx`: Google's script at the top of `<head>` and the `<noscript>` iframe right after `<body>`.
