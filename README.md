@@ -114,3 +114,25 @@ No secrets are needed: every source is public.
 3. **Android app.** The Google Play link 404s, so only the iOS app (WSN Live!) is shown.
 4. Not stated anywhere and not invented: founding year, leadership, host bios/headshots, weekend programming,
    what airs between shows ("Between shows"), upcoming watch parties (the last one was 9/17/26).
+
+## Google Tag Manager
+
+GTM loads only when a container ID is set:
+
+1. Vercel → Project → Settings → Environment Variables → add `NEXT_PUBLIC_GTM_ID` = `GTM-XXXXXXX` (Production + Preview).
+2. Redeploy (Deployments → ⋯ → Redeploy), because `NEXT_PUBLIC_*` values are baked in at build time.
+
+With GTM on, `components/client/Analytics.tsx` also pushes these `dataLayer` events (create a Custom Event trigger per name in GTM):
+
+| Event | When |
+|---|---|
+| `watch_open` | Watch Live / player facade / dock WATCH (`placement`, `video_id`) |
+| `listen_apple`, `listen_spotify`, `listen_rss` | Podcast links |
+| `app_store` | WSN Live! App Store link |
+| `shop_click` | Any Shopify link |
+| `advertise_contact` | Instagram / Messenger advertise CTA |
+| `youtube_member`, `youtube_click` | YouTube links |
+| `story_click` | Story links to woodwardsports.com |
+| `social_click` | Facebook / Instagram / X / TikTok |
+
+Every event carries `label`, `link_url` and `page_path`. Page views on client-side navigation: use GTM's **History Change** trigger.

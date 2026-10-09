@@ -10,6 +10,12 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://website-wo
  */
 export const INDEXING = false;
 
+/**
+ * Google Tag Manager container (e.g. GTM-ABC1234). Set NEXT_PUBLIC_GTM_ID in Vercel → Settings → Environment Variables
+ * and redeploy. Empty = GTM and the dataLayer click events are not loaded at all.
+ */
+export const GTM_ID = (process.env.NEXT_PUBLIC_GTM_ID || '').trim();
+
 export const SITE_NAME = 'Woodward Sports Network';
 export const SITE_TITLE = 'Woodward Sports Network — Unfiltered Detroit Sports';
 export const OG_ALT = 'Woodward Sports Network: unfiltered Detroit sports, live every weekday 8AM–7PM ET';

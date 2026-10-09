@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
-import { INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
+import { GoogleTagManager } from '@next/third-parties/google';
+import { GTM_ID, INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
+import { Analytics } from '@/components/client/Analytics';
 import { BRAND, SOC, YT } from '@/lib/snapshot';
 import { getStories } from '@/lib/data/wp';
 import { getVideos } from '@/lib/data/youtube';
@@ -66,6 +68,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <link rel="preload" href="/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossOrigin="" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: LD }} />
       </head>
+      {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
       <body>
         <a className="skip" href="#main">Skip to content</a>
         <Sprite />
@@ -84,6 +87,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Find index={find} shows={schedule.shows.map(s => ({ id: s.id, short: s.short }))} />
           <LiveHtml shows={schedule.shows} />
         </LiveProvider>
+        {GTM_ID ? <Analytics /> : null}
       </body>
     </html>
   );
