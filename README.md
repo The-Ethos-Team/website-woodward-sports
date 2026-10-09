@@ -117,7 +117,7 @@ No secrets are needed: every source is public.
 
 ## Google Analytics 4
 
-GA4 is installed directly with Google's gtag.js snippet in `<head>` (`app/layout.tsx`) when `NEXT_PUBLIC_GA_ID` is set (Vercel → Settings → Environment Variables, then redeploy), or when a default ID is put in `lib/site.ts`. Currently none is set (the first property was on the wrong Google account and was removed).
+GA4 **G-256WQGQSLH** is installed directly with Google's gtag.js snippet in `<head>` (`app/layout.tsx`, ID in `lib/site.ts`); `NEXT_PUBLIC_GA_ID` overrides it (`off` disables).
 Client-side page changes are counted by GA4's Enhanced measurement ("Page changes based on browser history events" — keep it on).
 The click events listed below are also sent to GA4 as events. **Don't add a GA4 tag inside GTM as well**, or every hit is counted twice.
 
