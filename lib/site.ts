@@ -11,10 +11,11 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://website-wo
 export const INDEXING = false;
 
 /**
- * Google Tag Manager container (e.g. GTM-ABC1234). Set NEXT_PUBLIC_GTM_ID in Vercel → Settings → Environment Variables
- * and redeploy. Empty = GTM and the dataLayer click events are not loaded at all.
+ * Google Tag Manager container. NEXT_PUBLIC_GTM_ID (Vercel → Settings → Environment Variables) overrides it;
+ * set it to "off" to disable GTM and the dataLayer click events.
  */
-export const GTM_ID = (process.env.NEXT_PUBLIC_GTM_ID || '').trim();
+const GTM_ENV = (process.env.NEXT_PUBLIC_GTM_ID || '').trim();
+export const GTM_ID = GTM_ENV.toLowerCase() === 'off' ? '' : GTM_ENV || 'GTM-MB6LV6QX';
 
 export const SITE_NAME = 'Woodward Sports Network';
 export const SITE_TITLE = 'Woodward Sports Network — Unfiltered Detroit Sports';

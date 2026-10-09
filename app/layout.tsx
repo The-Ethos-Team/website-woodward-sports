@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import './globals.css';
-import { GoogleTagManager } from '@next/third-parties/google';
 import { GTM_ID, INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from '@/lib/site';
 import { Analytics } from '@/components/client/Analytics';
 import { BRAND, SOC, YT } from '@/lib/snapshot';
@@ -63,13 +62,30 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" className="no-js" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
+        {GTM_ID ? (
+          /* Google Tag Manager — as high in <head> as possible */
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${GTM_ID}');`,
+            }}
+          />
+        ) : null}
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
         <link rel="preload" href="/fonts/anton-400.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preload" href="/fonts/schibsted-grotesk-var.woff2" as="font" type="font/woff2" crossOrigin="" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: LD }} />
       </head>
-      {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
       <body>
+        {GTM_ID ? (
+          /* Google Tag Manager (noscript) — immediately after <body> */
+          <noscript>
+            <iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style={{ display: 'none', visibility: 'hidden' }} />
+          </noscript>
+        ) : null}
         <a className="skip" href="#main">Skip to content</a>
         <Sprite />
         <LiveProvider schedule={schedule}>

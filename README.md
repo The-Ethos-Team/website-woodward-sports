@@ -117,10 +117,10 @@ No secrets are needed: every source is public.
 
 ## Google Tag Manager
 
-GTM loads only when a container ID is set:
+Container **GTM-MB6LV6QX** is installed in `app/layout.tsx`: Google's script at the top of `<head>` and the `<noscript>` iframe right after `<body>`.
 
-1. Vercel → Project → Settings → Environment Variables → add `NEXT_PUBLIC_GTM_ID` = `GTM-XXXXXXX` (Production + Preview).
-2. Redeploy (Deployments → ⋯ → Redeploy), because `NEXT_PUBLIC_*` values are baked in at build time.
+- To use another container, set `NEXT_PUBLIC_GTM_ID` in Vercel → Settings → Environment Variables. To disable GTM, set it to `off`.
+- Then redeploy (Deployments → ⋯ → Redeploy), because `NEXT_PUBLIC_*` values are baked in at build time.
 
 With GTM on, `components/client/Analytics.tsx` also pushes these `dataLayer` events (create a Custom Event trigger per name in GTM):
 
