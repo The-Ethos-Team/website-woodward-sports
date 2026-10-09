@@ -314,7 +314,7 @@ kbd{font-family:-apple-system,system-ui,sans-serif}
 .hero__player{grid-area:p;margin-bottom:var(--space-4);min-width:0;container:player/inline-size}
 .facade{position:relative;width:100%;aspect-ratio:16/9;border-radius:4px;overflow:hidden;background:var(--ink-900);box-shadow:0 0 0 1px #ffffff24,0 30px 60px -24px #000000b2;isolation:isolate}
 .facade__img{width:100%;height:100%;object-fit:cover}
-.facade__shade{z-index:1;background:linear-gradient(180deg,#050f18f5 0%,#050f18e0 14%,transparent 30%,transparent 42%,#050f18eb 100%)}
+.facade__shade{z-index:1;background:radial-gradient(60% 40% at 100% 0%,#050f18fa 30%,transparent 100%),linear-gradient(180deg,#050f18f5 0%,#050f18e0 14%,transparent 30%,transparent 42%,#050f18eb 100%)}
 .facade__hit{z-index:4}
 .facade__hit:focus-visible{outline-offset:-4px}
 .bug{position:absolute;z-index:3;top:10px;display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 9px;border-radius:2px;background:#050f18d9;color:#fff;font:800 var(--fs-tab)/1 var(--f-text);letter-spacing:var(--tr-ui);text-transform:uppercase;pointer-events:none}
