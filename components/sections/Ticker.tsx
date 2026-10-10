@@ -19,7 +19,7 @@ export function Ticker({ stories }: { stories: Story[] }) {
           <a href={a.url} target="_blank" rel="noopener" tabIndex={tab}><em>{tag.toUpperCase()}</em> {a.title}<NewTab /></a>
         </li>,
       );
-      if (i === 2) seq.push(<li key="ad"><Link className="tk-ad" href="/advertise" tabIndex={tab}>THIS SPOT IS AVAILABLE · ADVERTISE WITH WSN</Link></li>);
+      if (i === 2) seq.push(<li key="ad"><Link className="tk-ad" href="/advertise" data-slot="ticker" tabIndex={tab}>THIS SPOT IS AVAILABLE · ADVERTISE WITH WSN</Link></li>);
       if (i === 4) seq.push(<li key="slogan"><span className="tk-slogan">MADE FOR THE FANS, MADE BY THE FANS</span></li>);
     });
     const out: React.ReactNode[] = [];

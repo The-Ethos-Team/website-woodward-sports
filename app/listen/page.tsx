@@ -27,7 +27,7 @@ export default async function ListenPage() {
           <SectionHead ch="01" name="LISTEN" title="TURN IT UP." sub="Play the latest episodes right here, or follow the show in your podcast app." id="listen-h" />
           <ul className="podlist pods--list" data-reveal="">
             {SHOWS.map((s, i) => (
-              <li className="pod pod--wide" key={s.id} style={{ ['--i' as string]: i }}>
+              <li className="pod pod--wide" key={s.id} data-show={s.id} style={{ ['--i' as string]: i }}>
                 <div className="pod__top">
                   <img className="pod__art" src={showArt(s.id).sm} width={480} height={480} alt="" loading="lazy" decoding="async" />
                   <div className="pod__id">

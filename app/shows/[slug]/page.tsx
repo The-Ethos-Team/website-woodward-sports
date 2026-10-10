@@ -75,7 +75,7 @@ export default async function ShowPage({ params }: { params: Promise<{ slug: str
             <div><dt>Podcast</dt><dd>{s.podcast_name}<small>Apple Podcasts{s.spotify ? ', Spotify' : ''} and RSS</small></dd></div>
             <div><dt>Watch</dt><dd>YouTube Live<small>@WoodwardSports and the WSN Live! app</small></dd></div>
           </dl>
-          <div className="sec__foot"><PartnerSlot k={`${s.short_name} presented by`} cta="Put your brand on the show" /></div>
+          <div className="sec__foot"><PartnerSlot k={`${s.short_name} presented by`} cta="Put your brand on the show" slot={`show_page:${s.id}`} /></div>
         </div>
       </section>
 

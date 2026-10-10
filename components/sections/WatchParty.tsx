@@ -20,9 +20,9 @@ export function PartyBoard() {
   );
 }
 
-export function PartnerSlot({ k = 'Presenting partner', cta = 'Put your name on the next one' }: { k?: string; cta?: string }) {
+export function PartnerSlot({ k = 'Presenting partner', cta = 'Put your name on the next one', slot = 'watch_party_partner' }: { k?: string; cta?: string; slot?: string }) {
   return (
-    <Link className="slot" href="/advertise">
+    <Link className="slot" href="/advertise" data-slot={slot}>
       <span className="slot__k">{k}</span>
       <span className="slot__v">Available</span>
       <span className="slot__cta">{cta}<Arrow /></span>

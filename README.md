@@ -121,6 +121,8 @@ GA4 **G-256WQGQSLH** is installed directly with Google's gtag.js snippet in `<he
 Client-side page changes are counted by GA4's Enhanced measurement ("Page changes based on browser history events" — keep it on).
 The click events listed below are also sent to GA4 as events. **Don't add a GA4 tag inside GTM as well**, or every hit is counted twice.
 
+Full event list, parameters and GA4/GTM setup: **[TRACKING.md](TRACKING.md)** (shows, social clicks, sponsor slot views/clicks, advertise contact).
+
 ## Google Tag Manager
 
 Container **GTM-MB6LV6QX** is installed in `app/layout.tsx`: Google's script at the top of `<head>` and the `<noscript>` iframe right after `<body>`.

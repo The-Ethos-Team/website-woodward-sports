@@ -94,7 +94,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               </li>
             ))}
           </ul>
-          <div className="sec__foot"><PartnerSlot k={`${short} coverage presented by`} cta="Sponsor the team hub" /></div>
+          <div className="sec__foot"><PartnerSlot k={`${short} coverage presented by`} cta="Sponsor the team hub" slot={`team_hub:${t.id}`} /></div>
         </div>
       </section>
 

@@ -6,8 +6,8 @@ import { nw } from '@/lib/format';
 export function AdvertiseCta() {
   return (
     <div className="adv__cta">
-      <a className="btn btn--blade btn--xl" href={CONTACT.primary} target="_blank" rel="noopener"><Icon name="chat" /><span>Advertise with WSN</span><span className="sr-only"> (opens Instagram in a new tab)</span></a>
-      <a className="textlink textlink--light" href={CONTACT.alt} target="_blank" rel="noopener"><span>Prefer Messenger? Message us on <span className="nw">Facebook<Arrow /></span></span><span className="sr-only"> (opens in new tab)</span></a>
+      <a className="btn btn--blade btn--xl" href={CONTACT.primary} target="_blank" rel="noopener" data-contact="" data-placement="advertise_section"><Icon name="chat" /><span>Advertise with WSN</span><span className="sr-only"> (opens Instagram in a new tab)</span></a>
+      <a className="textlink textlink--light" href={CONTACT.alt} target="_blank" rel="noopener" data-contact="" data-placement="advertise_section"><span>Prefer Messenger? Message us on <span className="nw">Facebook<Arrow /></span></span><span className="sr-only"> (opens in new tab)</span></a>
     </div>
   );
 }
@@ -35,7 +35,7 @@ export function Advertise({ ch = '10', as = 'h2' }: { ch?: string; as?: 'h1' | '
       <div className="wrap">
         <SectionHead ch={ch} name="ADVERTISE" title="YOUR BRAND. ON AIR." sub="Put your brand inside Detroit’s loudest sports conversation: live every weekday, on demand all week." id="adv-h" as={as} />
         <div className="adv">
-          <div className="demo" aria-label="Demo: how a sponsor appears on the WSN stream" role="img" data-demo="">
+          <div className="demo" aria-label="Demo: how a sponsor appears on the WSN stream" role="img" data-demo="" data-slot="advertise_demo">
             <img className="demo__img" src="/img/atmo-arena-bowl-1000.webp" srcSet="/img/atmo-arena-bowl-1000.webp 1000w, /img/atmo-arena-bowl.webp 2000w" sizes="(min-width: 1100px) 640px, 100vw" width={2000} height={1125} alt="" loading="lazy" decoding="async" />
             <span className="bug bug--air bug--demo"><i className="bug__dot" />LIVE</span>
             <span className="demo__logo"><img src="/img/logo.svg" width={56} height={56} alt="" /></span>

@@ -7,7 +7,7 @@ import type { Episode, Show } from '@/lib/types';
 export function PodCard({ s, i, ep }: { s: Show; i: number; ep?: Episode }) {
   const art = showArt(s.id);
   return (
-    <li className="pod" style={{ ['--i' as string]: i }}>
+    <li className="pod" data-show={s.id} style={{ ['--i' as string]: i }}>
       <div className="pod__top">
         <img className="pod__art" src={art.sm} width={480} height={480} alt="" loading="lazy" decoding="async" />
         <div className="pod__id">

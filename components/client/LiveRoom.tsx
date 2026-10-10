@@ -310,7 +310,7 @@ export function LiveRoom() {
               ))}
             </ul>
           </div>
-          <Link className="slot slot--sm" href="/advertise" onClick={() => close(false)}>
+          <Link className="slot slot--sm" href="/advertise" data-slot="live_room" onClick={() => close(false)}>
             <span className="slot__k">Live Room presented by</span><span className="slot__v">Available</span>
           </Link>
         </div>

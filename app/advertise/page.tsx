@@ -27,8 +27,8 @@ export default function AdvertisePage() {
         title="Advertise" dot
         sub="Sponsorships, live reads, podcast ads and watch-party activations with Detroit’s unfiltered sports network."
         ctas={<>
-          <a className="btn btn--blade btn--xl" href={CONTACT.primary} target="_blank" rel="noopener"><Icon name="chat" /><span>Advertise with WSN</span><span className="sr-only"> (opens Instagram in a new tab)</span></a>
-          <a className="textlink textlink--light" href={CONTACT.alt} target="_blank" rel="noopener">Prefer Messenger?<Arrow /><span className="sr-only"> (opens in new tab)</span></a>
+          <a className="btn btn--blade btn--xl" href={CONTACT.primary} target="_blank" rel="noopener" data-contact="" data-placement="advertise_hero"><Icon name="chat" /><span>Advertise with WSN</span><span className="sr-only"> (opens Instagram in a new tab)</span></a>
+          <a className="textlink textlink--light" href={CONTACT.alt} target="_blank" rel="noopener" data-contact="" data-placement="advertise_hero">Prefer Messenger?<Arrow /><span className="sr-only"> (opens in new tab)</span></a>
         </>}
       />
       <Advertise ch="01" />
@@ -38,7 +38,7 @@ export default function AdvertisePage() {
           <ul className="slots" data-reveal="">
             {SLOTS.map(([k, cta, href], i) => (
               <li key={k} style={{ ['--i' as string]: i }}>
-                <Link className="slot" href={href}><span className="slot__k">{k}</span><span className="slot__v">Available</span><span className="slot__cta">{cta}<Arrow /></span></Link>
+                <Link className="slot" href={href} data-slot={`advertise_list:${k.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '')}`}><span className="slot__k">{k}</span><span className="slot__v">Available</span><span className="slot__cta">{cta}<Arrow /></span></Link>
               </li>
             ))}
           </ul>

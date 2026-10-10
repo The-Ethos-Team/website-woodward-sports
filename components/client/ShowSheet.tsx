@@ -9,6 +9,7 @@ import { bus, register } from '@/lib/ui/bus';
 import { pull, push } from '@/lib/ui/dialogs';
 import { motion, surf, vibrate } from '@/lib/ui/motion';
 import { Arrow, Dot, Icon, NewTab } from '@/components/ui/bits';
+import { placementOf, track } from '@/components/client/Analytics';
 
 export function ShowSheet() {
   const S = useSchedule();
@@ -45,10 +46,11 @@ export function ShowSheet() {
     }
     flushSync(() => setIdx(k));
     idxRef.current = k;
+    track('show_open', { show_id: S.shows[k]?.id, placement: placementOf(op ?? null) });
     if (root.current) push({ el: root.current, close: () => close() });
     xBtn.current?.focus({ preventScroll: true });
     requestAnimationFrame(() => requestAnimationFrame(() => setShown(true)));
-  }, [N, close]);
+  }, [N, close, S.shows]);
 
   useEffect(() => register('openSheet', openSheet), [openSheet]);
 
@@ -56,6 +58,7 @@ export function ShowSheet() {
     vibrate(8);
     const ni = (idxRef.current + dir + N) % N;
     idxRef.current = ni;
+    track('show_surf', { show_id: S.shows[ni].id, direction: dir > 0 ? 'next' : 'prev' });
     surf(panel.current, () => flushSync(() => setIdx(ni)), `CH ${pad(ni + 1)} › ${S.shows[ni].name.toUpperCase()}`);
   }, [N, S]);
 
@@ -87,7 +90,7 @@ export function ShowSheet() {
         <button className="ibtn sheet__x" type="button" aria-label="Close" ref={xBtn} onClick={() => close()}><Icon name="close" /></button>
         <div className="sheet__body" data-surf-content="">
           {open ? (
-            <div className="ss">
+            <div className="ss" data-show={s.id} data-placement="show_sheet">
               <div className="ss__top">
                 <img className="ss__art" src={s.artL} width={900} height={900} alt={`${s.name} show art`} />
                 <div>
@@ -108,7 +111,7 @@ export function ShowSheet() {
                 <a className="pod__rss" href={s.rss} target="_blank" rel="noopener"><Icon name="rss" /><span>RSS</span><NewTab /></a>
               </div>
               <p className="ss__more"><Link className="textlink textlink--light" href={s.page} onClick={() => close(false)}>Episodes, hosts and stories<Arrow /></Link></p>
-              <Link className="slot slot--sm" href="/advertise" onClick={() => close(false)}><span className="slot__k">{s.short} presented by</span><span className="slot__v">Available</span></Link>
+              <Link className="slot slot--sm" href="/advertise" data-slot={`show_sheet:${s.id}`} onClick={() => close(false)}><span className="slot__k">{s.short} presented by</span><span className="slot__v">Available</span></Link>
             </div>
           ) : null}
         </div>
