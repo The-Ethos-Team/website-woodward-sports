@@ -1,6 +1,6 @@
-/* Is the channel streaming right now? Reads the channel's /live page: while a stream is on, YouTube points its
-   canonical link at the video and marks the player "isLive" (older pages also carry "isLiveNow"). A scheduled stream
-   that hasn't started has the same canonical link but "isUpcoming". The Live Room asks this before it loads the live
+/* Is the channel streaming right now? Reads the channel's /live page: while a stream is on, YouTube serves the live
+   video's page, whose player data says "isLive" (older pages also "isLiveNow") and names the video. A scheduled
+   stream that hasn't started says "isUpcoming"; an offline channel serves the channel page. The Live Room asks this before it loads the live
    player, so a late start or a day off shows the latest episode instead of a dead stream.
    { live: true, id } · { live: false } · { live: null } when YouTube can't be read (the player then tries anyway).
    ?fresh=1 ("Check for the stream") reads YouTube again after at most 10 s instead of 60 s. */
@@ -10,11 +10,15 @@ import { YT } from '@/lib/snapshot';
 export const dynamic = 'force-dynamic';
 
 function liveFromHtml(html: string): { live: boolean; id: string | null } {
-  const canon = html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})"/);
-  if (!canon) return { live: false, id: null };
-  const upcoming = /"isUpcoming":true/.test(html);
-  const live = !upcoming && /"isLive(?:Now)?":true/.test(html);
-  return { live, id: live ? canon[1] : null };
+  /* Servers in data centers get YouTube's "confirm you're not a bot" variant: the canonical link reads "undefined",
+     but the player data still says isLive and names the video. An offline channel page has neither. */
+  const live = /"isLive(?:Now)?":true/.test(html) && !/"isUpcoming":true/.test(html);
+  if (!live) return { live: false, id: null };
+  const id =
+    html.match(/"videoDetails":\{"videoId":"([\w-]{11})"/)?.[1] ??
+    html.match(/<link rel="canonical" href="https:\/\/www\.youtube\.com\/watch\?v=([\w-]{11})"/)?.[1] ??
+    null;
+  return { live: true, id };
 }
 
 export async function GET(req: Request) {
@@ -34,6 +38,7 @@ export async function GET(req: Request) {
         title: html.match(/<title>([^<]{0,120})/)?.[1] ?? null,
         canonical: html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? null,
         isLive: /"isLive":true/.test(html), isLiveNow: /"isLiveNow":true/.test(html), upcoming: /"isUpcoming":true/.test(html),
+        videoDetailsId: html.match(/"videoDetails":\{"videoId":"([\w-]{11})"/)?.[1] ?? null, result: liveFromHtml(html),
         consent: /consent\.youtube|before you continue/i.test(html), bot: /confirm you.re not a bot|unusual traffic/i.test(html),
       }, { headers: { 'Cache-Control': 'no-store' } });
     }
