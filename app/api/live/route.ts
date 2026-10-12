@@ -26,7 +26,18 @@ export async function GET(req: Request) {
       next: { revalidate: fresh ? 10 : 60 },
     });
     if (!r.ok) throw new Error(String(r.status));
-    return Response.json(liveFromHtml(await r.text()), {
+    const html = await r.text();
+    if (new URL(req.url).searchParams.has('diag')) {
+      /* temporary: what does YouTube serve to this server? (no secrets; removed after checking) */
+      return Response.json({
+        status: r.status, url: r.url, bytes: html.length, region: process.env.VERCEL_REGION ?? null,
+        title: html.match(/<title>([^<]{0,120})/)?.[1] ?? null,
+        canonical: html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? null,
+        isLive: /"isLive":true/.test(html), isLiveNow: /"isLiveNow":true/.test(html), upcoming: /"isUpcoming":true/.test(html),
+        consent: /consent\.youtube|before you continue/i.test(html), bot: /confirm you.re not a bot|unusual traffic/i.test(html),
+      }, { headers: { 'Cache-Control': 'no-store' } });
+    }
+    return Response.json(liveFromHtml(html), {
       headers: { 'Cache-Control': fresh ? 'no-store' : 'public, s-maxage=30, stale-while-revalidate=30' },
     });
   } catch {
