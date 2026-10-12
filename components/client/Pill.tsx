@@ -23,18 +23,20 @@ export function Pill() {
     else txt = <>{pre('OFF AIR')}<Num text={backAt(n, S.shows, false)} /></>;
   }
   /* keep the pill text whole when the header runs out of room: drop the Find label first, then the header's ET
-     clock, then the show name (UP NEXT), then "LIVE · " */
+     clock, then the show name (UP NEXT), then "LIVE · ", and last tighten the pill's spacing ("BRAYLON EDWARDS"
+     needs it at 375, 900 and 1100 px). Any overflow counts: a 1 px one already shows an ellipsis. */
   const txtRef = useRef<HTMLSpanElement>(null);
   const tkey = n ? (n.state === 'live' ? 'L' + n.i : n.state === 'next' ? (n.left <= 15 * 60000 ? 'S' + n.i : 'N' + n.i + cd(n.left).length) : 'O' + n.i) : '';
   const fit = () => {
     const t = txtRef.current, H = document.documentElement;
     if (!t) return;
-    const over = () => t.scrollWidth > t.clientWidth + 1;
-    H.classList.remove('pill-np', 'pill-nf', 'pill-nc', 'pill-nn');
-    if (over()) H.classList.add('pill-nf');
-    if (over()) H.classList.add('pill-nc');
-    if (over()) H.classList.add('pill-nn');
-    if (over()) H.classList.add('pill-np');
+    const over = () => t.scrollWidth > t.clientWidth;
+    const steps = ['pill-nf', 'pill-nc', 'pill-nn', 'pill-np', 'pill-nt'];
+    H.classList.remove(...steps);
+    for (const c of steps) {
+      if (!over()) break;
+      H.classList.add(c);
+    }
   };
   useLayoutEffect(fit, [tkey]);
   useEffect(() => {

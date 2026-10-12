@@ -5,7 +5,7 @@ import { cache } from 'react';
 import { BROWSER_UA, REVALIDATE } from '@/lib/site';
 import { DATA, LOCAL_VIDEOS, LOCAL_VIDEO_1280, YT } from '@/lib/snapshot';
 import { SHOW_MARKERS, SHOW_PLAYLISTS, TEAM_IDS, TEAM_PLAYLIST } from '@/lib/config';
-import { mentions } from '@/lib/teams';
+import { aboutOtherTeam, mentions } from '@/lib/teams';
 import { curly, decodeEntities } from '@/lib/format';
 import type { TeamId, Video, VideoThumb } from '@/lib/types';
 import { getText, xmlAttr, xmlBlocks, xmlText } from './fetcher';
@@ -140,6 +140,7 @@ export const getVideoPool = cache(async (): Promise<VideoPool> => {
 export async function getTeamVideos(team: TeamId, n = 8): Promise<{ videos: Video[]; fromShows: number; fromPlaylist: number }> {
   const pool = await getVideoPool();
   const matched = pool.all.filter(v => !v.isShort && mentions(v.title, team)).slice(0, n);
-  const fill = matched.length >= 4 ? [] : pool.teamLists[team].filter(v => !matched.some(m => m.id === v.id)).slice(0, n - matched.length);
+  /* the team playlist fills in, minus videos about another team (the college football playlist is mostly Michigan) */
+  const fill = matched.length >= 4 ? [] : pool.teamLists[team].filter(v => !matched.some(m => m.id === v.id) && !aboutOtherTeam(v.title, team)).slice(0, n - matched.length);
   return { videos: [...matched, ...fill], fromShows: matched.length, fromPlaylist: fill.length };
 }

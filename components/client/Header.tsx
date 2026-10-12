@@ -64,11 +64,11 @@ export function Header({ liveUrl }: { liveUrl: string }) {
         </nav>
         <EtClock />
         <Pill />
-        <button className="hdr__find" type="button" onClick={e => bus.openFind(e.currentTarget)} aria-keyshortcuts="Meta+K Control+K /" data-find-open="">
+        {/* the visible "Find" label is hidden at most widths, so the name is set here and always starts with it */}
+        <button className="hdr__find" type="button" onClick={e => bus.openFind(e.currentTarget)} aria-label="Find shows, teams, stories and videos" aria-keyshortcuts="Meta+K Control+K /" data-find-open="">
           <Icon name="search" />
-          <span className="hdr__findl">Find</span>
-          <kbd>⌘K</kbd>
-          <span className="sr-only">: shows, teams, stories, videos</span>
+          <span className="hdr__findl" aria-hidden="true">Find</span>
+          <kbd aria-hidden="true">⌘K</kbd>
         </button>
         <button className="hdr__menu" type="button" onClick={e => bus.openMenu(e.currentTarget)} aria-haspopup="dialog" aria-controls="menu" data-menu-open="">
           <Icon name="menu" />

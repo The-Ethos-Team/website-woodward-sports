@@ -222,6 +222,9 @@ kbd{font-family:-apple-system,system-ui,sans-serif}
 @media (min-width:900px){.pill__nm{display:inline}}
 .pill-nn .pill__nm{display:none}
 .pill-nc .hdr__clock{display:none!important}
+/* last resort before an ellipsis: a tighter pill (every optional part is already gone) */
+.pill-nt .pill__in{padding:0 8px;gap:5px}
+.pill-nt .pill__txt{letter-spacing:.03em}
 [data-state=live] .pill__in{background:var(--live);border-color:var(--live);color:#fff}
 [data-state=next] .pill__in{border-color:var(--amber);color:var(--amber)}
 .hdr__find,.hdr__menu{position:relative;width:44px;height:44px;border-radius:50%;color:var(--fg);flex:none}
@@ -293,6 +296,11 @@ kbd{font-family:-apple-system,system-ui,sans-serif}
 .tk-live .dot{color:var(--live-text)}
 .ticker__list .tk-ad{display:inline-block;padding:0 8px;line-height:22px;border:1px dashed #ffffff8c;border-radius:2px;color:var(--amber)}
 .ticker.is-paused .ticker__track,.ticker.is-off .ticker__track{animation-play-state:paused}
+/* a headline has keyboard focus: the crawl stops and the strip scrolls to the focused link instead (WCAG 2.4.11) */
+.ticker__view:focus-within{overflow-x:auto;scrollbar-width:none}
+.ticker__view:focus-within::-webkit-scrollbar{display:none}
+.ticker__view:focus-within .ticker__track{animation:none}
+.ticker__view:focus-within .ticker__list[aria-hidden]{display:none}
 @keyframes tick{to{transform:translateX(-50%)}}
 
 .hero{position:relative;overflow:clip;padding:var(--space-4) 0 var(--space-10)}

@@ -2,7 +2,8 @@
 
 GA4 property **G-256WQGQSLH** (gtag.js, installed in the site code) · GTM container **GTM-MB6LV6QX**.
 Every event below is sent to **GA4 directly** and also pushed to GTM's **`dataLayer`** (for future tools such as a Meta Pixel).
-Code: `components/client/Analytics.tsx` (events) and `data-*` attributes in the components.
+gtag.js keeps its own data layer, **`gaDataLayer`** (`gtag/js?id=…&l=gaDataLayer`), so GTM never sees GA4's `config` command and gtag.js loads once. `dataLayer` carries GTM's events only.
+Code: `components/client/Analytics.tsx` (events), `components/client/LiveRoom.tsx` (`watch_open`) and `data-*` attributes in the components.
 
 > Don't add a GA4 tag inside GTM. GA4 already receives these events from the site, so a GTM GA4 tag would count everything twice.
 
@@ -25,7 +26,7 @@ Code: `components/client/Analytics.tsx` (events) and `data-*` attributes in the 
 | `show_open` | The show sheet opens (Day Rail / lineup rows on the home page) | `show_id`, `placement` |
 | `show_surf` | The visitor pages to the next/previous show in the sheet (arrows, keys or swipe) | `show_id` (the new show), `direction` (`next`/`prev`) |
 | `show_click` | A link to a show page is clicked anywhere | `show_id`, `placement` |
-| `watch_open` | Watch Live, the hero player, the dock WATCH button, a show's Watch button or a video card opens the Live Room | `placement` (`facade`, `dock`, `show`, …), `video_id`, `show_id` when known |
+| `watch_open` | The Live Room opens, whatever opened it: Watch Live (header or page), the header pill while a show is live, the hero player, the dock WATCH button, a show's Watch button, the show sheet, a video card or a video in Find. Sent once per open, by the Live Room itself. | `placement` (`header`, `facade`, `dock`, `show`, `sheet`, `find`, or the section of a button or card), `video_id`, `show_id` when known, `label` |
 | `listen_apple`, `listen_spotify`, `listen_rss` | A podcast link is clicked | `show_id`, `placement` |
 
 ### Social
@@ -61,7 +62,7 @@ Every sponsor slot carries `data-slot="<placement>[:<subject>]"`:
 | `story_click` | A story link (woodwardsports.com) is clicked | `placement`, `team_id` when on a team page |
 | `shop_click` | A Shopify link is clicked | `placement`, `show_id`/`team_id` when known |
 | `app_store` | The WSN Live! App Store link is clicked | `placement` |
-| `youtube_click` | A YouTube video link is clicked (outside the Live Room) | `video_id`, `placement` |
+| `youtube_click` | A YouTube link takes the visitor to YouTube: a link outside the Live Room, or a video card / Watch Live opened in a new tab (⌘, Ctrl or Shift-click) | `video_id`, `placement` |
 | `youtube_member` | The channel membership link is clicked | `placement` |
 
 Common to all events: `page_path`; click events also send `label` (button text) and `link_url` where relevant.

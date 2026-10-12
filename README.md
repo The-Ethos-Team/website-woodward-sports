@@ -121,6 +121,7 @@ No secrets are needed: every source is public.
 ## Google Analytics 4
 
 GA4 **G-256WQGQSLH** is installed directly with Google's gtag.js snippet in `<head>` (`app/layout.tsx`, ID in `lib/site.ts`); `NEXT_PUBLIC_GA_ID` overrides it (`off` disables).
+The snippet uses its own data layer, `gaDataLayer` (`&l=gaDataLayer`): sharing GTM's `dataLayer` made GTM load gtag.js a second time.
 Client-side page changes are counted by GA4's Enhanced measurement ("Page changes based on browser history events" — keep it on).
 The click events listed below are also sent to GA4 as events. **Don't add a GA4 tag inside GTM as well**, or every hit is counted twice.
 
@@ -137,7 +138,7 @@ With GTM on, `components/client/Analytics.tsx` also pushes these `dataLayer` eve
 
 | Event | When |
 |---|---|
-| `watch_open` | Watch Live / player facade / dock WATCH (`placement`, `video_id`) |
+| `watch_open` | The Live Room opens: Watch Live, live pill, player facade, dock WATCH, show Watch, show sheet, video cards, Find (`placement`, `video_id`); sent by `LiveRoom.tsx` |
 | `listen_apple`, `listen_spotify`, `listen_rss` | Podcast links |
 | `app_store` | WSN Live! App Store link |
 | `shop_click` | Any Shopify link |
@@ -146,4 +147,4 @@ With GTM on, `components/client/Analytics.tsx` also pushes these `dataLayer` eve
 | `story_click` | Story links to woodwardsports.com |
 | `social_click` | Facebook / Instagram / X / TikTok |
 
-Every event carries `label`, `link_url` and `page_path`. Page views on client-side navigation: use GTM's **History Change** trigger.
+Every event carries `page_path`; clicks also carry `label`, and outbound links `link_url`. Page views on client-side navigation: use GTM's **History Change** trigger.

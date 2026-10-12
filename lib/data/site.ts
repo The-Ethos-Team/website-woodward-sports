@@ -75,7 +75,7 @@ export function buildFindIndex(stories: Story[], feed: Video[], pool: VideoPool,
   }
   for (const v of vids) {
     const show = SHOWS.find(s => s.id === v.show);
-    out.push({ type: 'video', title: v.title, keys: [show?.name ?? '', show ? hosts(show) : '', v.isShort ? 'short' : v.kind === 'clip' ? 'clip' : 'replay episode'].join(' '), target: v.id });
+    out.push({ type: 'video', title: v.title, keys: [show?.name ?? '', show ? hosts(show) : '', v.isShort ? 'short' : v.kind === 'clip' ? 'clip' : 'replay episode'].join(' '), target: v.id, meta: videoMeta(v), show: v.show });
   }
   return out;
 }

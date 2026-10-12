@@ -7,12 +7,16 @@ import { flushSync } from 'react-dom';
 import { getLive, useLive, useSchedule } from '@/lib/live/store';
 import { cd, firstHour, hostsOf, WD } from '@/lib/live/compute';
 import { register, type LiveOpts } from '@/lib/ui/bus';
+import type { LiveVideo, VideoThumb } from '@/lib/types';
+import { contextOf, track } from './Analytics';
 import { focusQuiet, pull, push } from '@/lib/ui/dialogs';
 import { EC, EO, fitName, motion, mq, MQ, padX, play, SPRING } from '@/lib/ui/motion';
 import { Dot, Icon } from '@/components/ui/bits';
 import { Flaps } from './Flaps';
 
 type Mode = 'live' | 'vod';
+
+const ytThumb = (id: string): VideoThumb => ({ sm: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, md: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`, local: false });
 
 /* Is the channel actually streaming? (/api/live reads YouTube; cached 60 s here and at the edge). The schedule says
    when a show should be on; this catches late starts and days off, so the LIVE tab never shows a dead stream. */
@@ -40,6 +44,8 @@ export function LiveRoom() {
   const [mini, setMini] = useState(false);
   const [mode, setMode] = useState<Mode>('vod');
   const [vid, setVid] = useState(S.latest.id);
+  /** a video from outside the room's own list (team pages, clips, search): its caption comes with it */
+  const [extra, setExtra] = useState<LiveVideo | null>(null);
   const [tab, setTab] = useState<'live' | 'replays'>('live');
   const [frame, setFrame] = useState(false);
   /** the YouTube id of the stream that's live right now (null: use the channel's live_stream embed) */
@@ -63,7 +69,8 @@ export function LiveRoom() {
   const live = n?.state === 'live';
   const s = S.shows[n?.i ?? 0];
   const embed = mode === 'live' ? (liveId ? `https://www.youtube.com/embed/${liveId}?autoplay=1&playsinline=1` : S.liveEmbed) : S.vodEmbed.replace('{id}', vid);
-  const posterThumb = mode === 'live' ? (live ? s.replayThumb : S.latest.thumb) : (S.videos.find(v => v.id === vid)?.thumb ?? S.latest.thumb);
+  const known = (id: string): LiveVideo | null => S.videos.find(x => x.id === id) ?? (extra?.id === id ? extra : null);
+  const posterThumb = mode === 'live' ? (live ? s.replayThumb : S.latest.thumb) : (known(vid)?.thumb ?? ytThumb(vid));
 
   /* ---------------------------------------------------------------- mini player geometry */
   const miniRect = (L: DOMRect) => {
@@ -167,15 +174,27 @@ export function LiveRoom() {
     });
   }, [S]);
 
-  const openLive = useCallback(({ from = 'btn', video = null, opener = null }: LiveOpts = {}) => {
+  const openLive = useCallback(({ from = 'btn', video = null, opener = null, info: about }: LiveOpts = {}) => {
     const c = st.current, n0 = getLive(), isLive = n0?.state === 'live';
     if (c.open && c.mini) expand();
     const m: Mode = video ? 'vod' : isLive ? 'live' : 'vod';
+    const outside = !!video && !S.videos.some(x => x.id === video);
     flushSync(() => {
       setMode(m);
       setVid(video ?? S.latest.id);
+      setExtra(outside ? { id: video!, show: about?.show ?? null, title: about?.title ?? '', meta: about?.meta ?? '', thumb: ytThumb(video!) } : null);
       setTab(m === 'live' ? 'live' : 'replays');
       setNotUp(false);
+    });
+    /* every way into the player counts once as watch_open (tracking plan): buttons, cards, the pill, the dock,
+       the show pop-up and search all come through here */
+    const ctx = opener ? contextOf(opener) : { show_id: undefined, team_id: undefined, placement: 'unknown' };
+    track('watch_open', {
+      ...ctx,
+      placement: from === 'btn' || from === 'card' ? ctx.placement : from,
+      video_id: video ?? undefined,
+      show_id: about?.show || opener?.dataset.show || (video ? S.videos.find(x => x.id === video)?.show : isLive ? S.shows[n0!.i].id : null) || ctx.show_id,
+      label: about?.title || (opener ? (opener.getAttribute('aria-label') || opener.textContent || '').replace(/\(opens in new tab\)/gi, '').replace(/\s+/g, ' ').trim().slice(0, 80) : undefined),
     });
     if (m === 'live') verifyLive();
     if (c.open) { if (!checking.current) setFrame(true); return; }
@@ -225,7 +244,11 @@ export function LiveRoom() {
         return;
       }
       const v = t.closest<HTMLElement>('a.vcard[data-video]');
-      if (v) { e.preventDefault(); openLive({ video: v.dataset.video, opener: v }); }
+      if (v) {
+        e.preventDefault();
+        const text = (sel: string) => v.querySelector(sel)?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+        openLive({ from: 'card', video: v.dataset.video, opener: v, info: { title: text('.vcard__title'), meta: text('.vcard__meta'), show: v.dataset.show || null } });
+      }
     };
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
@@ -281,7 +304,7 @@ export function LiveRoom() {
   }
 
   /* Anton name fits the plate */
-  const plateName = mode === 'live' ? (live ? s.name : 'Woodward Sports Network') : (S.shows.find(x => x.id === S.videos.find(v => v.id === vid)?.show)?.name ?? 'Woodward Sports');
+  const plateName = mode === 'live' ? (live ? s.name : 'Woodward Sports Network') : (S.shows.find(x => x.id === known(vid)?.show)?.name ?? 'Woodward Sports');
   useLayoutEffect(() => {
     const b = nameRef.current, plate = b?.parentElement;
     if (!open || !b || !plate || !plate.getClientRects().length) return;
@@ -289,13 +312,14 @@ export function LiveRoom() {
   }, [open, plateName]);
 
   /* plate, message */
-  const v = S.videos.find(x => x.id === vid) ?? S.videos[0];
+  const v = known(vid);
   let kick: React.ReactNode, hostsLine: string;
   if (mode === 'live') {
     kick = live ? <><Dot />LIVE NOW · {s.slotShort}</> : 'WSN LIVE STREAM';
     hostsLine = live ? hostsOf(s) : 'Live shows every weekday · 8AM–7PM ET';
   } else {
-    kick = 'REPLAY · ' + (v?.meta.split('·').pop()?.trim().toUpperCase() ?? '');
+    const when = v?.meta ? v.meta.split('·').pop()!.trim().toUpperCase() : '';
+    kick = when ? 'REPLAY · ' + when : 'REPLAY';
     hostsLine = v?.title ?? '';
   }
   const msg = !n ? null : live && notUp ? (

@@ -35,7 +35,8 @@ export function placementOf(el: Element | null): string {
   return el.closest<HTMLElement>('section[id]')?.id || 'page';
 }
 
-function context(el: Element) {
+/** show, team and placement of an element: [data-show], [data-team], the route, the section. */
+export function contextOf(el: Element) {
   return {
     show_id: el.closest<HTMLElement>('[data-show]')?.dataset.show || routeMatch(/^\/shows\/([^/]+)/),
     team_id: el.closest<HTMLElement>('[data-team]')?.dataset.team || routeMatch(/^\/teams\/([^/]+)/),
@@ -65,7 +66,7 @@ const SOCIAL: [RegExp, string][] = [
 function slotParams(el: HTMLElement) {
   const id = el.dataset.slot || 'unknown';
   const [placement, subject] = id.split(':');
-  const p: Params = { slot_id: id, slot_placement: placement, ...context(el) };
+  const p: Params = { slot_id: id, slot_placement: placement, ...contextOf(el) };
   if (subject && placement.startsWith('show')) p.show_id = subject;
   if (subject && placement.startsWith('team')) p.team_id = subject;
   return p;
@@ -80,15 +81,15 @@ export function Analytics() {
       const el = (e.target as Element | null)?.closest<HTMLElement>('a,button');
       if (!el) return;
       const label = (el.getAttribute('aria-label') || el.textContent || '').replace(/\(opens in new tab\)/gi, '').replace(/\s+/g, ' ').trim().slice(0, 80);
-      const ctx = context(el);
+      const ctx = contextOf(el);
 
       const slot = el.closest<HTMLElement>('[data-slot]');
       if (slot) { track('sponsor_slot_click', { ...slotParams(slot), label }); return; }
 
-      if (el.hasAttribute('data-live-open')) {
-        track('watch_open', { ...ctx, placement: el.getAttribute('data-live-open') || ctx.placement, video_id: el.getAttribute('data-video') || undefined, label });
-        return;
-      }
+      /* buttons and video cards that open the Live Room: the Live Room records watch_open itself. A modified click
+         (new tab) goes to YouTube instead, so that one counts as an outbound youtube_click below. */
+      const modified = e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0;
+      if (!modified && (el.hasAttribute('data-live-open') || el.matches('a.vcard[data-video]'))) return;
 
       const href = el instanceof HTMLAnchorElement ? el.href : '';
       if (!href) return;

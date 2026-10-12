@@ -164,4 +164,7 @@ export interface FindItem {
   keys: string;
   /** show/team: internal path · story: external URL · video: YouTube id */
   target: string;
+  /** videos: "Show · Oct 12" and the show id, for the Live Room's caption */
+  meta?: string;
+  show?: string | null;
 }

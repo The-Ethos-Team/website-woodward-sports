@@ -80,7 +80,7 @@ export function Find({ index, shows }: { index: FindItem[]; shows: { id: string;
     if (!x) return;
     if (x.type === 'story') { window.open(x.target, '_blank', 'noopener'); close(); return; }
     close(false);
-    if (x.type === 'video') bus.openLive({ video: x.target, opener: document.querySelector<HTMLElement>('[data-find-open]') });
+    if (x.type === 'video') bus.openLive({ video: x.target, from: 'find', opener: document.querySelector<HTMLElement>('[data-find-open]'), info: { title: x.title, meta: x.meta, show: x.show ?? null } });
     else router.push(x.target);
   };
 

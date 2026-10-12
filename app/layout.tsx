@@ -78,12 +78,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         ) : null}
         {GA_ID ? (
           <>
-            {/* Google tag (gtag.js) — GA4 */}
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            {/* Google tag (gtag.js) — GA4. It keeps its own data layer (gaDataLayer, Google's documented `l=` option):
+                when it shared GTM's `dataLayer`, GTM picked up the config command and loaded gtag.js a second time. */}
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}&l=gaDataLayer`} />
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+                __html: `window.gaDataLayer = window.gaDataLayer || [];
+function gtag(){gaDataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_ID}');`,
               }}

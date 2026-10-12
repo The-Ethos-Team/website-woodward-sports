@@ -1,8 +1,10 @@
 'use client';
 /* Tiny command bus between client islands (Live Room, show sheet, Find, home stories filter). */
 
-export type LiveFrom = 'btn' | 'facade' | 'dock' | 'sheet' | 'show';
-export interface LiveOpts { from?: LiveFrom; video?: string | null; opener?: HTMLElement | null }
+export type LiveFrom = 'btn' | 'facade' | 'dock' | 'sheet' | 'show' | 'card' | 'find';
+/** title/meta/show of a video the Live Room's own list doesn't have (team pages, clips, search results) */
+export interface LiveInfo { title: string; meta?: string; show?: string | null }
+export interface LiveOpts { from?: LiveFrom; video?: string | null; opener?: HTMLElement | null; info?: LiveInfo }
 
 type Handlers = {
   openLive: (o?: LiveOpts) => void;
