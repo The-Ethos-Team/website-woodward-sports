@@ -23,7 +23,7 @@ async function checkLive(fresh = false): Promise<LiveCheck> {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), 2500);
   try {
-    const j = (await (await fetch('/api/live', { signal: ctl.signal })).json()) as { live?: boolean | null; id?: string | null };
+    const j = (await (await fetch(fresh ? `/api/live?fresh=${Date.now()}` : '/api/live', { signal: ctl.signal })).json()) as { live?: boolean | null; id?: string | null };
     lastCheck = { live: typeof j.live === 'boolean' ? j.live : null, id: j.id ?? null, at: Date.now() };
   } catch {
     lastCheck = { live: null, id: null, at: Date.now() - 45000 };
