@@ -1,7 +1,7 @@
 /* Is the channel streaming right now? Reads the channel's /live page: while a stream is on, YouTube serves the live
-   video's page, whose player data says "isLive" (older pages also "isLiveNow") and names the video. A scheduled
-   stream that hasn't started says "isUpcoming"; an offline channel serves the channel page. The Live Room asks this before it loads the live
-   player, so a late start or a day off shows the latest episode instead of a dead stream.
+   video's page, whose player data says "isLive" (older pages also "isLiveNow"). A scheduled stream that hasn't
+   started says "isUpcoming"; an offline channel serves the channel page. The Live Room asks this before it loads
+   the live player, so a late start or a day off shows the latest episode instead of a dead stream.
    { live: true, id } · { live: false } · { live: null } when YouTube can't be read (the player then tries anyway).
    ?fresh=1 ("Check for the stream") reads YouTube again after at most 10 s instead of 60 s. */
 import { BROWSER_UA } from '@/lib/site';
@@ -31,17 +31,6 @@ export async function GET(req: Request) {
     });
     if (!r.ok) throw new Error(String(r.status));
     const html = await r.text();
-    if (new URL(req.url).searchParams.has('diag')) {
-      /* temporary: what does YouTube serve to this server? (no secrets; removed after checking) */
-      return Response.json({
-        status: r.status, url: r.url, bytes: html.length, region: process.env.VERCEL_REGION ?? null,
-        title: html.match(/<title>([^<]{0,120})/)?.[1] ?? null,
-        canonical: html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? null,
-        isLive: /"isLive":true/.test(html), isLiveNow: /"isLiveNow":true/.test(html), upcoming: /"isUpcoming":true/.test(html),
-        videoDetailsId: html.match(/"videoDetails":\{"videoId":"([\w-]{11})"/)?.[1] ?? null, result: liveFromHtml(html),
-        consent: /consent\.youtube|before you continue/i.test(html), bot: /confirm you.re not a bot|unusual traffic/i.test(html),
-      }, { headers: { 'Cache-Control': 'no-store' } });
-    }
     return Response.json(liveFromHtml(html), {
       headers: { 'Cache-Control': fresh ? 'no-store' : 'public, s-maxage=30, stale-while-revalidate=30' },
     });
