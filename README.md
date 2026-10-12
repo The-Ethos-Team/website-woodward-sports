@@ -57,7 +57,8 @@ public/                 img/, fonts/, site.webmanifest
 | Shows: name, tagline, hosts, description, podcast links | `data/content.json` → `shows[]` |
 | **Schedule** (start/end, America/Detroit) | `data/content.json` → `shows[].start` / `end`; weekdays in `schedule.days` (1 = Mon … 5 = Fri); the "between shows" gaps in `schedule.gaps_in_day` |
 | Curated merch (8 products, by Shopify handle) | `data/shop.json` |
-| Team colours, WP categories, YouTube keywords, team merch | `lib/config.ts` |
+| Team colours, WP categories, team title patterns (`TEAM_TITLE`), team merch (`PRODUCT_TEAMS`, `TEAM_EXTRA_PRODUCTS`) | `lib/config.ts` |
+| YouTube playlists per show (full episodes + clips) and per team | `lib/config.ts` → `SHOW_PLAYLISTS`, `TEAM_PLAYLIST` |
 | Advertise inventory, contact links | `lib/config.ts` → `INVENTORY`, `CONTACT` |
 | Watch-party board, recap | `lib/config.ts` → `PARTY_BOARD`, `data/content.json` → `watch_party` |
 | Writers (author pages) | `data/content.json` → `writers[]`, WP user slugs in `lib/config.ts` → `WRITER_WP_SLUG` |
@@ -69,16 +70,18 @@ weekends, with a countdown to the next weekday's first show. If a slot changes (
 
 ## Data sources and caching
 
-Every loader fetches live with Next's data cache (`fetch(..., { next: { revalidate } })`) and a hard 5-second
-timeout, and falls back to the bundled snapshot in `data/*.json` on **any** error, non-2xx status or timeout.
+Every loader fetches live with Next's data cache (`fetch(..., { next: { revalidate } })`) and a hard timeout
+(5 s, longer for the story index and feeds), retries once on a timeout, rate limit or server error, and falls back to
+the bundled snapshot in `data/*.json` if that fails too.
 Pages are statically generated and refreshed in the background (ISR) on the same windows.
 
 | Source | Loader | Revalidate | Notes |
 |---|---|---|---|
-| WordPress REST: posts, categories, media, users, privacy page (`woodwardsports.com/wp-json/wp/v2/…`) | `lib/data/wp.ts` | 10 min | Cloudflare needs a full browser User-Agent and may still block Vercel's servers, so the fallback is mandatory. Stories always link out to woodwardsports.com (new tab). |
-| YouTube RSS (`feeds/videos.xml?channel_id=UC8sYt4QHV6ZgOyL57ATacwQ`) | `lib/data/youtube.ts` | 10 min | 15 newest uploads; Shorts detected via `/shorts/<id>`; show matched from the title |
+| WordPress REST: posts, categories, media, users, privacy page (`woodwardsports.com/wp-json/wp/v2/…`) | `lib/data/wp.ts` | 10 min | One light index of every post (title, excerpt, categories, author) feeds all lists, so team filters, writer pages, counts and pages always agree. Teams: a title that names a team decides, otherwise the WP categories (`lib/teams.ts`); roundups filed under 3+ teams stay out of team lists. Guest bylines ("By Darren McCarty") credit the real writer. Images and reading times are fetched only for the stories on screen. Cloudflare needs a full browser User-Agent. Stories always link out to woodwardsports.com (new tab). |
+| YouTube RSS: the channel (`feeds/videos.xml?channel_id=…`) and playlists (`?playlist_id=…`) | `lib/data/youtube.ts` | 10 min | The channel's 15 newest uploads (Shorts detected) plus each show's full-episode and clip playlists and the team playlists. Show pages, Watch buttons, team hubs and search use these. |
+| YouTube live status (`/api/live`, reads the channel's /live page) | `app/api/live/route.ts` | 60 s | During a show slot the Live Room asks this first; if the stream isn't up yet it plays that show's latest episode instead. |
 | Spreaker RSS (URLs in `content.json` → `shows[].rss`) | `lib/data/podcasts.ts` | 1 h | Feeds are 0.4–6 MB, so only the first 300 KB is requested (HTTP Range) |
-| Shopify (`shop.woodwardsports.com/products/<handle>.json`) | `lib/data/shop.ts` | 1 h | Only the curated 8 from `shop.json`, with live price and image |
+| Shopify (`shop.woodwardsports.com/products/<handle>.json`) | `lib/data/shop.ts` | 1 h | The curated 8 from `shop.json` plus team gear by handle (`TEAM_EXTRA_PRODUCTS`), with live price and image |
 
 **Images.** Local images in `public/img` are pre-sized webp with hand-written `srcset`. Live images from YouTube
 and Shopify go through `next/image` (`images.remotePatterns` in `next.config.ts`). WordPress images load straight

@@ -14,6 +14,25 @@ import { Flaps } from './Flaps';
 
 type Mode = 'live' | 'vod';
 
+/* Is the channel actually streaming? (/api/live reads YouTube; cached 60 s here and at the edge). The schedule says
+   when a show should be on; this catches late starts and days off, so the LIVE tab never shows a dead stream. */
+type LiveCheck = { live: boolean | null; id: string | null; at: number };
+let lastCheck: LiveCheck | null = null;
+async function checkLive(fresh = false): Promise<LiveCheck> {
+  if (!fresh && lastCheck && Date.now() - lastCheck.at < 60000) return lastCheck;
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), 2500);
+  try {
+    const j = (await (await fetch('/api/live', { signal: ctl.signal })).json()) as { live?: boolean | null; id?: string | null };
+    lastCheck = { live: typeof j.live === 'boolean' ? j.live : null, id: j.id ?? null, at: Date.now() };
+  } catch {
+    lastCheck = { live: null, id: null, at: Date.now() - 45000 };
+  } finally {
+    clearTimeout(t);
+  }
+  return lastCheck;
+}
+
 export function LiveRoom() {
   const S = useSchedule();
   const n = useLive();
@@ -23,6 +42,12 @@ export function LiveRoom() {
   const [vid, setVid] = useState(S.latest.id);
   const [tab, setTab] = useState<'live' | 'replays'>('live');
   const [frame, setFrame] = useState(false);
+  /** the YouTube id of the stream that's live right now (null: use the channel's live_stream embed) */
+  const [liveId, setLiveId] = useState<string | null>(null);
+  /** the schedule says live but YouTube has no stream yet: the latest episode plays instead */
+  const [notUp, setNotUp] = useState(false);
+  const checking = useRef(false);
+  const settled = useRef(false);
 
   const root = useRef<HTMLDivElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
@@ -37,7 +62,7 @@ export function LiveRoom() {
 
   const live = n?.state === 'live';
   const s = S.shows[n?.i ?? 0];
-  const embed = mode === 'live' ? S.liveEmbed : S.vodEmbed.replace('{id}', vid);
+  const embed = mode === 'live' ? (liveId ? `https://www.youtube.com/embed/${liveId}?autoplay=1&playsinline=1` : S.liveEmbed) : S.vodEmbed.replace('{id}', vid);
   const posterThumb = mode === 'live' ? (live ? s.replayThumb : S.latest.thumb) : (S.videos.find(v => v.id === vid)?.thumb ?? S.latest.thumb);
 
   /* ---------------------------------------------------------------- mini player geometry */
@@ -55,7 +80,7 @@ export function LiveRoom() {
     H.classList.toggle('lr-mini', !!m);
   };
   const placeMclose = (m: { x: number; y: number; W: number }) => {
-    if (mclose.current) mclose.current.style.transform = `translate(${Math.round(Math.min(m.x + m.W - 30, innerWidth - 50))}px,${Math.round(m.y - 20)}px)`;
+    if (mclose.current) mclose.current.style.transform = `translate(${Math.round(Math.min(m.x + m.W - 44, innerWidth - 52))}px,${Math.round(Math.max(8, m.y - 52))}px)`;
   };
 
   /* ---------------------------------------------------------------- open / close / minimize */
@@ -73,6 +98,7 @@ export function LiveRoom() {
     else a = play(sh, [{ transform: sh?.style.transform || 'none' }, { transform: 'translateY(100%)' }], { duration: 320, easing: EC, fill: 'forwards' });
     c.open = false;
     c.mini = false;
+    settled.current = false;
     (a ? a.finished : Promise.resolve()).catch(() => {}).then(() => {
       a?.cancel();
       pl?.getAnimations?.().forEach(x => x.cancel());
@@ -83,7 +109,12 @@ export function LiveRoom() {
       setOpen(false);
       setMini(false);
     });
-    if (returnFocus && !wasMini && c.opener?.isConnected) c.opener.focus({ preventScroll: true });
+    if (returnFocus) {
+      /* back to the button that opened the player; if that page is gone, to the Watch button that's on screen */
+      const vis = (el: HTMLElement | null | undefined) => !!el?.isConnected && el.getClientRects().length > 0;
+      const back = vis(c.opener) ? c.opener : Array.from(document.querySelectorAll<HTMLElement>('.dock__watch, .hdr__watch')).find(vis);
+      back?.focus({ preventScroll: true });
+    }
   }, []);
 
   const minimize = useCallback((fromRect?: DOMRect) => {
@@ -120,6 +151,22 @@ export function LiveRoom() {
     setTimeout(() => focusQuiet(minBtn.current), 60);
   }, [close]);
 
+  /** schedule says live: ask YouTube, then play the stream or (not up yet) the show's latest episode */
+  const verifyLive = useCallback((fresh = false) => {
+    checking.current = true;
+    checkLive(fresh).then(c => {
+      checking.current = false;
+      if (!st.current.open) return;
+      const n0 = getLive();
+      if (c.live === false && n0?.state === 'live') {
+        flushSync(() => { setNotUp(true); setMode('vod'); setVid(S.shows[n0.i].replay); });
+      } else {
+        flushSync(() => { setNotUp(false); setLiveId(c.live ? c.id : null); setMode('live'); });
+      }
+      if (settled.current) setFrame(true);
+    });
+  }, [S]);
+
   const openLive = useCallback(({ from = 'btn', video = null, opener = null }: LiveOpts = {}) => {
     const c = st.current, n0 = getLive(), isLive = n0?.state === 'live';
     if (c.open && c.mini) expand();
@@ -128,8 +175,10 @@ export function LiveRoom() {
       setMode(m);
       setVid(video ?? S.latest.id);
       setTab(m === 'live' ? 'live' : 'replays');
+      setNotUp(false);
     });
-    if (c.open) { setFrame(true); return; }
+    if (m === 'live') verifyLive();
+    if (c.open) { if (!checking.current) setFrame(true); return; }
     c.open = true;
     c.opener = opener || (document.activeElement as HTMLElement);
     flushSync(() => setOpen(true));
@@ -145,9 +194,18 @@ export function LiveRoom() {
       fade.forEach(el => play(el, [{ opacity: 0 }, { opacity: 1 }], { duration: 320, delay: 160, easing: 'ease-out', fill: 'backwards' }));
     } else if (mq(MQ.tab)) a = play(sh, [{ opacity: 0, transform: 'translateY(24px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: EO });
     else a = play(sh, [{ transform: 'translateY(100%)' }, { transform: 'none' }], { duration: 420, easing: EO });
-    (a ? a.finished : Promise.resolve()).catch(() => {}).then(() => { if (st.current.open) setFrame(true); });
+    (a ? a.finished : Promise.resolve()).catch(() => {}).then(() => {
+      settled.current = true;
+      if (st.current.open && !checking.current) setFrame(true);
+    });
     setTimeout(() => focusQuiet(minBtn.current), 60);
-  }, [S, close, expand]);
+  }, [S, close, expand, verifyLive]);
+
+  /** the LIVE tab: off air it shows when the next show starts (the current video keeps playing) */
+  const liveTab = () => {
+    setTab('live');
+    if (getLive()?.state === 'live' && mode !== 'live') verifyLive();
+  };
 
   useEffect(() => register('openLive', openLive), [openLive]);
 
@@ -240,7 +298,9 @@ export function LiveRoom() {
     kick = 'REPLAY · ' + (v?.meta.split('·').pop()?.trim().toUpperCase() ?? '');
     hostsLine = v?.title ?? '';
   }
-  const msg = !n ? null : live ? (
+  const msg = !n ? null : live && notUp ? (
+    <><b>{s.name}</b> hasn’t started streaming yet. Playing the latest {s.short} episode until it does.</>
+  ) : live ? (
     <><b>{s.name}</b> is live right now with {hostsOf(s)}.</>
   ) : n.state === 'next' ? (
     <>Up next: <b>{s.name}</b> at {firstHour(s)}. Starts in</>
@@ -278,9 +338,9 @@ export function LiveRoom() {
             </div>
           </div>
           <div className="tabs" role="tablist" aria-label="Live Room"
-            onKeyDown={e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const t = tab === 'live' ? 'replays' : 'live'; setTab(t); if (t === 'live') { setMode('live'); setFrame(true); } (e.currentTarget.querySelector(`[data-lr-tab="${t}"]`) as HTMLElement | null)?.focus(); } }}>
+            onKeyDown={e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const t = tab === 'live' ? 'replays' : 'live'; if (t === 'live') liveTab(); else setTab(t); (e.currentTarget.querySelector(`[data-lr-tab="${t}"]`) as HTMLElement | null)?.focus(); } }}>
             <button className="tab" type="button" role="tab" id="lr-tab-live" aria-controls="lr-p-live" aria-selected={tab === 'live'} tabIndex={tab === 'live' ? 0 : -1} data-lr-tab="live"
-              onClick={() => { setTab('live'); setMode('live'); setFrame(true); }}><i className="tab__dot" />Live</button>
+              onClick={liveTab}><i className="tab__dot" />Live</button>
             <button className="tab" type="button" role="tab" id="lr-tab-rep" aria-controls="lr-p-rep" aria-selected={tab === 'replays'} tabIndex={tab === 'replays' ? 0 : -1} data-lr-tab="replays"
               onClick={() => setTab('replays')}>Replays</button>
           </div>
@@ -290,6 +350,11 @@ export function LiveRoom() {
               {n && !live ? <Flaps key={n.state + n.i} value={cd(n.left)} animate={open && !mini} /> : null}
             </p>
             <div className="lr__acts">
+              {live && notUp ? (
+                <button className="btn btn--ghost btn--sm" type="button" onClick={() => verifyLive(true)}>
+                  <Icon name="play" /><span>Check for the stream</span>
+                </button>
+              ) : null}
               <button className="btn btn--ghost btn--sm" type="button"
                 onClick={() => { const id = live ? s.replay : S.latest.id; setTab('replays'); setMode('vod'); setVid(id); setFrame(true); }}>
                 <Icon name="play" /><span>Latest replay</span>

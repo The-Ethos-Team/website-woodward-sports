@@ -12,11 +12,13 @@ export const metadata = pageMeta({
   path: '/advertise',
 });
 
+/** Every sponsor slot on the site (each one carries data-slot for the tracking plan). */
 const SLOTS: [string, string, string][] = [
   ['Live Room presented by', 'The player that follows fans around the site', '/watch'],
-  ['Show presented by', 'Your name on a show: open, bug and lower-thirds', '/shows'],
-  ['Team hub presented by', 'Own the Lions, Pistons, Tigers or Red Wings page', '/teams'],
+  ['Show presented by', 'Your name on a show page and its pop-up: one per show', '/shows'],
+  ['Team hub presented by', 'Own a team page: Lions, Pistons, Tigers, Red Wings, Michigan or MSU', '/teams'],
   ['Watch party presenting partner', 'Put your bar or brand on the next one', '/watch-parties'],
+  ['Ticker spot', 'Your name in the headline crawl on every page', '/'],
 ];
 
 export default function AdvertisePage() {

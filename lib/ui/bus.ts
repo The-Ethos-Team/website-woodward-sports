@@ -8,6 +8,7 @@ type Handlers = {
   openLive: (o?: LiveOpts) => void;
   openSheet: (i: number, opener?: HTMLElement | null) => void;
   openFind: (opener?: HTMLElement | null) => void;
+  openMenu: (opener?: HTMLElement | null) => void;
   /** returns false when no stories filter is mounted (not on the home page) */
   setStoryFilter: (team: string, o?: { scroll?: boolean }) => boolean;
 };
@@ -17,6 +18,7 @@ export const bus: Handlers = {
   openLive: noop,
   openSheet: noop,
   openFind: noop,
+  openMenu: noop,
   setStoryFilter: () => false,
 };
 

@@ -15,7 +15,16 @@ export async function getLatestEpisodes(): Promise<Record<string, Episode | unde
   return Object.fromEntries(Object.entries(all).map(([k, v]) => [k, v.episodes[0]]));
 }
 
-export { getStories } from './wp';
-export { getVideos } from './youtube';
-export { getProducts } from './shop';
+/**
+ * How many stories fill the paper list without leaving a lone card: a feature, up to 4 rows, then cards in rows
+ * of 3 on desktop (StoryList). 7 available → 5, 10 → 8.
+ */
+export function fitStories(available: number, max: number) {
+  const n = Math.min(available, max);
+  return n <= 5 ? n : 5 + Math.floor((n - 5) / 3) * 3;
+}
+
+export { getStories, getStoriesAbout, getWriterStories } from './wp';
+export { getVideos, getVideoPool, getTeamVideos } from './youtube';
+export { getProducts, getProductsByHandle } from './shop';
 export { getEpisodes, getAllEpisodes } from './podcasts';

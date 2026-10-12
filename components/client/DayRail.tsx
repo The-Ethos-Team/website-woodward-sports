@@ -20,6 +20,7 @@ export function DayRail({ gaps, mode = 'sheet' }: { gaps: string[]; mode?: 'shee
   const rail = useRef<HTMLOListElement>(null);
   const lane = useRef<HTMLDivElement>(null);
   const [head, setHead] = useState<number | null>(null);
+  const [headT, setHeadT] = useState('');
   const [nx, setNx] = useState<{ x: number; t: string } | null>(null);
   const [local, setLocal] = useState<string[] | null>(null);
   const lastHead = useRef(0);
@@ -48,6 +49,7 @@ export function DayRail({ gaps, mode = 'sheet' }: { gaps: string[]; mode?: 'shee
       if (n.prevEnd) { row = gapRows[n.i - 1]; f = (n.now - n.prevEnd) / (n.start - n.prevEnd); } else { row = rows[0]; f = 0; }
     }
     setHead(row && !mq(MQ.wide) ? row.offsetTop + Math.min(1, Math.max(0, f)) * row.offsetHeight : null);
+    setHeadT(clean(etShort.format(new Date(n.now))).replace(/ (AM|PM)/, ''));
     const p = n.p, hrs = p.h + p.mi / 60;
     if (S.days.includes(p.wd) && hrs >= 8 && hrs <= 19 && lane.current) {
       setNx({ x: ((hrs - 8) / 11) * lane.current.clientWidth, t: 'NOW ' + clean(etShort.format(new Date(n.now))).replace(/ (AM|PM)/, '') });
@@ -126,7 +128,9 @@ export function DayRail({ gaps, mode = 'sheet' }: { gaps: string[]; mode?: 'shee
       </div>
       <div className="rail-wrap">
         <ol className="rail" data-reveal="" ref={rail}>{rows}</ol>
-        <span className="rail__head" aria-hidden="true" hidden={head === null} style={head !== null ? { ['--y' as string]: head + 'px' } : undefined} />
+        <span className="rail__head" aria-hidden="true" hidden={head === null} style={head !== null ? { ['--y' as string]: head + 'px' } : undefined}>
+          <span className="rail__nowl">NOW <Num text={headT} /></span>
+        </span>
       </div>
       <p className="smallprint">Weekdays · schedule may change.{local ? ' All times ET (Detroit), with your local time underneath.' : ''}</p>
     </>

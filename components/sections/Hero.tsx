@@ -1,5 +1,6 @@
 import { Icon, Slashes } from '@/components/ui/bits';
 import { HeroFacade } from '@/components/client/HeroFacade';
+import { LiveLabel } from '@/components/client/LiveLabel';
 import { YT } from '@/lib/snapshot';
 
 /** Home hero: wall, H1, live player facade (client island), CTAs. */
@@ -30,7 +31,7 @@ export function Hero() {
         </div>
         <div className="hero__ctas">
           <a className="btn btn--blade btn--xl" href={YT.live_url} target="_blank" rel="noopener" data-live-open="">
-            <Icon name="play" /><span>Watch Live</span><span className="sr-only"> (opens in new tab)</span>
+            <Icon name="play" /><LiveLabel on="Watch Live" off="Watch the latest show" /><span className="sr-only"> (opens in new tab)</span>
           </a>
           <a className="btn btn--ghost" href="#listen"><Icon name="listen" /><span>Listen</span></a>
           <a className="btn btn--ghost" href="#lineup"><Icon name="shows" /><span>Lineup</span></a>

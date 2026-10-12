@@ -218,11 +218,17 @@ kbd{font-family:-apple-system,system-ui,sans-serif}
 @media (min-width:400px){.pill__pre{display:inline}}
 /* set by JS when the pill would truncate: first the Find label goes (.pill-nf), then "LIVE · " */
 .pill-np .pill__pre{display:none}
+.pill__nm{display:none}
+@media (min-width:900px){.pill__nm{display:inline}}
+.pill-nn .pill__nm{display:none}
+.pill-nc .hdr__clock{display:none!important}
 [data-state=live] .pill__in{background:var(--live);border-color:var(--live);color:#fff}
 [data-state=next] .pill__in{border-color:var(--amber);color:var(--amber)}
-.hdr__find{position:relative;width:44px;height:44px;border-radius:50%;color:var(--fg);flex:none}
-.hdr__find .ico{width:21px;height:21px}
-.hdr__find:hover{background:#ffffff14}
+.hdr__find,.hdr__menu{position:relative;width:44px;height:44px;border-radius:50%;color:var(--fg);flex:none}
+.hdr__find .ico,.hdr__menu .ico{width:21px;height:21px}
+.hdr__find:hover,.hdr__menu:hover{background:#ffffff14}
+.hdr__menu{display:grid;place-items:center;margin-left:-4px}
+@media (min-width:900px){.hdr__menu{display:none}}
 .hdr__prog{display:none}
 @supports (animation-timeline:scroll()){
   .hdr__prog{display:block;position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--mint);transform-origin:0 50%;transform:scaleX(0);animation:prog linear both;animation-timeline:scroll(root)}
@@ -464,6 +470,8 @@ kbd{font-family:-apple-system,system-ui,sans-serif}
 .rail__row.is-done .srow__art{opacity:.45;filter:grayscale(1)}
 .rail__row.is-done .srow__name,.rail__row.is-done .srow__tag{color:var(--muted)}
 .rail__head{position:absolute;left:0;top:0;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px #34e0a138;transform:translateY(var(--y,0px));transition:transform .6s var(--eo);z-index:2}
+/* phones: the playhead carries its time down the rail line (the desktop track has its own NOW flag) */
+.rail__nowl{position:absolute;left:50%;top:16px;transform:translateX(-50%);writing-mode:vertical-rl;padding:5px 0;background:var(--ink-950);color:var(--mint);font:800 10px/1 var(--f-text);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;font-variant-numeric:tabular-nums}
 @media (min-width:600px){
   .srow{grid-template-columns:96px minmax(0,1fr);gap:var(--space-4);padding:var(--card-pad-sm) var(--space-4)}
   .srow__art{width:96px;height:96px}
@@ -968,6 +976,34 @@ html.lr-mini .ftr{padding-bottom:calc(var(--mini-clear,0px) + 24px)}
 .fres__k{flex:none;font:800 var(--fs-tab)/1 var(--f-text);letter-spacing:var(--tr-ui);text-transform:uppercase;color:var(--muted)}
 .fres mark{background:#34e0a138;color:inherit;font-weight:800;border-radius:2px}
 .find__none{color:var(--muted)}
+
+/* ---------- menu (phones + tablet portrait: every page, the teams, search) ---------- */
+.menu{position:fixed;inset:0;z-index:60}
+.menu__backdrop{position:absolute;inset:0;background:#050f18cc;opacity:0;transition:opacity .25s}
+.menu.is-open .menu__backdrop{opacity:1}
+.menu__panel{position:absolute;inset:0;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);background:var(--ink-950);opacity:0;transform:translateY(14px);transition:opacity .2s,transform .32s var(--eo)}
+.menu.is-open .menu__panel{opacity:1;transform:none}
+.menu__bar{display:flex;align-items:center;gap:var(--space-2);height:56px;padding:0 calc(var(--gr) - 4px) 0 var(--gl);border-bottom:1px solid var(--line);flex:none}
+.menu__h{flex:1;margin:0;font:800 var(--fs-kicker)/1 var(--f-text);letter-spacing:var(--tr-ui);text-transform:uppercase;color:var(--muted)}
+.menu__find{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:4px;border:1.5px solid var(--line-strong);font:800 var(--fs-ui-sm)/1 var(--f-text);letter-spacing:var(--tr-ui);text-transform:uppercase;color:var(--fg)}
+.menu__find .ico{width:18px;height:18px}
+.menu__find:hover{border-color:#fff}
+.menu__body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:var(--space-2) var(--gr) calc(var(--space-6) + env(safe-area-inset-bottom)) var(--gl)}
+.menu__list{list-style:none;margin:0;padding:0}
+.menu__a{display:grid;gap:4px;padding:var(--space-3) 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.menu__a b{font:400 1.75rem/1 var(--f-display);letter-spacing:.01em;text-transform:uppercase}
+.menu__a span{font:500 var(--fs-meta)/1.35 var(--f-text);color:var(--muted)}
+.menu__a:hover b,.menu__a.is-on b{color:var(--mint)}
+.menu__lbl{margin:var(--space-6) 0 var(--space-3);font:800 var(--fs-kicker)/1 var(--f-text);letter-spacing:var(--tr-ui);text-transform:uppercase;color:var(--muted)}
+.menu__teams{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.menu__teams .fx{text-decoration:none}
+.fx.is-on{border-color:#fff}
+@media (min-width:600px){
+  .menu__panel{left:auto;width:min(440px,100%);border-left:1px solid var(--line);transform:translateX(24px)}
+  .menu__bar{height:64px;padding:0 var(--space-4) 0 var(--space-6)}
+  .menu__body{padding:var(--space-3) var(--space-6) var(--space-8)}
+}
+.rm .menu__panel{transition:opacity .15s linear!important;transform:none!important}
 @media (min-width:768px){
   .find__panel{left:50%;right:auto;top:11vh;bottom:auto;width:640px;max-height:72vh;margin-left:-320px;border-radius:4px;box-shadow:0 0 0 1px var(--line),0 40px 80px #00000099}
   .find__bar{padding:12px 16px}
@@ -1236,6 +1272,7 @@ a.fchip{text-decoration:none}
 .cover img{width:72px;height:72px;border-radius:2px;object-fit:cover}
 .cover b{display:block;font:400 1.5rem/1.04 var(--f-display);letter-spacing:.01em;text-transform:uppercase;color:#fff;text-wrap:balance}
 .cover small{display:block;margin-top:var(--space-1);font:700 var(--fs-kicker)/1.25 var(--f-text);letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--mint)}
+.cover small.cover__n{font:600 var(--fs-meta)/1.3 var(--f-text);letter-spacing:0;text-transform:none;color:var(--muted)}
 
 /* watch parties: venues */
 .venues{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--card-gap)}
@@ -1265,7 +1302,9 @@ a.fchip{text-decoration:none}
 .prose p+p{margin-top:var(--space-4)}
 .prose ul{list-style:disc;padding-left:1.2em;margin-top:var(--space-3)}
 .prose li+li{margin-top:var(--space-2)}
-.prose a{color:var(--wsn-green-d);text-decoration-thickness:2px;text-underline-offset:3px}
+.prose a:not(.btn):not(.textlink){color:var(--wsn-green-d);text-decoration-thickness:2px;text-underline-offset:3px}
+.prose b{color:var(--paper-fg);font-weight:600}
+.prose code{font-size:.9em;padding:1px 5px;border-radius:2px;background:#050f1414}
 .prose .smallprint{color:var(--paper-muted)}
 
 /* off air (404) */
@@ -1286,6 +1325,9 @@ a.fchip{text-decoration:none}
 @media (min-width:600px){.slots{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1100px){.slots{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .slots .slot{height:100%}
+/* an odd one out (the ticker spot) runs the full width instead of sitting alone */
+@media (min-width:600px){.slots li:last-child:nth-child(odd){grid-column:1/-1}}
+@media (min-width:1100px){.slots li:last-child:nth-child(odd){grid-column:auto}.slots li:last-child:nth-child(4n+1){grid-column:1/-1}}
 .pod--wide .eps{gap:var(--space-4) var(--col-gap)}
 .pod--wide .ep{padding:var(--space-4) 0 0;background:none;border:0;border-top:1px solid #ffffff1f;border-radius:0}
 .pod--wide .pod__ctas{padding-top:var(--space-6)}

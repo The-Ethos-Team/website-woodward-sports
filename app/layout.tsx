@@ -5,7 +5,7 @@ import { GA_ID, GTM_ID, INDEXING, OG_ALT, SITE_NAME, SITE_TITLE, SITE_URL } from
 import { Analytics } from '@/components/client/Analytics';
 import { BRAND, SOC, YT } from '@/lib/snapshot';
 import { getStories } from '@/lib/data/wp';
-import { getVideos } from '@/lib/data/youtube';
+import { getVideoPool, getVideos } from '@/lib/data/youtube';
 import { buildFindIndex, buildSchedule } from '@/lib/data/site';
 import { Sprite } from '@/components/ui/bits';
 import { Ticker } from '@/components/sections/Ticker';
@@ -17,6 +17,7 @@ import { Dock } from '@/components/client/Dock';
 import { LiveRoom } from '@/components/client/LiveRoom';
 import { ShowSheet } from '@/components/client/ShowSheet';
 import { Find } from '@/components/client/Find';
+import { Menu } from '@/components/client/Menu';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -56,9 +57,9 @@ const LD = JSON.stringify({
 });
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const [{ videos }, latest] = await Promise.all([getVideos(), getStories({ perPage: 20 })]);
-  const schedule = buildSchedule(videos);
-  const find = buildFindIndex(latest.items, videos);
+  const [{ videos }, pool, latest] = await Promise.all([getVideos(), getVideoPool(), getStories({ perPage: 20 })]);
+  const schedule = buildSchedule(videos, pool);
+  const find = buildFindIndex(latest.items, videos, pool);
   return (
     <html lang="en" className="no-js" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
@@ -115,6 +116,7 @@ gtag('config', '${GA_ID}');`,
           <Dock liveUrl={YT.live_url} />
           <LiveRoom />
           <ShowSheet />
+          <Menu />
           <Find index={find} shows={schedule.shows.map(s => ({ id: s.id, short: s.short }))} />
           <LiveHtml shows={schedule.shows} />
         </LiveProvider>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { PageHero } from '@/components/ui/PageHero';
 import { SectionHead } from '@/components/ui/SectionHead';
 import { Arrow, Ext } from '@/components/ui/bits';
@@ -12,7 +13,8 @@ import { pageMeta } from '@/lib/meta';
 import { TEAMS } from '@/lib/snapshot';
 import type { TeamId } from '@/lib/types';
 
-const PER = 12;
+/** a feature, 4 rows and 6 cards: full rows of 3 on desktop */
+const PER = 11;
 type SP = Promise<{ team?: string | string[]; page?: string | string[] }>;
 const one = (v?: string | string[]) => (Array.isArray(v) ? v[0] : v);
 const teamParam = (v?: string | string[]) => (TEAM_IDS.includes(one(v) as TeamId) ? (one(v) as TeamId) : undefined);
@@ -34,6 +36,7 @@ export default async function StoriesPage({ searchParams }: { searchParams: SP }
   const team = teamParam(sp.team);
   const page = Math.max(1, parseInt(one(sp.page) ?? '1', 10) || 1);
   const res = await getStories({ team, perPage: PER, page });
+  if (page > res.pages) notFound();
   const writers = getWriters();
   const href = (t?: string, p?: number) => {
     const q = new URLSearchParams();

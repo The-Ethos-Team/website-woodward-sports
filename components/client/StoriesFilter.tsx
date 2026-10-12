@@ -15,7 +15,7 @@ export function StoriesFilter({ items, cats }: { items: StoryView[]; cats: Recor
   const [filter, setFilter] = useState('all');
   const [expanded, setExpanded] = useState(false);
   const [limit, setLimit] = useState(8);
-  const match = useCallback((f: string) => items.filter(s => f === 'all' || s.teams.includes(f as never)), [items]);
+  const match = useCallback((f: string) => items.filter(s => f === 'all' || (!s.generic && s.teams.includes(f as never))), [items]);
   const [shown, setShown] = useState<number[]>(() => items.slice(0, 8).map(s => s.id));
   const lis = useRef(new Map<number, HTMLLIElement>());
   const list = useRef<HTMLOListElement>(null);

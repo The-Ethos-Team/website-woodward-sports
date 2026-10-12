@@ -21,6 +21,8 @@ export interface Story {
   author: string;
   categories: string[];
   teams: TeamId[];
+  /** a roundup filed under 3+ teams that names none of them: listed under "All" only */
+  generic?: boolean;
   readingMinutes: number | null;
   url: string;
   image: Img | null;
@@ -45,6 +47,8 @@ export interface Video {
   isShort: boolean;
   url: string;
   thumb: VideoThumb;
+  /** where it came from: the channel feed, a show's full-episode or clips playlist, or a team playlist */
+  kind?: 'upload' | 'episode' | 'clip' | 'stream';
 }
 
 export interface Episode {

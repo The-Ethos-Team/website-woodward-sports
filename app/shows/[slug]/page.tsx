@@ -8,12 +8,14 @@ import { StoryList } from '@/components/ui/StoryList';
 import { VideoGrid } from '@/components/ui/VideoGrid';
 import { PartnerSlot } from '@/components/sections/WatchParty';
 import { ShowStatus } from '@/components/client/ShowStatus';
-import { getEpisodes, getStories, getVideos } from '@/lib/data';
+import { getEpisodes, getStories, getStoriesAbout, getVideoPool } from '@/lib/data';
 import { replayFor } from '@/lib/data/site';
-import { SHOW_CATEGORIES } from '@/lib/config';
+import { SHOW_PLAYLISTS, TEAM, playlistUrl } from '@/lib/config';
+import { titleTeams } from '@/lib/teams';
 import { duration, fdate, hosts, nw, slotShort } from '@/lib/format';
 import { pageMeta } from '@/lib/meta';
-import { DATA, SHOWS, YT, showArt, showById } from '@/lib/snapshot';
+import { SHOWS, YT, showArt, showById } from '@/lib/snapshot';
+import type { TeamId } from '@/lib/types';
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -31,21 +33,28 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   });
 }
 
+const list = (xs: string[]) => (xs.length < 3 ? xs.join(' and ') : xs.slice(0, -1).join(', ') + ' and ' + xs[xs.length - 1]);
+
 export default async function ShowPage({ params }: { params: Promise<{ slug: string }> }) {
   const s = showById((await params).slug);
   if (!s) notFound();
   const i = SHOWS.indexOf(s);
   const art = showArt(s.id);
-  const cats = SHOW_CATEGORIES[s.id] ?? [];
-  const [{ videos }, { episodes }, related] = await Promise.all([
-    getVideos(), getEpisodes(s.id, 5), cats.length ? getStories({ categories: cats, perPage: 5 }) : Promise.resolve(null),
-  ]);
-  const stories = related && related.items.length >= 2 ? related : await getStories({ perPage: 5 });
-  const showVideos = videos.filter(v => v.show === s.id);
-  const replay = replayFor(s, videos);
+  const [pool, { episodes }] = await Promise.all([getVideoPool(), getEpisodes(s.id, 5)]);
+  const own = pool.shows[s.id] ?? { episodes: [], clips: [] };
+  const replay = replayFor(s, pool);
+
+  /* what the show has been talking about: teams named in its latest episode and clip titles */
+  const tally = new Map<TeamId, number>();
+  for (const v of [...own.episodes, ...own.clips]) for (const t of titleTeams(v.title)) tally.set(t, (tally.get(t) ?? 0) + 1);
+  const top = [...tally.entries()].sort((a, b) => b[1] - a[1]);
+  const talked = top.filter(([, c]) => c >= Math.max(2, top[0]?.[1] * 0.25)).slice(0, 3).map(([t]) => t);
+  const related = talked.length ? await getStoriesAbout(talked, 5) : [];
+  const stories = related.length >= 2 ? related : (await getStories({ perPage: 5 })).items;
+
   const also = (s.also_on_air ?? []).flatMap(a => a.names);
   const ch = String(i + 1).padStart(2, '0');
-  const ytSearch = (DATA.shows.find(x => x.id === s.id) as { youtube_search?: string } | undefined)?.youtube_search ?? YT.videos_url;
+  const lists = SHOW_PLAYLISTS[s.id];
 
   return (
     <>
@@ -81,11 +90,21 @@ export default async function ShowPage({ params }: { params: Promise<{ slug: str
 
       <section className="sec sec--ink2" aria-labelledby="eps-h">
         <div className="wrap">
-          <SectionHead ch={ch} name="WATCH" title="LATEST EPISODES" sub="Fresh off the stream. Tap one to watch it right here." id="eps-h" />
-          {showVideos.length ? <VideoGrid videos={showVideos.slice(0, 8)} /> : <p className="empty">No new uploads from this show in the latest feed.</p>}
-          <div className="sec__foot"><Ext href={ytSearch} className="textlink textlink--light"><span>All {s.short_name} videos on YouTube</span><Arrow /></Ext></div>
+          <SectionHead ch={ch} name="WATCH" title="FULL EPISODES" sub="Every show, start to finish, newest first. Tap one to watch it right here." id="eps-h" />
+          {own.episodes.length ? <VideoGrid videos={own.episodes.slice(0, 8)} /> : <p className="empty">The latest episodes are on YouTube.</p>}
+          <div className="sec__foot"><Ext href={lists ? playlistUrl(lists.episodes) : YT.videos_url} className="textlink textlink--light"><span>All {s.short_name} episodes on YouTube</span><Arrow /></Ext></div>
         </div>
       </section>
+
+      {own.clips.length ? (
+        <section className="sec sec--ink" aria-labelledby="clips-h">
+          <div className="wrap">
+            <SectionHead ch={ch} name="WATCH" title="CLIPS" sub={`The big moments from ${s.name}, cut down.`} id="clips-h" />
+            <VideoGrid videos={own.clips.slice(0, 8)} />
+            {lists ? <div className="sec__foot"><Ext href={playlistUrl(lists.clips)} className="textlink textlink--light"><span>All {s.short_name} clips on YouTube</span><Arrow /></Ext></div> : null}
+          </div>
+        </section>
+      ) : null}
 
       <section className="sec sec--grad" aria-labelledby="pod-h">
         <div className="wrap">
@@ -104,8 +123,12 @@ export default async function ShowPage({ params }: { params: Promise<{ slug: str
 
       <section className="sec sec--paper" aria-labelledby="rel-h">
         <div className="wrap">
-          <SectionHead ch={ch} name="STORIES" title={related && related.items.length >= 2 ? 'RELATED STORIES' : 'THE LATEST'} id="rel-h" />
-          <StoryList stories={stories.items} />
+          <SectionHead
+            ch={ch} name="STORIES" id="rel-h"
+            title={related.length >= 2 ? 'ON THE TABLE' : 'THE LATEST'}
+            sub={related.length >= 2 ? `The newest ${list(talked.map(t => TEAM[t].short))} stories, the ${talked.length === 1 ? 'team' : 'teams'} ${s.name} has been talking about most.` : undefined}
+          />
+          <StoryList stories={stories} />
           <div className="sec__foot"><Link className="textlink" href="/stories"><span>All stories</span><Arrow /></Link></div>
         </div>
       </section>

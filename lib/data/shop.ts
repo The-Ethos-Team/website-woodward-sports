@@ -4,7 +4,7 @@ import { REVALIDATE } from '@/lib/site';
 import { SHOP_SNAPSHOT } from '@/lib/snapshot';
 import { PRODUCT_TEAMS } from '@/lib/config';
 import { curly } from '@/lib/format';
-import type { Product } from '@/lib/types';
+import type { Product, TeamId } from '@/lib/types';
 import { getJSON } from './fetcher';
 
 type ShopifyProduct = {
@@ -36,4 +36,22 @@ export async function getProducts(): Promise<{ products: Product[]; live: boolea
     };
   }));
   return { products, live: anyLive };
+}
+
+/** Live products by handle (team gear outside the curated 8). A product that's gone or sold out is skipped. */
+export async function getProductsByHandle(handles: string[], team: TeamId): Promise<Product[]> {
+  const all = await Promise.all(handles.map(async h => {
+    const r = await getJSON<ShopifyProduct>(`https://shop.woodwardsports.com/products/${h}.json`, { revalidate: REVALIDATE.shop, tags: ['shop'] });
+    const p = r?.data?.product;
+    if (!p?.image || !p.variants.some(v => v.available !== false)) return null;
+    const prices = p.variants.map(v => parseFloat(v.price)).filter(x => isFinite(x));
+    if (!prices.length) return null;
+    return {
+      handle: p.handle, title: curly(p.title), url: `https://shop.woodwardsports.com/products/${p.handle}`,
+      price: Math.min(...prices).toFixed(2),
+      image: { src: p.image.src, w: p.image.width || 1000, h: p.image.height || 1000, alt: p.image.alt || p.title, local: false },
+      teams: [team],
+    } satisfies Product;
+  }));
+  return all.filter(Boolean) as Product[];
 }

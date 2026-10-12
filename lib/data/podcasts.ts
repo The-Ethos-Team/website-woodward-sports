@@ -18,7 +18,7 @@ export async function getEpisodes(showId: string, n = 5): Promise<{ episodes: Ep
   if (!s) return { episodes: [], live: false };
   /* The full feeds are 0.4–6 MB (Next caches at most 2 MB per fetch): ask for the head of the file only.
      Spreaker's CDN honours Range; only complete <item> blocks are parsed. */
-  const xml = await getText(s.rss, { revalidate: REVALIDATE.podcasts, tags: ['podcasts'], bytes: 300_000 });
+  const xml = await getText(s.rss, { revalidate: REVALIDATE.podcasts, tags: ['podcasts'], bytes: 300_000, timeout: 12000 });
   const items = xml ? xmlBlocks(xml, 'item').slice(0, n) : [];
   if (!items.length) return { episodes: snapshot(s).slice(0, n), live: false };
   const episodes = items.map(it => {

@@ -1,29 +1,56 @@
 import 'server-only';
 /* Stories, categories and writers from the WordPress REST API on woodwardsports.com, with the snapshot as fallback.
    Cloudflare in front of the site needs a full browser User-Agent and may still block Vercel's servers: every call
-   falls back to data/content.json on any error or after 5 s. Stories always link out to woodwardsports.com. */
+   falls back to data/content.json on any error or after 5 s. Stories always link out to woodwardsports.com.
+
+   All lists (newest, per team, per writer) come from one light index of every post (title, excerpt, categories,
+   author: ~150 KB for 226 posts), so team filters, writer pages, counts and pagination always agree. Images and
+   reading times are fetched only for the stories on screen. */
+import { cache } from 'react';
 import { REVALIDATE } from '@/lib/site';
 import { DATA, NEWS_MEDIA, type SnapshotArticle } from '@/lib/snapshot';
-import { TEAM_CATEGORIES, TEAM_IDS, WRITER_WP_SLUG } from '@/lib/config';
+import { WRITER_WP_SLUG } from '@/lib/config';
+import { classify } from '@/lib/teams';
 import { curly, decodeEntities, slugify, stripTags } from '@/lib/format';
 import type { Img, Story, TeamId, Writer } from '@/lib/types';
 import { getJSON } from './fetcher';
 
 const WP = 'https://woodwardsports.com/wp-json/wp/v2';
 const OPTS = { revalidate: REVALIDATE.stories, browserUA: true, tags: ['wp'] };
+/** the index pages (100 posts each) and full texts are bigger: give them longer */
+const BIG = { ...OPTS, timeout: 15000 };
+const MAX_INDEX_PAGES = 5; // 500 posts
 
 type WPCat = { id: number; name: string; slug: string; count: number; link: string };
 type WPUser = { id: number; name: string; slug: string };
 type WPPost = {
   id: number; date_gmt: string; link: string; title: { rendered: string }; excerpt: { rendered: string };
-  content?: { rendered: string }; categories: number[]; author: number; featured_media: number;
+  categories: number[]; author: number; featured_media: number;
 };
 type WPMedia = {
   id: number; source_url: string; alt_text: string;
   media_details?: { width?: number; height?: number; sizes?: Record<string, { source_url: string; width: number; height: number }> };
 };
 
-export type StoryPage = { items: Story[]; total: number; pages: number; live: boolean };
+export type StoryPage = { items: Story[]; total: number; pages: number; page: number; live: boolean };
+
+/** One story in the index: everything but the image (fetched per page) + the WordPress media id. */
+type Entry = Omit<Story, 'image' | 'readingMinutes'> & { media: number };
+
+/* ------------------------------------------------------------------ writers and bylines */
+const HOUSE = 'Woodward Sports';
+const WRITER_NAMES = DATA.writers.map(w => w.name);
+/** Guest and beat writers post on the house account and sign the first line ("By Nicholas Kohloff …",
+    "Nicholas Kohloff | Detroit Tigers Beat Reporter …"). Matched only against known writers. */
+const BYLINES: [RegExp, string][] = [
+  ...WRITER_NAMES.filter(n => n !== HOUSE).map(n => [n, n] as [string, string]),
+  ['Nick Kohloff', 'Nicholas Kohloff'],
+].map(([alias, name]) => [new RegExp(`^(?:by:?\\s+)?${alias.replace(/[’']/g, "['’]").replace(/\s+/g, '\\s+')}\\b`, 'i'), name]);
+
+function byline(excerpt: string): string | null {
+  const head = excerpt.slice(0, 160);
+  return BYLINES.find(([re]) => re.test(head))?.[1] ?? null;
+}
 
 /* ------------------------------------------------------------------ snapshot */
 const SNAP: SnapshotArticle[] = (() => {
@@ -33,25 +60,16 @@ const SNAP: SnapshotArticle[] = (() => {
     .sort((a, b) => b.date.localeCompare(a.date));
 })();
 const SNAP_BY_ID = new Map(SNAP.map(a => [a.id, a]));
+const SNAP_INDEX: Entry[] = SNAP.map(a => {
+  const c = classify(a.title_display, a.categories.map(slugify));
+  return { id: a.id, title: a.title_display, excerpt: a.excerpt, date: a.date, author: a.author, categories: a.categories, teams: c.teams, generic: c.generic, url: a.url, media: 0 };
+});
 
 function localImage(id: number, alt: string): Img | null {
   const m = NEWS_MEDIA[id];
   if (!m) return null;
   const srcSet = m.file_small !== m.file ? `/${m.file_small} ${m.w_small}w, /${m.file} ${m.w}w` : `/${m.file} ${m.w}w`;
   return { src: '/' + m.file_small, srcSet, w: m.w, h: m.h, alt, local: true };
-}
-
-function fromSnapshot(a: SnapshotArticle): Story {
-  return {
-    id: a.id, title: a.title_display, excerpt: a.excerpt, date: a.date, author: a.author,
-    categories: a.categories, teams: a.teams as TeamId[], readingMinutes: a.reading_minutes, url: a.url,
-    image: localImage(a.id, ''),
-  };
-}
-
-function snapshotPage(filter: (a: SnapshotArticle) => boolean, perPage: number, page: number): StoryPage {
-  const all = SNAP.filter(filter);
-  return { items: all.slice((page - 1) * perPage, page * perPage).map(fromSnapshot), total: all.length, pages: Math.max(1, Math.ceil(all.length / perPage)), live: false };
 }
 
 /* ------------------------------------------------------------------ live lookups */
@@ -73,76 +91,106 @@ async function getMedia(ids: number[]): Promise<Map<number, WPMedia>> {
   return new Map((r && Array.isArray(r.data) ? r.data : []).map(m => [m.id, m]));
 }
 
-/* in-article bylines ("By Nicholas Kohloff") on the house account, matched only against known writers */
-const KNOWN_WRITERS = DATA.writers.map(w => w.name);
-const ALIASES: Record<string, string> = { 'Nick Kohloff': 'Nicholas Kohloff', "Ryan O'Bleness": 'Ryan O’Bleness' };
-function byline(text: string): string | null {
-  const m = text.slice(0, 500).match(/\bBy:?\s+([A-Z][\w’'.-]+(?:\s[A-Z][\w’'.-]+){1,2})/);
-  if (!m) return null;
-  const n = ALIASES[m[1]] ?? m[1].replace(/'/g, '’');
-  return KNOWN_WRITERS.includes(n) ? n : null;
+/** Reading time (words / 230) for the stories on screen, from their full text. */
+async function getReadingMinutes(ids: number[]): Promise<Map<number, number>> {
+  const want = [...new Set(ids)].sort((a, b) => a - b);
+  if (!want.length) return new Map();
+  const r = await getJSON<{ id: number; content: { rendered: string } }[]>(
+    `${WP}/posts?per_page=${want.length}&include=${want.join(',')}&_fields=id,content`, BIG,
+  );
+  const out = new Map<number, number>();
+  for (const p of r && Array.isArray(r.data) ? r.data : []) {
+    const words = stripTags(p.content?.rendered ?? '').split(' ').filter(Boolean).length;
+    if (words) out.set(p.id, Math.max(1, Math.ceil(words / 230)));
+  }
+  return out;
 }
 
+/** WordPress image sizes, smallest first; the original only when it isn't huge. 150×150 thumbnails are crops: skipped. */
 function wpImage(m: WPMedia | undefined, alt: string): Img | null {
   if (!m) return null;
-  const s = m.media_details?.sizes ?? {};
-  const pick = ['medium_large', 'large', '1536x1536'].map(k => s[k]).filter(Boolean);
-  const w = m.media_details?.width ?? pick[0]?.width ?? 1200, h = m.media_details?.height ?? pick[0]?.height ?? 675;
-  if (!pick.length) return { src: m.source_url, w, h, alt, local: false };
-  return { src: pick[0].source_url, srcSet: pick.map(p => `${p.source_url} ${p.width}w`).join(', '), w: pick[0].width, h: pick[0].height, alt, local: false };
+  const d = m.media_details ?? {};
+  const cand = ['medium', 'medium_large', 'large', '1536x1536'].map(k => d.sizes?.[k]).filter(Boolean) as { source_url: string; width: number; height: number }[];
+  if (d.width && d.height && d.width <= 1600) cand.push({ source_url: m.source_url, width: d.width, height: d.height });
+  const sizes = [...new Map(cand.map(c => [c.width, c])).values()].sort((a, b) => a.width - b.width);
+  const w = d.width ?? sizes[sizes.length - 1]?.width ?? 1200, h = d.height ?? sizes[sizes.length - 1]?.height ?? 675;
+  if (!sizes.length) return { src: m.source_url, w, h, alt, local: false };
+  const src = (sizes.find(s => s.width >= 600) ?? sizes[sizes.length - 1]).source_url;
+  return { src, srcSet: sizes.map(s => `${s.source_url} ${s.width}w`).join(', '), w, h, alt, local: false };
 }
 
-async function normalise(posts: WPPost[], cats: Map<string, WPCat>): Promise<Story[]> {
-  const byId = new Map([...cats.values()].map(c => [c.id, c]));
-  const [media, users] = await Promise.all([getMedia(posts.filter(p => !NEWS_MEDIA[p.id]).map(p => p.featured_media)), getUsers()]);
-  const uById = new Map((users ?? []).map(u => [u.id, u]));
-  return posts.map(p => {
-    const snap = SNAP_BY_ID.get(p.id);
-    if (snap) return fromSnapshot(snap);
-    const slugs = p.categories.map(id => byId.get(id)?.slug).filter(Boolean) as string[];
-    const names = p.categories.map(id => byId.get(id)?.name).filter(Boolean).map(n => decodeEntities(n as string));
-    const teams = TEAM_IDS.filter(t => TEAM_CATEGORIES[t].some(c => slugs.includes(c)));
-    const text = p.content ? stripTags(p.content.rendered) : '';
-    const wpName = uById.get(p.author)?.name ?? 'Woodward Sports';
-    const author = (wpName === 'Woodward Sports' && byline(text)) || wpName;
-    const title = curly(decodeEntities(p.title.rendered));
-    return {
-      id: p.id, title, excerpt: stripTags(p.excerpt.rendered).replace(/\s*(\[…\]|…|\.\.\.)$/, '…'),
-      date: p.date_gmt.endsWith('Z') ? p.date_gmt : p.date_gmt + 'Z', author, categories: names, teams,
-      readingMinutes: text ? Math.max(1, Math.ceil(text.split(' ').length / 230)) : null, url: p.link,
-      image: localImage(p.id, '') ?? wpImage(media.get(p.featured_media), ''),
-    } satisfies Story;
-  });
-}
-
-async function livePosts(q: Record<string, string>): Promise<{ posts: WPPost[]; total: number; pages: number; cats: Map<string, WPCat> } | null> {
-  const cats = await getCategories();
+/* ------------------------------------------------------------------ the index */
+async function liveIndex(): Promise<Entry[] | null> {
+  const [cats, users] = await Promise.all([getCategories(), getUsers()]);
   if (!cats) return null;
-  const params = new URLSearchParams({ _fields: 'id,date_gmt,link,title,excerpt,content,categories,author,featured_media', ...q });
-  const r = await getJSON<WPPost[]>(`${WP}/posts?${params}`, OPTS);
-  if (!r || !Array.isArray(r.data)) return null;
-  return { posts: r.data, total: Number(r.headers.get('x-wp-total')) || r.data.length, pages: Number(r.headers.get('x-wp-totalpages')) || 1, cats };
+  const fields = 'id,date_gmt,link,title,excerpt,categories,author,featured_media';
+  const url = (page: number) => `${WP}/posts?per_page=100&page=${page}&_fields=${fields}`;
+  const first = await getJSON<WPPost[]>(url(1), BIG);
+  if (!first || !Array.isArray(first.data)) return null;
+  const pages = Math.min(MAX_INDEX_PAGES, Number(first.headers.get('x-wp-totalpages')) || 1);
+  const rest = await Promise.all(Array.from({ length: pages - 1 }, (_, i) => getJSON<WPPost[]>(url(i + 2), BIG)));
+  const posts = [first, ...rest].flatMap(r => (r && Array.isArray(r.data) ? r.data : []));
+
+  const catById = new Map([...cats.values()].map(c => [c.id, c]));
+  const userById = new Map((users ?? []).map(u => [u.id, u]));
+  const seen = new Set<number>();
+  return posts
+    .filter(p => (seen.has(p.id) ? false : (seen.add(p.id), true)))
+    .map(p => {
+      const cs = p.categories.map(id => catById.get(id)).filter(Boolean) as WPCat[];
+      const title = curly(decodeEntities(p.title.rendered));
+      const excerpt = stripTags(p.excerpt.rendered);
+      const wpName = userById.get(p.author)?.name ?? HOUSE;
+      const c = classify(title, cs.map(x => x.slug));
+      return {
+        id: p.id, title, url: p.link,
+        excerpt: excerpt.replace(/\s*(\[…\]|…|\.\.\.)$/, '…'),
+        date: p.date_gmt.endsWith('Z') ? p.date_gmt : p.date_gmt + 'Z',
+        author: (wpName === HOUSE && byline(excerpt)) || wpName,
+        categories: cs.map(x => decodeEntities(x.name)),
+        teams: c.teams, generic: c.generic, media: p.featured_media,
+      } satisfies Entry;
+    })
+    .sort((a, b) => b.date.localeCompare(a.date));
 }
+
+/** Every story, newest first (one fetch per request, cached by Next for REVALIDATE.stories). */
+const getIndex = cache(async (): Promise<{ entries: Entry[]; live: boolean }> => {
+  const live = await liveIndex();
+  return live?.length ? { entries: live, live: true } : { entries: SNAP_INDEX, live: false };
+});
+
+async function withImages(list: Entry[], live: boolean): Promise<Story[]> {
+  const needMedia = list.filter(e => !NEWS_MEDIA[e.id] && e.media).map(e => e.media);
+  const needMins = list.filter(e => !SNAP_BY_ID.get(e.id)?.reading_minutes).map(e => e.id);
+  const [media, mins] = live ? await Promise.all([getMedia(needMedia), getReadingMinutes(needMins)]) : [new Map<number, WPMedia>(), new Map<number, number>()];
+  return list.map(({ media: mid, ...e }) => ({
+    ...e,
+    readingMinutes: SNAP_BY_ID.get(e.id)?.reading_minutes ?? mins.get(e.id) ?? null,
+    image: localImage(e.id, '') ?? wpImage(media.get(mid), ''),
+  }));
+}
+
+async function pageOf(all: Entry[], perPage: number, page: number, live: boolean): Promise<StoryPage> {
+  const pages = Math.max(1, Math.ceil(all.length / perPage));
+  const items = page > pages ? [] : await withImages(all.slice((page - 1) * perPage, page * perPage), live);
+  return { items, total: all.length, pages, page, live };
+}
+
+const inTeam = (e: Entry, team: TeamId) => e.teams.includes(team) && !e.generic;
 
 /* ------------------------------------------------------------------ public loaders */
-/** Newest stories (optionally one team, or a set of category slugs), paginated. */
-export async function getStories(o: { team?: TeamId; categories?: string[]; perPage?: number; page?: number } = {}): Promise<StoryPage> {
+/** Newest stories, optionally one team's, paginated. A page past the last one returns no items. */
+export async function getStories(o: { team?: TeamId; perPage?: number; page?: number } = {}): Promise<StoryPage> {
   const perPage = o.perPage ?? 16, page = Math.max(1, o.page ?? 1);
-  const slugs = o.team ? TEAM_CATEGORIES[o.team] : o.categories;
-  const snapFilter = (a: SnapshotArticle) =>
-    o.team ? (a.teams as string[]).includes(o.team) : slugs ? a.categories.some(n => slugs.includes(slugify(n))) : true;
-  if (slugs && !slugs.length) return { items: [], total: 0, pages: 1, live: false };
-  const cats = await getCategories();
-  if (!cats) return snapshotPage(snapFilter, perPage, page);
-  const q: Record<string, string> = { per_page: String(perPage), page: String(page) };
-  if (slugs) {
-    const ids = slugs.map(s => cats.get(s)?.id).filter(Boolean);
-    if (!ids.length) return { items: [], total: 0, pages: 1, live: true };
-    q.categories = ids.join(',');
-  }
-  const r = await livePosts(q);
-  if (!r) return snapshotPage(snapFilter, perPage, page);
-  return { items: await normalise(r.posts, r.cats), total: r.total, pages: r.pages, live: true };
+  const { entries, live } = await getIndex();
+  return pageOf(o.team ? entries.filter(e => inTeam(e, o.team!)) : entries, perPage, page, live);
+}
+
+/** Newest stories about any of these teams (show pages: what the show has been talking about). */
+export async function getStoriesAbout(teams: TeamId[], n: number): Promise<Story[]> {
+  const { entries, live } = await getIndex();
+  return withImages(entries.filter(e => teams.some(t => inTeam(e, t))).slice(0, n), live);
 }
 
 /** Writer pages: content.json writers (WP authors and in-article bylines). */
@@ -157,23 +205,9 @@ export const writerSlug = (name: string) => {
   return w ? slugify(w.name) : null;
 };
 
-export async function getWriterStories(w: Writer, perPage = 24): Promise<StoryPage> {
-  const snap = () => snapshotPage(a => a.author === w.name, perPage, 1);
-  const cats = await getCategories();
-  if (!cats) return snap();
-  let q: Record<string, string>;
-  if (w.wpSlug) {
-    const users = await getUsers();
-    const u = users?.find(x => x.slug === w.wpSlug);
-    if (!u) return snap();
-    q = { author: String(u.id), per_page: String(perPage) };
-  } else {
-    q = { search: w.name.split(' ').slice(-1)[0].replace('’', "'"), per_page: '20' };
-  }
-  const r = await livePosts(q);
-  if (!r) return snap();
-  const items = (await normalise(r.posts, r.cats)).filter(s => s.author === w.name);
-  return { items, total: w.wpSlug && w.name !== 'Woodward Sports' ? r.total : items.length, pages: 1, live: true };
+export async function getWriterStories(w: Writer, o: { perPage?: number; page?: number } = {}): Promise<StoryPage> {
+  const { entries, live } = await getIndex();
+  return pageOf(entries.filter(e => e.author === w.name), o.perPage ?? 11, Math.max(1, o.page ?? 1), live);
 }
 
 /** Privacy policy page meta (title, last modified, URL), when the WP page is reachable. */

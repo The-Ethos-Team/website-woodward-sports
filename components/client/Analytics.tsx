@@ -29,6 +29,7 @@ export function placementOf(el: Element | null): string {
   if (el.closest('.tkbar, .tk')) return 'ticker';
   if (el.closest('.lr')) return 'live_room';
   if (el.closest('.find')) return 'find';
+  if (el.closest('.menu')) return 'menu';
   if (el.closest('header')) return 'header';
   if (el.closest('footer')) return 'footer';
   return el.closest<HTMLElement>('section[id]')?.id || 'page';

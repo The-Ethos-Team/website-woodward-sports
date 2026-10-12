@@ -16,19 +16,24 @@ export function Pill() {
   let txt: React.ReactNode = <>WEEKDAYS <span className="nw">8AM–7PM ET</span></>;
   if (n) {
     const s = S.shows[n.i];
+    /* the next show's name where the header has room (desktop); the fit below drops it when the pill would truncate */
+    const nm = <span className="pill__nm">· {s.short.toUpperCase()} </span>;
     if (n.state === 'live') txt = <>{pre('LIVE')}{s.short.toUpperCase()}</>;
-    else if (n.state === 'next') txt = n.left <= 15 * 60000 ? 'STARTING SOON' : <>UP NEXT <Num text={cd(n.left)} /></>;
+    else if (n.state === 'next') txt = n.left <= 15 * 60000 ? <>STARTING SOON {nm}</> : <>UP NEXT {nm}<Num text={cd(n.left)} /></>;
     else txt = <>{pre('OFF AIR')}<Num text={backAt(n, S.shows, false)} /></>;
   }
-  /* keep the pill text whole when the header runs out of room: drop the Find label first, then "LIVE · " */
+  /* keep the pill text whole when the header runs out of room: drop the Find label first, then the header's ET
+     clock, then the show name (UP NEXT), then "LIVE · " */
   const txtRef = useRef<HTMLSpanElement>(null);
-  const tkey = n ? (n.state === 'live' ? 'L' + n.i : n.state === 'next' ? (n.left <= 15 * 60000 ? 'S' : 'N' + cd(n.left).length) : 'O' + n.i) : '';
+  const tkey = n ? (n.state === 'live' ? 'L' + n.i : n.state === 'next' ? (n.left <= 15 * 60000 ? 'S' + n.i : 'N' + n.i + cd(n.left).length) : 'O' + n.i) : '';
   const fit = () => {
     const t = txtRef.current, H = document.documentElement;
     if (!t) return;
     const over = () => t.scrollWidth > t.clientWidth + 1;
-    H.classList.remove('pill-np', 'pill-nf');
+    H.classList.remove('pill-np', 'pill-nf', 'pill-nc', 'pill-nn');
     if (over()) H.classList.add('pill-nf');
+    if (over()) H.classList.add('pill-nc');
+    if (over()) H.classList.add('pill-nn');
     if (over()) H.classList.add('pill-np');
   };
   useLayoutEffect(fit, [tkey]);

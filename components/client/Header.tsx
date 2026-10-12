@@ -70,6 +70,10 @@ export function Header({ liveUrl }: { liveUrl: string }) {
           <kbd>⌘K</kbd>
           <span className="sr-only">: shows, teams, stories, videos</span>
         </button>
+        <button className="hdr__menu" type="button" onClick={e => bus.openMenu(e.currentTarget)} aria-haspopup="dialog" aria-controls="menu" data-menu-open="">
+          <Icon name="menu" />
+          <span className="sr-only">Menu</span>
+        </button>
         <a className="btn btn--blade hdr__watch" href={liveUrl} target="_blank" rel="noopener" data-live-open="">
           <Icon name="play" />
           <span>Watch Live</span>

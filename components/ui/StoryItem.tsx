@@ -7,13 +7,14 @@ import { StoryImg } from './media';
 export type StoryView = Story & { dateLabel: string };
 export type Kind = 'feature' | 'row' | 'card';
 export const kindAt = (k: number): Kind => (k === 0 ? 'feature' : k < 5 ? 'row' : 'card');
-const SIZES: Record<Kind, string> = { feature: '(min-width: 900px) 58vw, 100vw', card: '(min-width: 900px) 31vw, 128px', row: '(min-width: 1100px) 136px, 128px' };
+/* thumbnails are 96 px (phones) / 128–136 px: the sizes keep phones on WordPress's 300 px "medium" image */
+const SIZES: Record<Kind, string> = { feature: '(min-width: 900px) 58vw, 100vw', card: '(min-width: 900px) 31vw, (min-width: 600px) 128px, 96px', row: '(min-width: 1100px) 136px, (min-width: 600px) 128px, 96px' };
 
 export function StoryItem({ s, kind, hidden, eager, liRef }: { s: StoryView; kind: Kind; hidden?: boolean; eager?: boolean; liRef?: (el: HTMLLIElement | null) => void }) {
   const [tag, col] = teamTag(s);
   const ring = col === '#18453B' ? ' st__dot--ring' : '';
   return (
-    <li className={`st st--${kind}`} data-teams={s.teams.join(' ')} data-id={s.id} hidden={hidden} ref={liRef}>
+    <li className={`st st--${kind}`} data-teams={s.generic ? '' : s.teams.join(' ')} data-id={s.id} hidden={hidden} ref={liRef}>
       <a className="st__a" href={s.url} target="_blank" rel="noopener">
         <div className="st__media"><StoryImg story={s} className="st__img" sizes={SIZES[kind]} eager={eager} /></div>
         <div className="st__body">
